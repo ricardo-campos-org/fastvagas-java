@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Minha conta | Fast vagas</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container-fluid" id="minha-conta">
+        <div class="row bg-title">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4 class="page-title" style="text-transform: none;">Olá <span data-bind="text: nomePessoa"></span>!</h4>
+                    </div>
+                    <div class="col-sm-6 mt-xs">
+                        <ol class="breadcrumb">
+                            <li><a th:href="@{/app}">Home</a></li>
+                            <li class="active">Minha conta</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-12">
+                <div class="white-box">
+                    <div class="user-bg">
+                        <div class="overlay-box">
+                            <div class="user-content">
+                                <a href="javascript:void(0)" title="Alterar imagem do perfil">
+                                    <img src="http://localhost:5000/user/img/users/user.png" class="thumb-lg img-circle" alt="Imagem do usuário"></a>
+                                <h4 class="text-white">Login</h4>
+                                <h5 class="text-white" data-bind="text: form_conta.email_place">ricardompcampos@gmail.com</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-btm-box">
+                        <div class="col-md-4 col-sm-4 text-center">
+                            <p class="text-purple"><i class="ti-facebook"></i></p>
+                            <h1>258</h1>
+                            <p class="text-purple">Vagas</p>
+                        </div>
+                        <div class="col-md-4 col-sm-4 text-center">
+                            <p class="text-blue"><i class="ti-twitter"></i></p>
+                            <h1>125</h1>
+                            <p class="text-purple">E-mails</p>
+                        </div>
+                        <div class="col-md-4 col-sm-4 text-center">
+                            <p class="text-danger"><i class="ti-dribbble"></i></p>
+                            <h1>556</h1>
+                            <p class="text-purple">??</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-xs-12">
+                <div class="white-box">
+                    <h2 style="margin-bottom: 30px">Seus dados de cadastro</h2>
+                    <form class="form-horizontal form-material" data-bind="submit: submit_conta" novalidate="">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="nome_conta">Nome *</label>
+                                <input type="text" id="nome_conta" class="form-control form-control-line" data-bind="value: form_conta.nome, attr: {'placeholder': form_conta.nome_place}" placeholder="Ricardo">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="sobrenome_conta">Sobrenome *</label>
+                                <input type="text" id="sobrenome_conta" class="form-control form-control-line" data-bind="value: form_conta.sobrenome, attr: {'placeholder': form_conta.sobrenome_place}" placeholder="Campos">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="email_conta">E-mail *</label>
+                                <input type="email" id="email_conta" class="form-control form-control-line" data-bind="value: form_conta.email, attr: {'placeholder': form_conta.email_place}" placeholder="ricardompcampos@gmail.com">
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label for="">Localização</label>
+                                <input class="form-control" data-bind="value: form_conta.nome_cidade() + ', ' + form_conta.nome_uf()" disabled="">
+                            </div>
+                        </div>
+                        <span data-bind="visible: form_conta.aguarde" style="display: none;">
+                        <i class="fa fa-spinner fa-pulse"></i> Aguarde...
+                    </span>
+                        <div class="alert alert-danger" style="margin-top: 20px; display: none;" role="alert" data-bind="visible: form_conta.erro(), text: form_conta.erro()"></div>
+                        <div class="alert alert-success" style="margin-top: 20px; display: none;" role="alert" data-bind="visible: form_conta.sucesso(), text: form_conta.sucesso()"></div>
+                        <input type="submit" class="btn btn-primary" value="Salvar">
+                        <input type="button" class="btn btn-secondary" value="Alterar senha">
+                        <input type="button" class="btn btn-secondary" value="Cancelar minha conta!">
+                    </form>
+
+                    <h2 style="margin: 30px 0px">Seus dados de pagamento</h2>
+
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <h4 class="list-group-item-heading">
+                                <img src="http://localhost:5000/user/img/plano.png" height="32" alt="Mastercard">
+                                Plano Ax01 Light
+                            </h4>
+                            <p class="list-group-item-text mt-md">
+                                R$ 2,99 por mês. Próxima cobrança em 01/04/2019
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4 class="list-group-item-heading">
+                                <img src="http://localhost:5000/user/img/mastercard.png" width="32" alt="Mastercard">
+                                Cartão Mastercard final 0000
+                            </h4>
+                            <p class="list-group-item-text mt-md">
+                                Vencimento todo dia 01
+                            </p>
+                        </li>
+                    </ul>
+
+                    <input type="button" class="btn btn-primary" value="Atualizar dados de pagamento">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

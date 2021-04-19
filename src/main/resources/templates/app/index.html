@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>HOME | Fast vagas</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container-fluid" id="home">
+        <div class="row bg-title">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4 class="page-title" style="text-transform: none;">Bem vindo <span data-bind="text: nomePessoa"></span>!</h4>
+                    </div>
+                    <div class="col-sm-6 mt-xs">
+                        <div class="pull-right">
+                            <small>Último acesso: <span data-bind="text: ultimoLogin"></span></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- primeiro acesso -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="alert alert-info" role="alert">
+                    <p>&#x1F60D &#x1F60D &#x1F60D </p>
+                    <p><span style="font-weight: 400">Yaaiiiiii</span> Obrigado por escolher o Fast Vagas !!</p>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <h4>Esta é sua página inicial &#x1F603</h4>
+                        <p class="mt-md">
+                            Aqui é onde você confere o resumo das últimas vagas para sua cidade de busca e para a sua busca!
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- fim primeiro acesso -->
+        <div class="row">
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Vagas neste mês</h3>
+                    <ul class="list-inline two-part">
+                        <li>
+                            <div id="sparklinedash"></div>
+                        </li>
+                        <li class="text-right">
+                            <i class="ti-arrow-up text-success"></i>
+                            <span class="counter text-info" data-bind="text: totalMes"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Vagas nesta semana</h3>
+                    <ul class="list-inline two-part">
+                        <li>
+                            <div id="sparklinedash2"></div>
+                        </li>
+                        <li class="text-right">
+                            <i class="ti-arrow-up text-purple"></i>
+                            <span class="counter text-info" data-bind="text: totalSemana"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Vagas de hoje</h3>
+                    <ul class="list-inline two-part">
+                        <li>
+                            <div id="sparklinedash3"></div>
+                        </li>
+                        <li class="text-right">
+                            <i class="ti-arrow-up text-info"></i>
+                            <span class="counter text-info" data-bind="text: totalHoje"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vagas da pessoa: só aparece quando tem -->
+        <div class="row" data-bind="visible: vagasSelecionadas().length > 0">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <h3 class="box-title">Últimas vagas selecionadas selecionadas para você</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>TÍTULO</th>
+                                <th>ORIGEM</th>
+                                <th>PUBLICAÇÃO</th>
+                                <th>DETALHAR</th>
+                            </tr>
+                            </thead>
+                            <tbody data-bind="foreach: vagasSelecionadas">
+                            <tr>
+                                <td data-bind="text: $index()+1"></td>
+                                <td data-bind="text: name"></td>
+                                <td data-bind="text: portal_id"></td>
+                                <td data-bind="text: published_at"></td>
+                                <td><a href="#">Detalhar</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Últimas vagas na cidade da pessoa -->
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <h3 class="box-title">
+                        Últimas vagas em <span data-bind="text: cidadeEstado"></span>
+                    </h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>TÍTULO</th>
+                                    <th>ORIGEM</th>
+                                    <th>PUBLICAÇÃO</th>
+                                    <th>DETALHAR</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: ultimasVagas">
+                                <tr>
+                                    <td data-bind="text: $index()+1"></td>
+                                    <td data-bind="text: name"></td>
+                                    <td data-bind="text: portal_name"></td>
+                                    <td data-bind="text: published_at"></td>
+                                    <td><a href="#" data-bind="click: $parent.verVaga">Ver vaga</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top vagas na cidade da pessoa
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                <div class="white-box">
+                    <h3 class="box-title">
+                        Top vagas em <span data-bind="text: cidadeEstado"></span>
+                    </h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>TÍTULO</th>
+                                <th>ORIGEM</th>
+                                <th>HITS</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="txt-oflo">Secretária pessoal</td>
+                                <td>Joinville Vagas</td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td class="txt-oflo">Comprador</td>
+                                <td>Indeed</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td class="txt-oflo">Recepcionista</td>
+                                <td>Joinville Vagas</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td class="txt-oflo">Atendente comercial</td>
+                                <td>SINE Joinville</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td class="txt-oflo">Vendedor interno</td>
+                                <td>Joinville Vagas</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td class="txt-oflo">Vendedor externo</td>
+                                <td>Joinville Vagas</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td class="txt-oflo">Estoquista (H/M)</td>
+                                <td>SINE Joinville</td>
+                                <td>2</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <!-- Modal vaga -->
+        <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal: abrirModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Detalhando vaga</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h1 data-bind="text: vaga.name"></h1>
+                        <p>Empresa: <span data-bind="text: vaga.company_name"></span></p>
+                        <p>Tipo: <span data-bind="text: vaga.job_type"></span></p>
+                        <h3>Descrição:</h3>
+                        <p data-bind="text: vaga.description"></p>
+                        <p><a target="_blank" data-bind="attr: {'href': vaga.url}, text: 'VER VAGA no site ' + vaga.portal_name()"></a></p>
+                        <p><small>
+                            Em <span data-bind="text: vaga.published_at"></span> - De <span data-bind="text: vaga.portal_name"></span>
+                        </small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

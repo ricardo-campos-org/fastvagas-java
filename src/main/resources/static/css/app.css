@@ -1,0 +1,41 @@
+.btn.btn-lg.btn-default.readonly {
+    background: #e4e7ea;
+    border: 1px solid #e4e7ea;
+    opacity: .65;
+}
+
+.mt-xs {
+    margin-top: 4px!important;
+}
+
+.mt-sm {
+    margin-top: 8px!important;
+}
+
+.mt-md {
+    margin-top: 16px!important;
+}
+
+.mt-lg {
+    margin-top: 24px!important;
+}
+
+table.dataTable tbody > tr.selected, table.dataTable tbody > tr > .selected {
+    background-color: #55efc4 !important;
+}
+
+table.dataTable tbody tr.selected, table.dataTable tbody th.selected, table.dataTable tbody td.selected {
+    color: #2d3436 !important;
+}
+
+tbody {
+    color: #2d3436 !important;
+}
+
+.modal-footer {
+    text-align: left !important;
+}
+
+.bootbox-accept {
+    margin-right: 5px !important;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<th:block th:fragment="header">
+    <nav class="navbar navbar-default navbar-static-top m-b-0">
+        <div class="navbar-header">
+            <div class="top-left-part">
+                <a class="logo" th:href="@{/app}">
+                    <!-- Logo icon image, you can use font-icon also -->
+                    <b>
+                        <!--This is dark logo icon-->
+                        <img src="/img/fast_logo2a.png" width="48" alt="Fastvagas" class="dark-logo" />
+                        <!--<img th:src="@{/img/logo.png}" alt="memorynotfound logo"/>-->
+                        <!--This is light logo icon-->
+                        <img src="/img/fast_logo2a.png" width="48" alt="Fastvagas" class="light-logo" />
+                    </b>
+                    <!-- Logo text image you can use text also -->
+                    <span class="hidden-xs">
+                        <!--This is dark logo text-->
+                        <span class="dark-logo">Fast Vagas</span>
+
+                        <!--This is light logo text-->
+                        <span class="light-logo">Fast Vagas</span>
+                    </span>
+                </a>
+            </div>
+            <!-- /Logo -->
+            <ul class="nav navbar-top-links navbar-right pull-right">
+                <li>
+                    <a class="profile-pic" th:href="@{/minha-conta}">
+                        <img src="/img/users/user.png" alt="Imagem do usuário" width="36" class="img-circle">
+                        <b class="hidden-xs"><span sec:authentication="name"></span></b>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="navbar-default sidebar" role="navigation" sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="sidebar-nav slimscrollsidebar">
+            <div class="sidebar-head">
+                <h3>
+                <span class="fa-fw open-close">
+                    <i class="ti-close ti-menu"></i>
+                </span>
+                    <span class="hide-menu">Navigation</span>
+                </h3>
+            </div>
+            <ul class="nav" id="side-menu">
+                <li style="padding: 70px 0 0;">
+                    <a th:href="@{/app}" class="waves-effect">
+                        <i class="fas fa-home" aria-hidden="true"></i> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="fas fa-users" aria-hidden="true"></i> Adm-Pessoas
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="fas fa-certificate" aria-hidden="true"></i> Adm-Portais
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="fas fa-briefcase" aria-hidden="true"></i> Adm-Vagas
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="waves-effect">
+                        <i class="fas fa-history" aria-hidden="true"></i> Adm-Histórico
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

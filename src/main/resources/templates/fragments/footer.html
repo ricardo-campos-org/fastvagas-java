@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<th:block th:fragment="footer">
+    <footer class="footer text-center">
+        2020 &copy; Fastvagas. Todos os direitos reservados - Template por
+        <a href="http://wrappixel.com">wrappixel.com</a>
+        <span sec:authorize="isAuthenticated()" style="display: inline-block;">
+            | Login: <span sec:authentication="name"></span> |
+            Roles: <span sec:authentication="principal.authorities"></span> |
+            <a th:href="@{/logout}">Sair</a>
+        </span>
+    </footer>
+</th:block>
+</body>
+</html>
