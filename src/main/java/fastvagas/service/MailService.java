@@ -22,7 +22,7 @@ public class MailService {
 
     public void send(Contact contact) {
         String origemEmail = "contato.fastvagas@ricardocampos.blog";
-        String origemEmailSenha = "KVt&6aAbi5x@";
+        String origemEmailSenha = "";
         String adminEmail = "ricardo@ricardocampos.blog";
 
         Properties propvls = System.getProperties();
@@ -88,7 +88,7 @@ public class MailService {
 
     public void jobNotification(String name, String email, List<PortalJob> portalJobs) {
         String origemEmail = "contato.fastvagas@ricardocampos.blog";
-        String origemEmailSenha = "KVt&6aAbi5x@";
+        String origemEmailSenha = "";
 
         Properties propvls = System.getProperties();
         propvls.setProperty("mail.smtp.host", "smtp.zoho.com");
