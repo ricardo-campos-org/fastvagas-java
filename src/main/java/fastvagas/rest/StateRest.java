@@ -1,4 +1,4 @@
-package fastvagas.controller;
+package fastvagas.rest;
 
 import fastvagas.dal.entity.State;
 import fastvagas.dal.service.StateService;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/app/state")
-class StateController {
+class StateRest {
 
     @Resource
     private StateService stateService;

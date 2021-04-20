@@ -238,6 +238,17 @@ VALUES ('Vagas', 'https://www.vagas.com.br/vagas-em-goiania', (SELECT city_id FR
 -- Joinville - SC
 INSERT INTO portals (name, url, city_id)
 VALUES ('Joinville Vagas', 'https://www.joinvillevagas.com.br/', (SELECT city_id FROM cities WHERE name = 'Joinville'));
+INSERT INTO portals (name, url, city_id)
+VALUES ('Indeed', 'https://br.indeed.com/jobs?q=&l=Joinville%2C+SC&sort=date', (SELECT city_id FROM cities WHERE name = 'Joinville'));
+INSERT INTO portals (name, url, city_id)
+VALUES ('Info Jobs', 'https://www.infojobs.com.br/vagas-de-emprego-joinville.aspx', (SELECT city_id FROM cities WHERE name = 'Joinville'));
+INSERT INTO portals (name, url, city_id)
+VALUES ('Trabalha Brasil', 'https://www.trabalhabrasil.com.br/vagas-empregos-em-joinville-sc', (SELECT city_id FROM cities WHERE name = 'Joinville'));
+INSERT INTO portals (name, url, city_id)
+VALUES ('BNE', 'https://www.bne.com.br/vagas-de-emprego-em-joinville-sc', (SELECT city_id FROM cities WHERE name = 'Joinville'));
+INSERT INTO portals (name, url, city_id)
+VALUES ('Vagas', 'https://www.vagas.com.br/vagas-de-joinville,-santa-catarina', (SELECT city_id FROM cities WHERE name = 'Joinville'));
+
 -- Aparecida de Goiânia - GO
 -- Londrina - PR
 -- Juiz de Fora - MG
@@ -254,6 +265,6 @@ VALUES ('Joinville Vagas', 'https://www.joinvillevagas.com.br/', (SELECT city_id
 -- Mauá - SP
 
 INSERT INTO users (first_name, last_name, email, password, city_id, enabled, created_at)
-    VALUES ('Ricardo', 'Campos', 'ricardompcampos@gmail.com', '', 50, 1, '2020-01-03 14:16:10');
+    VALUES ('Ricardo', 'Campos', 'ricardo@ricardocampos.blog', '', 1, 1, '2021-04-19 20:28:10');
 
-INSERT INTO authorities (email, authority) VALUES ('ricardompcampos@gmail.com', 'ROLE_USER');
+INSERT INTO authorities (email, authority) VALUES ('ricardo@ricardocampos.blog', 'ROLE_USER');

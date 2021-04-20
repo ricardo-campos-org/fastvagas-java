@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document;
 
 import java.util.List;
 
-public class SaoPauloIndeed implements Crowler {
+public class JoinvilleIndeed implements Crowler {
 
     @Override
     public List<PortalJob> findJobs(Document document) {

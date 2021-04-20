@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
@@ -20,14 +21,16 @@ import java.util.logging.Logger;
 public class MailService {
 
     public void send(Contact contact) {
-        String origemEmail = "contato@fastvagas.com.br";
-        String origemEmailSenha = "[XSL.?xgRH@Y";
-        String adminEmail = "webmaster@fastvagas.com.br";
+        String origemEmail = "contato.fastvagas@ricardocampos.blog";
+        String origemEmailSenha = "KVt&6aAbi5x@";
+        String adminEmail = "ricardo@ricardocampos.blog";
 
         Properties propvls = System.getProperties();
-        propvls.setProperty("mail.smtp.host", "hahost.com.br");
+        propvls.setProperty("mail.smtp.host", "smtp.zoho.com");
+        propvls.put("mail.debug", "true");
         propvls.put("mail.smtp.port", "587");
         propvls.put("mail.smtp.auth", "true");
+        propvls.put("mail.smtp.starttls.enable", "true");
         propvls.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         Session session = Session.getInstance(propvls, new Authenticator() {
@@ -40,16 +43,16 @@ public class MailService {
         // Envia um e-mail para alguém do fastvagas
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(origemEmail));
-            message.setReplyTo(new Address[]{ new InternetAddress(origemEmail) });
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(adminEmail));
+            message.setFrom(new InternetAddress(contact.getEmail(), contact.getName()));
+            message.setReplyTo(new Address[]{ new InternetAddress(contact.getEmail(), contact.getName()) });
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(adminEmail, "Ricardo Campos"));
             message.setSubject("Contato Fastvagas. Assunto: " + contact.getSubject());
             message.setText("Novo contato feito a partir do site: " + contact.getMessage());
             message.setSentDate(new java.util.Date());
 
             Transport.send(message);
             Logger.getLogger(getClass().getName()).info("E-mail admin enviado com sucesso!");
-        } catch (MessagingException me) {
+        } catch (MessagingException | UnsupportedEncodingException me) {
             me.printStackTrace();
             throw new SendMailException(
                 "Problema no servidor ao registrar contato.",
@@ -60,17 +63,20 @@ public class MailService {
 
         // Envia um e-mail para a pessoa que fez o contato
         try {
+            String content = "Obrigado por entrar em contato. " +
+                    "Em breve responderemos!<br><br>Sua mensagem:<br>" + contact.getMessage();
+
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(origemEmail));
-            message.setReplyTo(new Address[]{ new InternetAddress(origemEmail)});
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail()));
+            message.setFrom(new InternetAddress(origemEmail, "Contato Fast Vagas"));
+            message.setReplyTo(new Address[]{ new InternetAddress(origemEmail, "Contato Fast Vagas")});
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail(), contact.getName()));
             message.setSubject("Contato Fastvagas. Assunto: " + contact.getSubject());
-            message.setText("Obrigado por entrar em contato. Em breve responderemos!");
             message.setSentDate(new java.util.Date());
+            message.setContent(content, "text/html; charset=UTF-8");
 
             Transport.send(message);
             Logger.getLogger(getClass().getName()).info("E-mail para a pessoa enviado com sucesso!");
-        } catch (MessagingException me) {
+        } catch (MessagingException | UnsupportedEncodingException me) {
             me.printStackTrace();
             throw new SendMailException(
                 "Problema no servidor ao registrar contato.",
@@ -81,13 +87,15 @@ public class MailService {
     }
 
     public void jobNotification(String name, String email, List<PortalJob> portalJobs) {
-        String origemEmail = "vagas@fastvagas.com.br";
-        String origemEmailSenha = "$R2RrIEfV{Ou";
+        String origemEmail = "contato.fastvagas@ricardocampos.blog";
+        String origemEmailSenha = "KVt&6aAbi5x@";
 
         Properties propvls = System.getProperties();
-        propvls.setProperty("mail.smtp.host", "hahost.com.br");
+        propvls.setProperty("mail.smtp.host", "smtp.zoho.com");
+        propvls.put("mail.debug", "true");
         propvls.put("mail.smtp.port", "587");
         propvls.put("mail.smtp.auth", "true");
+        propvls.put("mail.smtp.starttls.enable", "true");
         propvls.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         propvls.put("mail.mime.charset", "UTF-8");
 

@@ -11,17 +11,12 @@ import fastvagas.util.DateUtil;
 import fastvagas.util.StringUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -29,8 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class CrowlerService {
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-    private Logger logger = LoggerFactory.getLogger(CrowlerService.class);
+    private final Logger logger = LoggerFactory.getLogger(CrowlerService.class);
 
     @Autowired
     private PortalService portalService;
@@ -60,7 +54,7 @@ public class CrowlerService {
         Map<Long, City> cityCache = cityService.findAll().stream()
                 .collect(Collectors.toMap(City::getCity_id, Function.identity()));
 
-        Integer nextSequence = crowlerLogService.getLastSequenceByDate(new Date()) + 1;
+        int nextSequence = crowlerLogService.getLastSequenceByDate(new Date()) + 1;
 
         for (Portal portal : portals) {
             City city = cityCache.get(portal.getCity_id());

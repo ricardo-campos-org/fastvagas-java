@@ -1,11 +1,13 @@
 $(document).ready(function(){
-    //wow.js init
+    //wow.js init: TODO: add wow
+    /*
 	var wow = new WOW({
         animateClass: 'animated',
         mobile: false,
         offset: 100
     });
 	wow.init();
+	*/
     
     // Evento ao clicar no link 'contato' no header: rola até o form no rodapé
     $('#contato-header').click(function(e) {

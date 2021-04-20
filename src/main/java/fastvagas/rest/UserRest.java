@@ -1,4 +1,4 @@
-package fastvagas.controller;
+package fastvagas.rest;
 
 import fastvagas.dal.entity.User;
 import fastvagas.service.AuthService;
@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/app/user")
-class UserController {
+class UserRest {
 
     @Resource
     private AuthService authService;

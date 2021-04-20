@@ -14,7 +14,7 @@ import java.util.Date;
 public class JobsCrowlerTask {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-    private Logger logger = LoggerFactory.getLogger(JobsCrowlerTask.class);
+    private final Logger logger = LoggerFactory.getLogger(JobsCrowlerTask.class);
     private final long SECOND = 1000;
     private final long MINUTE = SECOND * 60;
     private final long HOUR = MINUTE * 60;
@@ -22,7 +22,7 @@ public class JobsCrowlerTask {
     @Autowired
     private CrowlerService crowlerService;
 
-    @Scheduled(fixedRate = HOUR)
+    @Scheduled(fixedRate = HOUR * 3)
     public void reportCurrentTime() {
         logger.info("Starting jobs crowler at {}", dateFormat.format(new Date()));
 

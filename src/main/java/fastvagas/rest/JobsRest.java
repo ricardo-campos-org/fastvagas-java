@@ -1,4 +1,4 @@
-package fastvagas.controller;
+package fastvagas.rest;
 
 import fastvagas.dal.entity.User;
 import fastvagas.json.AppUserJob;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/app/jobs")
-public class JobsController {
+public class JobsRest {
 
     @Autowired
     private AppJobService appJobService;

@@ -1,4 +1,4 @@
-package fastvagas.controller;
+package fastvagas.rest;
 
 import fastvagas.dal.entity.City;
 import fastvagas.dal.service.CityService;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/app/city")
-class CityController {
+class CityRest {
 
     @Resource
     private CityService cityService;

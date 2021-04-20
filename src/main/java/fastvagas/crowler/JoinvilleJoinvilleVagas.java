@@ -17,7 +17,7 @@ import java.util.List;
 
 public class JoinvilleJoinvilleVagas implements Crowler {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public List<PortalJob> findJobs(Document document) {
@@ -28,7 +28,7 @@ public class JoinvilleJoinvilleVagas implements Crowler {
             Elements liJobListing = olJobListings.select(".job_listing");
 
             for (Element li : liJobListing) {
-                PortalJob portalJob = new PortalJob();;
+                PortalJob portalJob = new PortalJob();
 
                 // Nome da vaga e URL
                 Element h3JobListingTitle = li.selectFirst(".job_listing-title");
