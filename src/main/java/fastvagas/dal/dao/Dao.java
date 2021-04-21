@@ -24,6 +24,9 @@ class Dao<T> {
     private final Class<T> entityClass;
     private final RowMapper<T> rowMapper;
     protected KeyHolder keyHolder;
+    protected final String LIMIT_PARAM = "LIMIT";
+    protected final String OFFSET_PARAM = "OFFSET";
+    protected final Integer PAGE_SIZE = 10;
 
     Dao(Class<T> entityClass, NamedParameterJdbcTemplate template, RowMapper<T> rowMapper) {
         this.entityClass = entityClass;
@@ -71,6 +74,30 @@ class Dao<T> {
                 "Operação não realizada. Contate o administrador do sistema.",
                 ex,
                 entityClass.getName() + ": getListFromResult DataAccessException: " + ex.getLocalizedMessage()
+            );
+        }
+    }
+
+    List<T> getListFromResultPage(String query, SqlParameterSource params, Integer page) {
+        try {
+            Logger.getLogger(entityClass.getName()).info("SQL: " + query);
+
+            List<T> list = template.query(query, params, rowMapper);
+            if (list.isEmpty()) {
+                Logger.getLogger(entityClass.getName()).info("0 results.");
+                return new ArrayList<>();
+            }
+
+
+
+            Logger.getLogger(entityClass.getName()).info(list.size() + " row(s).");
+
+            return list;
+        } catch (DataAccessException ex) {
+            throw new DatabaseException(
+                    "Operação não realizada. Contate o administrador do sistema.",
+                    ex,
+                    entityClass.getName() + ": getListFromResult DataAccessException: " + ex.getLocalizedMessage()
             );
         }
     }

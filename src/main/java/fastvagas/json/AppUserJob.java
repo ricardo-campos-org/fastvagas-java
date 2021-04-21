@@ -12,9 +12,9 @@ public class AppUserJob implements Serializable {
     private Integer monthJobs;
     private Integer weekJobs;
     private Integer todayJobs;
-    private List<JobDetail> userJobList;
-    private List<JobDetail> lastJobList;
-    private List<JobDetail> topJobList;
+    private JobPagination userJobPagination;
+    private JobPagination lastJobPagination;
+    private JobPagination topJobPagination;
 
     public AppUserJob() {
         this.cityName = "";
@@ -22,9 +22,9 @@ public class AppUserJob implements Serializable {
         this.monthJobs = 0;
         this.weekJobs = 0;
         this.todayJobs = 0;
-        this.userJobList = new ArrayList<>();
-        this.lastJobList = new ArrayList<>();
-        this.topJobList = new ArrayList<>();
+        this.userJobPagination = new JobPagination();
+        this.lastJobPagination = new JobPagination();
+        this.topJobPagination = new JobPagination();
     }
 
     public String getCityName() {
@@ -67,27 +67,27 @@ public class AppUserJob implements Serializable {
         this.todayJobs = todayJobs;
     }
 
-    public List<JobDetail> getUserJobList() {
-        return userJobList;
+    public JobPagination getUserJobPagination() {
+        return userJobPagination;
     }
 
-    public void setUserJobList(List<JobDetail> userJobList) {
-        this.userJobList = userJobList;
+    public void setUserJobPagination(JobPagination userJobPagination) {
+        this.userJobPagination = userJobPagination;
     }
 
-    public List<JobDetail> getLastJobList() {
-        return lastJobList;
+    public JobPagination getLastJobPagination() {
+        return lastJobPagination;
     }
 
-    public void setLastJobList(List<JobDetail> lastJobList) {
-        this.lastJobList = lastJobList;
+    public void setLastJobPagination(JobPagination lastJobPagination) {
+        this.lastJobPagination = lastJobPagination;
     }
 
-    public List<JobDetail> getTopJobList() {
-        return topJobList;
+    public JobPagination getTopJobPagination() {
+        return topJobPagination;
     }
 
-    public void setTopJobList(List<JobDetail> topJobList) {
-        this.topJobList = topJobList;
+    public void setTopJobPagination(JobPagination topJobPagination) {
+        this.topJobPagination = topJobPagination;
     }
 }

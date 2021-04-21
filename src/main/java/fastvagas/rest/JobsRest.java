@@ -5,9 +5,7 @@ import fastvagas.json.AppUserJob;
 import fastvagas.service.AppJobService;
 import fastvagas.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/app/jobs")
@@ -20,8 +18,8 @@ public class JobsRest {
     private AuthService authService;
 
     @GetMapping(value = "/user", produces = "application/json")
-    public AppUserJob getAppUserJobs() {
+    public AppUserJob getAppUserJobs(@RequestParam("page") Integer page) {
         User user = authService.getUser();
-        return appJobService.getAppUserJobs(user);
+        return appJobService.getAppUserJobs(user, page);
     }
 }

@@ -16,6 +16,7 @@ $(document).ready(function(){
             self.topVagas = ko.observableArray([]);
             self.abrirModal = ko.observable(false);
             self.vaga = ko.mapping.fromJS(JobDetail.getData());
+            self.currentPage = ko.observable(1);
 
             iniciar();
 
@@ -30,16 +31,16 @@ $(document).ready(function(){
                     self.nomePessoa(response.first_name || '');
                 });
 
-                jQ.getJSON('/app/jobs/user', (response) => {
+                jQ.getJSON('/app/jobs/user?page=' + self.currentPage(), (response) => {
                     if (response.cityName && response.stateName) {
                         self.cidadeEstado(`${response.cityName}/${response.stateName}`);
                     }
                     self.totalMes(response.monthJobs || 0);
                     self.totalSemana(response.weekJobs || 0);
                     self.totalHoje(response.todayJobs || 0);
-                    self.vagasSelecionadas(response.userJobList || []);
-                    self.ultimasVagas(response.lastJobList || []);
-                    self.topVagas(response.topJobList || []);
+                    self.vagasSelecionadas(response.userJobPagination.jobList || []);
+                    self.ultimasVagas(response.lastJobPagination.jobList || []);
+                    self.topVagas(response.topJobPagination.jobList || []);
                 });
             }
 

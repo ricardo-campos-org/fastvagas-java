@@ -4,6 +4,7 @@ import fastvagas.dal.entity.Portal;
 import fastvagas.dal.entity.PortalJob;
 import fastvagas.dal.mapper.PortalJobRowMapper;
 import fastvagas.util.DateUtil;
+import fastvagas.util.PaginationUtil;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -37,15 +38,36 @@ public class PortalJobDao extends Dao<PortalJob> {
 
     public List<PortalJob> findAllByPortalIdPublishedRange(Long portal_id, Date published_at_start) {
         final String query = "SELECT * "
-            + " FROM " + PortalJob.TABLE
-            + " WHERE " + PortalJob.PORTAL_ID + "=:" + PortalJob.PORTAL_ID
-            + " AND " + PortalJob.PUBLISHED_AT + " > :" + PortalJob.PUBLISHED_AT;
+                + " FROM " + PortalJob.TABLE
+                + " WHERE " + PortalJob.PORTAL_ID + "=:" + PortalJob.PORTAL_ID
+                + " AND " + PortalJob.PUBLISHED_AT + " > :" + PortalJob.PUBLISHED_AT
+                + " ORDER BY " + PortalJob.PUBLISHED_AT + " DESC"
+                + " , " + PortalJob.NAME + " ASC";
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue(PortalJob.PORTAL_ID, portal_id)
                 .addValue(PortalJob.PUBLISHED_AT, published_at_start);
 
         return getListFromResult(query, params);
+    }
+
+    public List<PortalJob> findAllByPortalIdPublishedRangePage(Long portal_id, Date published_at_start,
+                                                               Integer page) {
+        final String query = "SELECT * "
+                + " FROM " + PortalJob.TABLE
+                + " WHERE " + PortalJob.PORTAL_ID + "= :" + PortalJob.PORTAL_ID
+                + " AND " + PortalJob.PUBLISHED_AT + " > :" + PortalJob.PUBLISHED_AT
+                + " ORDER BY " + PortalJob.PUBLISHED_AT + " DESC"
+                + " , " + PortalJob.NAME + " ASC"
+                + " LIMIT :" + LIMIT_PARAM + " OFFSET :" + OFFSET_PARAM;
+
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue(PortalJob.PORTAL_ID, portal_id)
+                .addValue(PortalJob.PUBLISHED_AT, published_at_start)
+                .addValue(LIMIT_PARAM, PAGE_SIZE)
+                .addValue(OFFSET_PARAM, PaginationUtil.getOffset(PAGE_SIZE, page));
+
+        return getListFromResultPage(query, params, page);
     }
 
     public PortalJob create(PortalJob portalJob) {

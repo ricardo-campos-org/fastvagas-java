@@ -8,7 +8,10 @@ import fastvagas.dal.service.StateService;
 import fastvagas.exception.EntityNotFoundException;
 import fastvagas.json.AppUserJob;
 import fastvagas.json.JobDetail;
+import fastvagas.json.JobPagination;
 import fastvagas.util.DateUtil;
+import fastvagas.util.ObjectUtil;
+import fastvagas.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +34,7 @@ public class AppJobService {
     @Autowired
     PortalService portalService;
 
-    public AppUserJob getAppUserJobs(User user) {
+    public AppUserJob getAppUserJobs(User user, Integer page) {
         City city = cityService.findById(user.getCity_id());
         if (city == null) {
             throw new EntityNotFoundException(City.class, "city_id", String.valueOf(user.getCity_id()));
@@ -40,6 +43,10 @@ public class AppJobService {
         State state = stateService.findById(city.getState_id());
         if (state == null) {
             throw new EntityNotFoundException(State.class, "state_id", String.valueOf(city.getState_id()));
+        }
+
+        if (!ObjectUtil.hasValue(page)) {
+            page = 1;
         }
 
         List<Portal> portals = portalService.findAllByCityId(user.getCity_id());
@@ -56,12 +63,20 @@ public class AppJobService {
         Integer weekJobs = 0;
         Integer todayJobs = 0;
         final List<JobDetail> lastJobList = new ArrayList<>();
+
+        Integer lastCount = 0;
         for (Portal portal : portals) {
             /* Month jobs for the user city */
-            List<PortalJob> portalJobsTmp = portalJobService.findAllByPortalIdPublishedRange(
-                portal.getPortal_id(),
-                firstDayOfMonth
+            List<PortalJob> portalJobsTmp = portalJobService.findAllByPortalIdPublishedRangePage(
+                    portal.getPortal_id(),
+                    firstDayOfMonth,
+                    page
             );
+
+            lastCount = portalJobService.findAllByPortalIdPublishedRange(
+                    portal.getPortal_id(),
+                    firstDayOfMonth
+            ).size();
 
             monthJobs += portalJobsTmp.size();
 
@@ -90,8 +105,8 @@ public class AppJobService {
 
             /* Week jobs */
             weekJobs += portalJobService.findAllByPortalIdPublishedRange(
-                portal.getPortal_id(),
-                firstDayOfMonth
+                    portal.getPortal_id(),
+                    firstDayOfMonth
             ).size();
         }
 
@@ -102,10 +117,32 @@ public class AppJobService {
         appUserJob.setWeekJobs(weekJobs);
         appUserJob.setTodayJobs(todayJobs);
 
-        //appUserJob.setUserJobList();
-        appUserJob.setLastJobList(lastJobList);
-        //appUserJob.setTopJobList();
+        // User jobs
+        appUserJob.setUserJobPagination(createJobPagination(null, null, null));
+
+        // Last jobs
+        appUserJob.setLastJobPagination(createJobPagination(lastJobList, page, lastCount));
+
+        // Top jobs
+        appUserJob.setTopJobPagination(createJobPagination(null, null, null));
 
         return appUserJob;
+    }
+
+    private JobPagination createJobPagination(List<JobDetail> jobList, Integer page, Integer count) {
+        if (!ObjectUtil.hasValue(jobList, page, count)) {
+            return new JobPagination();
+        }
+
+        PaginationUtil util = new PaginationUtil(count, page);
+
+        JobPagination pagination = new JobPagination();
+        pagination.setCurrentPage(page);
+        pagination.setPages(util.getPages());
+        pagination.setHasNextPage(util.getHasNextPage());
+        pagination.setHasPreviousPage(util.getHasPreviousPage());
+        pagination.setJobList(jobList);
+
+        return pagination;
     }
 }

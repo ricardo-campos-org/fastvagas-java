@@ -26,6 +26,11 @@ public class PortalJobService {
         return portalJobDao.findAllByPortalIdPublishedRange(portal_id, published_at_start);
     }
 
+    public List<PortalJob> findAllByPortalIdPublishedRangePage(Long portal_id, Date published_at_start,
+                                                               Integer page) {
+        return portalJobDao.findAllByPortalIdPublishedRangePage(portal_id, published_at_start, page);
+    }
+
     public Map<String, PortalJob> listToMapByUrl(List<PortalJob> list) {
         Map<String, PortalJob> portalJobMap = new HashMap<>();
         list.forEach((portalJob) -> portalJobMap.put(portalJob.getUrl(), portalJob));
