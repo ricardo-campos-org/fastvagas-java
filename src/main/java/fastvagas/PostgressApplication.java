@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication(scanBasePackages = "fastvagas")
-@EnableScheduling
+//@EnableScheduling
 public class PostgressApplication {
 
     public static void main(String[] args) {

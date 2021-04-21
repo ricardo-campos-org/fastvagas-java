@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.AddressException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/guest")
@@ -76,8 +78,11 @@ public class GuestController {
     }
 
     // Crowler tests
-    @GetMapping(value = "/guest/crowler")
-    public void crowlerTests() {
+    @GetMapping(value = "/crowler", produces = "application/json")
+    public Map<String, String> crowlerTests() {
         crowlerService.start();
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "success");
+        return map;
     }
 }
