@@ -16,14 +16,17 @@ $(document).ready(function(){
             self.topVagas = ko.observableArray([]);
             self.abrirModal = ko.observable(false);
             self.vaga = ko.mapping.fromJS(JobDetail.getData());
-            self.currentPage = ko.observable(1);
+            self.currentPageUser = ko.observable(1);
+            self.currentPageLast = ko.observable(1);
+            self.currentPageTop = ko.observable(1);
+            self.cityId = ko.observable(1);
 
             iniciar();
 
             self.verVaga = verVaga;
 
             function iniciar() {
-                jQ.getJSON('/app/user/get-logged-user', (response) => {
+                jQ.getJSON('/app/index/current-user', (response) => {
                     if (response.last_login) {
                         const dateTime = response.last_login.split(' ');
                         self.ultimoLogin(dateTime[0] + ' às ' + dateTime[1]);
@@ -31,7 +34,7 @@ $(document).ready(function(){
                     self.nomePessoa(response.first_name || '');
                 });
 
-                jQ.getJSON('/app/jobs/user?page=' + self.currentPage(), (response) => {
+                jQ.getJSON('/app/index/all-jobs', (response) => {
                     if (response.cityName && response.stateName) {
                         self.cidadeEstado(`${response.cityName}/${response.stateName}`);
                     }
@@ -41,6 +44,7 @@ $(document).ready(function(){
                     self.vagasSelecionadas(response.userJobPagination.jobList || []);
                     self.ultimasVagas(response.lastJobPagination.jobList || []);
                     self.topVagas(response.topJobPagination.jobList || []);
+                    self.cityId(response.city_id || 0);
                 });
             }
 

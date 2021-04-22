@@ -2,7 +2,6 @@ package fastvagas.dal.dao;
 
 import fastvagas.exception.DatabaseException;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,8 +10,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +23,7 @@ class Dao<T> {
     protected KeyHolder keyHolder;
     protected final String LIMIT_PARAM = "LIMIT";
     protected final String OFFSET_PARAM = "OFFSET";
-    protected final Integer PAGE_SIZE = 10;
+    protected final Integer PAGE_SIZE = 3;
 
     Dao(Class<T> entityClass, NamedParameterJdbcTemplate template, RowMapper<T> rowMapper) {
         this.entityClass = entityClass;
@@ -74,30 +71,6 @@ class Dao<T> {
                 "Operação não realizada. Contate o administrador do sistema.",
                 ex,
                 entityClass.getName() + ": getListFromResult DataAccessException: " + ex.getLocalizedMessage()
-            );
-        }
-    }
-
-    List<T> getListFromResultPage(String query, SqlParameterSource params, Integer page) {
-        try {
-            Logger.getLogger(entityClass.getName()).info("SQL: " + query);
-
-            List<T> list = template.query(query, params, rowMapper);
-            if (list.isEmpty()) {
-                Logger.getLogger(entityClass.getName()).info("0 results.");
-                return new ArrayList<>();
-            }
-
-
-
-            Logger.getLogger(entityClass.getName()).info(list.size() + " row(s).");
-
-            return list;
-        } catch (DataAccessException ex) {
-            throw new DatabaseException(
-                    "Operação não realizada. Contate o administrador do sistema.",
-                    ex,
-                    entityClass.getName() + ": getListFromResult DataAccessException: " + ex.getLocalizedMessage()
             );
         }
     }
@@ -183,7 +156,7 @@ class Dao<T> {
     }
 
     protected long getGeneratedId(String keyName) {
-        Long id = 0L;
+        long id = 0L;
 
         if (!keyHolder.getKeyList().isEmpty()) {
             Object obj = keyHolder.getKeys().get(keyName);

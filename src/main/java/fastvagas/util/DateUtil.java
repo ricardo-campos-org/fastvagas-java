@@ -111,6 +111,16 @@ public class DateUtil {
         return addDays(pDate, pDays * -1);
     }
 
+    public static boolean isGreater(Date baseDate, Date other) {
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(baseDate);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(other);
+
+        return c2.getTimeInMillis() > c1.getTimeInMillis();
+    }
+
     public static boolean equalsIgnoringHours(Date pDateA, Date pDateB) {
         if (pDateA == null || pDateB == null) {
             return false;

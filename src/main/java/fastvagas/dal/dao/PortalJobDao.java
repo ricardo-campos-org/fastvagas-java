@@ -1,6 +1,5 @@
 package fastvagas.dal.dao;
 
-import fastvagas.dal.entity.Portal;
 import fastvagas.dal.entity.PortalJob;
 import fastvagas.dal.mapper.PortalJobRowMapper;
 import fastvagas.util.DateUtil;
@@ -51,23 +50,46 @@ public class PortalJobDao extends Dao<PortalJob> {
         return getListFromResult(query, params);
     }
 
-    public List<PortalJob> findAllByPortalIdPublishedRangePage(Long portal_id, Date published_at_start,
-                                                               Integer page) {
+    public List<PortalJob> findAllByCityIdPublishedRange(Long city_id, Date published_at_start) {
         final String query = "SELECT * "
                 + " FROM " + PortalJob.TABLE
-                + " WHERE " + PortalJob.PORTAL_ID + "= :" + PortalJob.PORTAL_ID
+                + " WHERE " + PortalJob.CITY_ID + "=:" + PortalJob.CITY_ID
                 + " AND " + PortalJob.PUBLISHED_AT + " > :" + PortalJob.PUBLISHED_AT
+                + " ORDER BY " + PortalJob.PUBLISHED_AT + " DESC"
+                + " , " + PortalJob.NAME + " ASC";
+
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue(PortalJob.CITY_ID, city_id)
+                .addValue(PortalJob.PUBLISHED_AT, published_at_start);
+
+        return getListFromResult(query, params);
+    }
+
+    public List<PortalJob> findAllLastByCityIdPage(Long city_id, Integer page) {
+        final String query = "SELECT * "
+                + " FROM " + PortalJob.TABLE
+                + " WHERE " + PortalJob.CITY_ID + "= :" + PortalJob.CITY_ID
                 + " ORDER BY " + PortalJob.PUBLISHED_AT + " DESC"
                 + " , " + PortalJob.NAME + " ASC"
                 + " LIMIT :" + LIMIT_PARAM + " OFFSET :" + OFFSET_PARAM;
 
         SqlParameterSource params = new MapSqlParameterSource()
-                .addValue(PortalJob.PORTAL_ID, portal_id)
-                .addValue(PortalJob.PUBLISHED_AT, published_at_start)
+                .addValue(PortalJob.CITY_ID, city_id)
                 .addValue(LIMIT_PARAM, PAGE_SIZE)
                 .addValue(OFFSET_PARAM, PaginationUtil.getOffset(PAGE_SIZE, page));
 
         return getListFromResultPage(query, params, page);
+    }
+
+    public List<PortalJob> findAllLastByCityId(Long city_id) {
+        final String query = "SELECT * "
+                + " FROM " + PortalJob.TABLE
+                + " WHERE " + PortalJob.CITY_ID + "= :" + PortalJob.CITY_ID;
+
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue(PortalJob.CITY_ID, city_id);
+
+        return getListFromResult(query, params);
     }
 
     public PortalJob create(PortalJob portalJob) {
@@ -80,6 +102,7 @@ public class PortalJobDao extends Dao<PortalJob> {
             + "," + PortalJob.URL
             + "," + PortalJob.SEEN
             + "," + PortalJob.PORTAL_ID
+            + "," + PortalJob.CITY_ID
             + ") values ("
             + ":" + PortalJob.NAME
             + ",:" + PortalJob.COMPANY_NAME
@@ -89,6 +112,7 @@ public class PortalJobDao extends Dao<PortalJob> {
             + ",:" + PortalJob.URL
             + ",:" + PortalJob.SEEN
             + ",:" + PortalJob.PORTAL_ID
+            + ",:" + PortalJob.CITY_ID
             + ")";
 
         if (executeInsert(query, getParams(portalJob)) == 1) {
@@ -109,6 +133,7 @@ public class PortalJobDao extends Dao<PortalJob> {
                 + "," + PortalJob.URL
                 + "," + PortalJob.SEEN
                 + "," + PortalJob.PORTAL_ID
+                + "," + PortalJob.CITY_ID
                 + ") values ("
                 + ":" + PortalJob.NAME
                 + ",:" + PortalJob.COMPANY_NAME
@@ -118,6 +143,7 @@ public class PortalJobDao extends Dao<PortalJob> {
                 + ",:" + PortalJob.URL
                 + ",:" + PortalJob.SEEN
                 + ",:" + PortalJob.PORTAL_ID
+                + ",:" + PortalJob.CITY_ID
                 + ")";
 
         if (executeInsertBatch(query, list).length > 0) {
@@ -137,6 +163,7 @@ public class PortalJobDao extends Dao<PortalJob> {
             + "," + PortalJob.URL + "=:" + PortalJob.URL
             + "," + PortalJob.SEEN + "=:" + PortalJob.SEEN
             + "," + PortalJob.PORTAL_ID + "=:" + PortalJob.PORTAL_ID
+            + "," + PortalJob.CITY_ID + "=:" + PortalJob.CITY_ID
             + " WHERE " + PortalJob.PORTAL_JOB_ID + "=:" + PortalJob.PORTAL_JOB_ID;
 
         if (executeUpdateDelete(query, getParams(portalJob)) == 1) {
@@ -168,6 +195,7 @@ public class PortalJobDao extends Dao<PortalJob> {
         params.put(PortalJob.URL, portalJob.getUrl());
         params.put(PortalJob.SEEN, DateUtil.getGmtTimestamp(portalJob.getSeen()));
         params.put(PortalJob.PORTAL_ID, portalJob.getPortal_id());
+        params.put(PortalJob.CITY_ID, portalJob.getCity_id());
         return params;
     }
 }

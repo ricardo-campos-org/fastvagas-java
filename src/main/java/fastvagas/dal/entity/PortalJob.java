@@ -16,6 +16,7 @@ public class PortalJob {
     public static final String URL = "url";
     public static final String SEEN = "seen";
     public static final String PORTAL_ID = "portal_id";
+    public static final String CITY_ID = "city_id";
 
     private Long portal_job_id;
     private String name;
@@ -26,6 +27,7 @@ public class PortalJob {
     private String url;
     private Date seen;
     private Long portal_id;
+    private Long city_id;
 
     public Long getPortal_job_id() {
         return portal_job_id;
@@ -125,5 +127,13 @@ public class PortalJob {
             + "," + SEEN + "='" + DateUtil.formatDate(seen, true) + "'"
             + "," + PORTAL_ID + "=" + portal_id
             + "}";
+    }
+
+    public Long getCity_id() {
+        return city_id;
+    }
+
+    public void setCity_id(Long city_id) {
+        this.city_id = city_id;
     }
 }

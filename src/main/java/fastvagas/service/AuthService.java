@@ -13,7 +13,7 @@ public class AuthService {
     @Autowired
     UserService userService;
 
-    public User getUser() {
+    public User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         org.springframework.security.core.userdetails.User userDetails =

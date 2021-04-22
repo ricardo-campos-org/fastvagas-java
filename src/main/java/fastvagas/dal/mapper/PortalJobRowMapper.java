@@ -25,6 +25,7 @@ public class PortalJobRowMapper implements RowMapper<PortalJob> {
             portalJob.setSeen(new Date(resultSet.getTimestamp(PortalJob.SEEN).getTime()));
         }
         portalJob.setPortal_id(resultSet.getLong(PortalJob.PORTAL_ID));
+        portalJob.setCity_id(resultSet.getLong(PortalJob.CITY_ID));
         return portalJob;
     }
 }

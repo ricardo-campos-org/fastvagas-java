@@ -9,7 +9,7 @@ public class PaginationUtil {
     private final Boolean hasNextPage;
     private final Boolean hasPreviousPage;
 
-    public PaginationUtil(Integer count, Integer page) {
+    public PaginationUtil(Long count, Integer page) {
         this.pages = new ArrayList<>();
 
         for (int i=0; i<count; i++) {

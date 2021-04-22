@@ -1,5 +1,7 @@
 package fastvagas.json;
 
+import fastvagas.dal.entity.PortalJob;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,6 +17,17 @@ public class JobDetail implements Serializable {
     private String url;
     private Long portal_id;
     private String portal_name;
+
+    public JobDetail(PortalJob portalJob) {
+        setPortal_job_id(portalJob.getPortal_job_id());
+        setName(portalJob.getName());
+        setCompany_name(portalJob.getCompany_name());
+        setJob_type(portalJob.getJob_type());
+        setDescription(portalJob.getDescription());
+        setPublished_at(portalJob.getPublished_at());
+        setUrl(portalJob.getUrl());
+        setPortal_id(portalJob.getPortal_id());
+    }
 
     public Long getPortal_job_id() {
         return portal_job_id;

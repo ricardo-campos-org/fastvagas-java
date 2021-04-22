@@ -9,14 +9,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class PortalJobService {
 
     @Autowired
-    private PortalJobDao portalJobDao;
+    PortalJobDao portalJobDao;
 
     public List<PortalJob> createBatch(List<PortalJob> list) {
         return portalJobDao.createBatch(list);
@@ -26,9 +24,16 @@ public class PortalJobService {
         return portalJobDao.findAllByPortalIdPublishedRange(portal_id, published_at_start);
     }
 
-    public List<PortalJob> findAllByPortalIdPublishedRangePage(Long portal_id, Date published_at_start,
-                                                               Integer page) {
-        return portalJobDao.findAllByPortalIdPublishedRangePage(portal_id, published_at_start, page);
+    public List<PortalJob> findAllByCityIdPublishedRange(Long city_id, Date published_at_start) {
+        return portalJobDao.findAllByCityIdPublishedRange(city_id, published_at_start);
+    }
+
+    public List<PortalJob> findAllLastByCityIdPage(Long city_id, Integer page) {
+        return portalJobDao.findAllLastByCityIdPage(city_id, page);
+    }
+
+    public List<PortalJob> findAllLastByCityId(Long city_id) {
+        return portalJobDao.findAllLastByCityId(city_id);
     }
 
     public Map<String, PortalJob> listToMapByUrl(List<PortalJob> list) {

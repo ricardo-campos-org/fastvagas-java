@@ -1,12 +1,11 @@
 package fastvagas.json;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AppUserJob implements Serializable {
+public class IndexJson implements Serializable {
 
     private static final long serialVersionUID = -6640904968315898140L;
+    private Long cityId;
     private String cityName;
     private String stateName;
     private Integer monthJobs;
@@ -16,7 +15,8 @@ public class AppUserJob implements Serializable {
     private JobPagination lastJobPagination;
     private JobPagination topJobPagination;
 
-    public AppUserJob() {
+    public IndexJson() {
+        this.cityId = 0L;
         this.cityName = "";
         this.stateName = "";
         this.monthJobs = 0;
@@ -89,5 +89,13 @@ public class AppUserJob implements Serializable {
 
     public void setTopJobPagination(JobPagination topJobPagination) {
         this.topJobPagination = topJobPagination;
+    }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long city_id) {
+        this.cityId = city_id;
     }
 }
