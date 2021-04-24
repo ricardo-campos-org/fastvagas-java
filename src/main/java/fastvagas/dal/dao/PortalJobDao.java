@@ -75,8 +75,8 @@ public class PortalJobDao extends Dao<PortalJob> {
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue(PortalJob.CITY_ID, city_id)
-                .addValue(LIMIT_PARAM, PAGE_SIZE)
-                .addValue(OFFSET_PARAM, PaginationUtil.getOffset(PAGE_SIZE, page));
+                .addValue(LIMIT_PARAM, PaginationUtil.PAGE_SIZE)
+                .addValue(OFFSET_PARAM, PaginationUtil.getOffset(page));
 
         return getListFromResult(query, params);
     }

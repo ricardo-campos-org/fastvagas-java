@@ -148,11 +148,16 @@
                 </div>
 
                 <!-- Pagination -->
-                <nav aria-label="Page navigation">
+                <nav aria-label="Page navigation" class="text-center">
                     <ul class="pagination">
+                        <li data-bind="css: {'disabled': lastJobPagination.currentPage() === 1}">
+                            <a href="#" aria-label="Previous" data-bind="click: lastJobPaginationFirst">
+                                <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
+                            </a>
+                        </li>
                         <li data-bind="css: {'disabled': !lastJobPagination.hasPreviousPage()}">
                             <a href="#" aria-label="Previous" data-bind="click: lastJobPaginationPrev">
-                                <span aria-hidden="true">&laquo;</span>
+                                <span aria-hidden="true"><i class="fas fa-angle-left"></i></span>
                             </a>
                         </li>
                         <!-- ko foreach: lastJobPagination.pages -->
@@ -162,7 +167,12 @@
                         <!-- /ko -->
                         <li data-bind="css: {'disabled': !lastJobPagination.hasNextPage()}">
                             <a href="#" aria-label="Next" data-bind="click: lastJobPaginationNext">
-                                <span aria-hidden="true">&raquo;</span>
+                                <span aria-hidden="true"><i class="fas fa-angle-right"></i></span>
+                            </a>
+                        </li>
+                        <li data-bind="css: {'disabled': lastJobPagination.currentPage() === lastJobPagination.pages().length }">
+                            <a href="#" aria-label="Next" data-bind="click: lastJobPaginationLast">
+                                <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
                             </a>
                         </li>
                     </ul>

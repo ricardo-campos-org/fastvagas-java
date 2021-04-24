@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-@SuppressWarnings("unchecked")
 class Dao<T> {
     private final NamedParameterJdbcTemplate template;
     private final Class<T> entityClass;
@@ -23,7 +22,6 @@ class Dao<T> {
     protected KeyHolder keyHolder;
     protected final String LIMIT_PARAM = "LIMIT";
     protected final String OFFSET_PARAM = "OFFSET";
-    protected final Integer PAGE_SIZE = 3;
 
     Dao(Class<T> entityClass, NamedParameterJdbcTemplate template, RowMapper<T> rowMapper) {
         this.entityClass = entityClass;
