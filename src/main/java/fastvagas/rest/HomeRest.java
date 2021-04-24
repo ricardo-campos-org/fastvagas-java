@@ -21,15 +21,6 @@ public class HomeRest {
     @Autowired
     HomeService homeService;
 
-    @GetMapping(value = "/current-user")
-    public User getLoggedUser() {
-        User user = authService.getCurrentUser();
-        if (user != null) {
-            user.setPassword("");
-        }
-        return user;
-    }
-
     @GetMapping(value = "/all-jobs", produces = "application/json")
     public HomeJson getAllJobs() {
         return homeService.getAllJobs(authService.getCurrentUser());

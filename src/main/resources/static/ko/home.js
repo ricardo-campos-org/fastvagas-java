@@ -25,12 +25,12 @@ $(document).ready(function(){
             iniciar();
 
             function iniciar() {
-                jQ.getJSON('/app/home/current-user', (response) => {
-                    if (response.last_login) {
-                        const dateTime = response.last_login.split(' ');
+                jQ.getJSON('/app/base/current-user', (response) => {
+                    if (response.lastLogin) {
+                        const dateTime = response.lastLogin.split(' ');
                         self.ultimoLogin(dateTime[0] + ' às ' + dateTime[1]);
                     }
-                    self.nomePessoa(response.first_name || '');
+                    self.nomePessoa(response.firstName || '');
                 });
 
                 jQ.getJSON('/app/home/all-jobs', (response) => {
