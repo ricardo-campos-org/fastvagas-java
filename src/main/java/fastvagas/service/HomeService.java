@@ -6,7 +6,7 @@ import fastvagas.dal.service.PortalJobService;
 import fastvagas.dal.service.PortalService;
 import fastvagas.dal.service.StateService;
 import fastvagas.exception.EntityNotFoundException;
-import fastvagas.json.IndexJson;
+import fastvagas.json.HomeJson;
 import fastvagas.json.JobDetail;
 import fastvagas.json.JobPagination;
 import fastvagas.util.DateUtil;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class IndexService {
+public class HomeService {
 
     @Autowired
     CityService cityService;
@@ -32,7 +32,7 @@ public class IndexService {
     @Autowired
     PortalService portalService;
 
-    public IndexJson getAllJobs(User user) {
+    public HomeJson getAllJobs(User user) {
         City city = cityService.findById(user.getCity_id());
         if (city == null) {
             throw new EntityNotFoundException(City.class, "city_id", String.valueOf(user.getCity_id()));
@@ -73,18 +73,18 @@ public class IndexService {
             }
         }
 
-        IndexJson indexJson = new IndexJson();
-        indexJson.setCityId(city.getCity_id());
-        indexJson.setCityName(city.getName());
-        indexJson.setStateName(state.getSigla_uf());
-        indexJson.setMonthJobs(cityJobs.size());
-        indexJson.setWeekJobs(weekJobs);
-        indexJson.setTodayJobs(todayJobs);
-        indexJson.setUserJobPagination(createJobPagination(null, null, null));
-        indexJson.setLastJobPagination(getLastJobs(city.getCity_id(), null));
-        indexJson.setTopJobPagination(createJobPagination(null, null, null));
+        HomeJson homeJson = new HomeJson();
+        homeJson.setCityId(city.getCity_id());
+        homeJson.setCityName(city.getName());
+        homeJson.setStateName(state.getSigla_uf());
+        homeJson.setMonthJobs(cityJobs.size());
+        homeJson.setWeekJobs(weekJobs);
+        homeJson.setTodayJobs(todayJobs);
+        homeJson.setUserJobPagination(createJobPagination(null, null, null));
+        homeJson.setLastJobPagination(getLastJobs(city.getCity_id(), null));
+        homeJson.setTopJobPagination(createJobPagination(null, null, null));
 
-        return indexJson;
+        return homeJson;
     }
 
     public JobPagination getUserJobs(User user, Integer page) {

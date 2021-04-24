@@ -10,7 +10,7 @@
             iniciar();
 
             function iniciar() {
-                jQ.getJSON('/app/user/get-logged-user', (response) => {
+                jQ.getJSON('/app/home/current-user', (response) => {
                     self.nomePessoa(response.first_name || '');
                 });
             }

@@ -2,7 +2,7 @@ package fastvagas.json;
 
 import java.io.Serializable;
 
-public class IndexJson implements Serializable {
+public class HomeJson implements Serializable {
 
     private static final long serialVersionUID = -6640904968315898140L;
     private Long cityId;
@@ -15,7 +15,7 @@ public class IndexJson implements Serializable {
     private JobPagination lastJobPagination;
     private JobPagination topJobPagination;
 
-    public IndexJson() {
+    public HomeJson() {
         this.cityId = 0L;
         this.cityName = "";
         this.stateName = "";

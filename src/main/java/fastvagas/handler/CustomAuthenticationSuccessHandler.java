@@ -30,6 +30,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             userService.update(user);
         }
 
-        response.sendRedirect("/app");
+        response.sendRedirect("/home");
     }
 }

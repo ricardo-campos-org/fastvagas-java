@@ -11,9 +11,9 @@ public class PagesController {
         return "index";
     }
 
-    @GetMapping("/app")
+    @GetMapping("/home")
     public String appIndex() {
-        return "app/index";
+        return "app/home";
     }
 
     @GetMapping("/termos-de-busca")

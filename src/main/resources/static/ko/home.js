@@ -25,7 +25,7 @@ $(document).ready(function(){
             iniciar();
 
             function iniciar() {
-                jQ.getJSON('/app/index/current-user', (response) => {
+                jQ.getJSON('/app/home/current-user', (response) => {
                     if (response.last_login) {
                         const dateTime = response.last_login.split(' ');
                         self.ultimoLogin(dateTime[0] + ' às ' + dateTime[1]);
@@ -33,7 +33,7 @@ $(document).ready(function(){
                     self.nomePessoa(response.first_name || '');
                 });
 
-                jQ.getJSON('/app/index/all-jobs', (response) => {
+                jQ.getJSON('/app/home/all-jobs', (response) => {
                     if (response.cityName && response.stateName) {
                         self.cidadeEstado(`${response.cityName}/${response.stateName}`);
                     }
@@ -65,7 +65,7 @@ $(document).ready(function(){
                 idx += 1;
 
                 const query = '?page=' + idx + '&city_id=' + self.cityId();
-                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                jQ.getJSON('/app/home/last-jobs' + query, (response) => {
                     self.ultimasVagas([]);
                     ko.mapping.fromJS(response, self.lastJobPagination);
                     if (response.jobList.length > 0) {
@@ -76,7 +76,7 @@ $(document).ready(function(){
 
             self.lastJobPaginationFirst = function() {
                 const query = '?page=1&city_id=' + self.cityId();
-                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                jQ.getJSON('/app/home/last-jobs' + query, (response) => {
                     self.ultimasVagas([]);
                     ko.mapping.fromJS(response, self.lastJobPagination);
                     if (response.jobList.length > 0) {
@@ -96,7 +96,7 @@ $(document).ready(function(){
                 idx += 1;
 
                 const query = '?page=' + idx + '&city_id=' + self.cityId();
-                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                jQ.getJSON('/app/home/last-jobs' + query, (response) => {
                     self.ultimasVagas([]);
                     ko.mapping.fromJS(response, self.lastJobPagination);
                     if (response.jobList.length > 0) {
@@ -107,7 +107,7 @@ $(document).ready(function(){
 
             self.lastJobPaginationLast = function() {
                 const query = '?page=' + self.lastJobPagination.pages().length + '&city_id=' + self.cityId();
-                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                jQ.getJSON('/app/home/last-jobs' + query, (response) => {
                     self.ultimasVagas([]);
                     ko.mapping.fromJS(response, self.lastJobPagination);
                     if (response.jobList.length > 0) {
@@ -118,7 +118,7 @@ $(document).ready(function(){
 
             self.lastJobPaginationPage = function(page) {
                 const query = '?page=' + page + '&city_id=' + self.cityId();
-                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                jQ.getJSON('/app/home/last-jobs' + query, (response) => {
                     self.ultimasVagas([]);
                     ko.mapping.fromJS(response, self.lastJobPagination);
                     if (response.jobList.length > 0) {
