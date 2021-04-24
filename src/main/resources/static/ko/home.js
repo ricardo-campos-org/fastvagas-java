@@ -20,10 +20,9 @@ $(document).ready(function(){
             self.currentPageLast = ko.observable(1);
             self.currentPageTop = ko.observable(1);
             self.cityId = ko.observable(1);
+            self.lastJobPagination = ko.mapping.fromJS(HomePagination.getData());
 
             iniciar();
-
-            self.verVaga = verVaga;
 
             function iniciar() {
                 jQ.getJSON('/app/index/current-user', (response) => {
@@ -44,14 +43,61 @@ $(document).ready(function(){
                     self.vagasSelecionadas(response.userJobPagination.jobList || []);
                     self.ultimasVagas(response.lastJobPagination.jobList || []);
                     self.topVagas(response.topJobPagination.jobList || []);
-                    self.cityId(response.city_id || 0);
+                    self.cityId(response.cityId || 0);
+
+                    ko.mapping.fromJS(response.lastJobPagination, self.lastJobPagination);
                 });
             }
 
-            function verVaga(item) {
+            self.verVaga = function(item) {
                 ko.mapping.fromJS(item, self.vaga);
                 self.abrirModal(true);
-            }
+            };
+
+            self.lastJobPaginationNext = function() {
+                const currentPage = self.lastJobPagination.currentPage();
+                let idx = currentPage - 1;
+                idx++;
+                idx += 1;
+                console.log('next:', idx);
+
+                const query = '?page=' + idx + '&city_id=' + self.cityId();
+                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                    self.ultimasVagas([]);
+                    ko.mapping.fromJS(response, self.lastJobPagination);
+                    if (response.jobList.length > 0) {
+                        self.ultimasVagas(response.jobList);
+                    }
+                });
+            };
+
+            self.lastJobPaginationPrev = function() {
+                const currentPage = self.lastJobPagination.currentPage();
+                let idx = currentPage - 1;
+                idx--;
+                idx += 1;
+                console.log('prev:', idx);
+
+                const query = '?page=' + idx + '&city_id=' + self.cityId();
+                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                    self.ultimasVagas([]);
+                    ko.mapping.fromJS(response.lastJobPagination, self.lastJobPagination);
+                    if (response.jobList.length > 0) {
+                        self.ultimasVagas(response.jobList);
+                    }
+                });
+            };
+
+            self.lastJobPaginationPage = function(page) {
+                const query = '?page=' + page + '&city_id=' + self.cityId();
+                jQ.getJSON('/app/index/last-jobs' + query, (response) => {
+                    self.ultimasVagas([]);
+                    ko.mapping.fromJS(response, self.lastJobPagination);
+                    if (response.jobList.length > 0) {
+                        self.ultimasVagas(response.jobList);
+                    }
+                });
+            };
         }
 
         ko.applyBindings(new HomeVM(jQuery));

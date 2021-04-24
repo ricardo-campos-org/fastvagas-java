@@ -148,6 +148,7 @@ gulp.task('app-js', function() {
 gulp.task('app-ko', function() {
     return gulp.src([
         'model/jobDetail.js',
+        'model/homePagination.js',
         'ko/handlers.js',
         'ko/home.js',
         'ko/minha-conta.js'])

@@ -47,7 +47,11 @@ public class IndexService {
         final Integer month = DateUtil.getMonthFromDate(today);
         final Integer year = DateUtil.getYearFromDate(today);
         final Date firstDayOfMonth = DateUtil.createDate(1, month, year);
-        final Date weekDate = new Date(); // FIXME
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(today);
+
+        final Date weekDate = DateUtil.subtractDays(today, (c.get(Calendar.DAY_OF_WEEK)-1));
 
         int weekJobs = 0;
         int todayJobs = 0;

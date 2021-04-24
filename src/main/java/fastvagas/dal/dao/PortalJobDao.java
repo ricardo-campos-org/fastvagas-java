@@ -78,7 +78,7 @@ public class PortalJobDao extends Dao<PortalJob> {
                 .addValue(LIMIT_PARAM, PAGE_SIZE)
                 .addValue(OFFSET_PARAM, PaginationUtil.getOffset(PAGE_SIZE, page));
 
-        return getListFromResultPage(query, params, page);
+        return getListFromResult(query, params);
     }
 
     public List<PortalJob> findAllLastByCityId(Long city_id) {

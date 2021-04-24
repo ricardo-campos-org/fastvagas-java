@@ -109,6 +109,7 @@ public class CrowlerService {
                 // Save the job, if it's not already saved
                 if (!portalJobMap.containsKey(portalJob.getUrl())) {
                     portalJob.setPortal_id(portal.getPortal_id());
+                    portalJob.setCity_id(portal.getCity_id());
                     portalJobToSave.add(portalJob);
                 }
 
