@@ -30,7 +30,7 @@
                         <div class="overlay-box">
                             <div class="user-content">
                                 <a href="javascript:void(0)" title="Alterar imagem do perfil">
-                                    <img src="http://localhost:5000/user/img/users/user.png" class="thumb-lg img-circle" alt="Imagem do usuário"></a>
+                                    <img th:src="@{/img/users/user.png}" class="thumb-lg img-circle" alt="Imagem do usuário"></a>
                                 <h4 class="text-white">Login</h4>
                                 <h5 class="text-white" data-bind="text: userAccount.email"></h5>
                             </div>
@@ -102,6 +102,7 @@
                         </span>
 
                         <input type="submit" class="btn btn-primary" value="Salvar">
+                        <input type="button" class="btn btn-secondary" value="Cancelar" data-bind="click: cancelarMeusDados">
                     </form>
 
                     <div class="alert alert-danger" style="margin-top: 20px;" role="alert" data-bind="visible: erro() !== '', text: erro"></div>

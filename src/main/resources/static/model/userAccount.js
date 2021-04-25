@@ -9,7 +9,8 @@ class UserAccount {
             createdAt: '',
             lastLogin: '',
             cityName: '',
-            stateName: ''
+            stateName: '',
+            password: ''
         }
     }
 }

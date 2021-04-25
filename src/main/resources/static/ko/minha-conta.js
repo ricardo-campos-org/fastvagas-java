@@ -28,8 +28,6 @@
             self.submitMeusDados = function() {
                 self.erro('');
 
-                console.log('self.nameChange():', self.nameChange());
-
                 let somethingChanged = self.nameChange()
                     || self.lastNameChange()
                     || self.emailChange()
@@ -46,6 +44,42 @@
                         return;
                     }
                 }
+
+                self.aguarde(true);
+
+                const userAccountJson = {
+                    firstName: self.nameChange() || self.userAccount.firstName(),
+                    lastName: self.lastNameChange() || self.userAccount.lastName(),
+                    email: self.emailChange() || self.userAccount.email(),
+                    password: self.passwdChange() || ''
+                };
+
+                jQ.ajax({
+                    type: 'POST',
+                    url: '/app/minha-conta/update-user-data',
+                    data: JSON.stringify(userAccountJson),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    sucess: function() {
+                        console.log('it works!');
+                        //self.nomePessoa(response.firstName || '');
+                        //ko.mapping.fromJS(response, self.userAccount);
+                        self.aguarde(false);
+                    },
+                    error: function() {
+                        console.log('it not works!');
+                        self.aguarde(false);
+                    }
+                });
+            };
+
+            self.cancelarMeusDados = function() {
+                self.erro('');
+                self.nameChange(undefined);
+                self.lastNameChange(undefined);
+                self.emailChange(undefined);
+                self.passwdChange(undefined);
+                self.passwdChangeTwo(undefined);
             };
 
             self.submitConta = function() {

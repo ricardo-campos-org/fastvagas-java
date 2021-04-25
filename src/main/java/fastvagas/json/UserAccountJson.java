@@ -15,6 +15,7 @@ public class UserAccountJson implements Serializable {
     private Date lastLogin;
     private String cityName;
     private String stateName;
+    private String password;
 
     public Long getUserId() {
         return userId;
@@ -86,5 +87,13 @@ public class UserAccountJson implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

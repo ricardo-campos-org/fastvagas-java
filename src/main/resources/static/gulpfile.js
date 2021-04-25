@@ -12,6 +12,7 @@ const maps = require('gulp-sourcemaps');
 const composer = require('gulp-uglify/composer');
 const uglify = composer(uglifyes, console);
 const stripCssComments = require('gulp-strip-css-comments');
+const watch = require('gulp-watch');
 
 const argv = require('minimist')(process.argv.slice(2));
 
@@ -83,8 +84,10 @@ gulp.task('custom-js', function() {
         'js/validation.js',
         'js/custom.js'])
     .pipe(concat('custom.js'))
-    .pipe(gulpif(!config.production, uglify()))
+    .pipe(gulpif(!config.production, sourcemaps.init()))
+    .pipe(gulpif(config.production, uglify()))
     .pipe(addBOM())
+    .pipe(gulpif(!config.production, sourcemaps.write('./')))
     .pipe(gulp.dest('dist/js/'));
 });
 
@@ -109,11 +112,6 @@ gulp.task('app-js', function() {
         'node_modules/jquery-toast-plugin/dist/jquery.toast.js'
     );
 
-    fs.copyFileSync(
-        'dist/js/custom.js',
-        'dist/js/custom.min.js'
-    );
-
     var files = [
         'node_modules/jquery/dist/jquery.min.js',
         'node_modules/bootstrap/dist/js/bootstrap.min.js',
@@ -129,8 +127,7 @@ gulp.task('app-js', function() {
         'node_modules/jquery-sparkline/jquery.sparkline.min.js',
         'node_modules/jquery-toast-plugin/dist/jquery.toast.min.js',
         'node_modules/jquery-validation/dist/jquery.validate.min.js',
-        'node_modules/jquery-validation/dist/localization/messages_pt_BR.min.js',
-        'dist/js/custom.min.js'
+        'node_modules/jquery-validation/dist/localization/messages_pt_BR.min.js'
     ];
 
     if (!config.production) {
@@ -152,8 +149,10 @@ gulp.task('app-ko', function() {
         'ko/home.js',
         'ko/minha-conta.js'])
     .pipe(concat('app-ko.js'))
-    .pipe(gulpif(!config.production, uglify()))
+    .pipe(gulpif(!config.production, sourcemaps.init()))
+    .pipe(gulpif(config.production, uglify()))
     .pipe(addBOM())
+    .pipe(gulpif(!config.production, sourcemaps.write('./')))
     .pipe(gulp.dest('dist/js/'));
 });
 
@@ -165,3 +164,8 @@ gulp.task('default', gulp.series(
     'app-js',
     'app-ko'
 ));
+
+gulp.task('watch', function() {
+    watch(['js/*.js', 'ko/*.js', 'model/*.js'], gulp.series('default'))
+});
+

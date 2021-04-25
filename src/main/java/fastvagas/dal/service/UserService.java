@@ -8,6 +8,7 @@ import fastvagas.exception.InUseException;
 import fastvagas.exception.InvalidEmailException;
 import fastvagas.exception.InvalidFieldException;
 import fastvagas.util.MailUtil;
+import fastvagas.util.ObjectUtil;
 import fastvagas.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,10 @@ public class UserService {
 
     public User update(User user) {
         validations(user, false);
+
+        if (ObjectUtil.hasValue(user.getPassword())) {
+            user.setPassword(PasswordUtil.getSaltedHash(user.getPassword()));
+        }
 
         user.setDisabled_at(null);
         return userDao.update(user);
@@ -140,11 +145,13 @@ public class UserService {
             }
         }
 
-        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-            throw new InvalidFieldException(
-                "Problema ao " + (create? "cadastrar" : "alterar") + " usuário: senha não informado",
-                "Field " + User.PASSWORD + " must not be empty"
-            );
+        if (create) {
+            if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+                throw new InvalidFieldException(
+                        "Problema ao cadastrar usuário: senha não informada",
+                        "Field " + User.PASSWORD + " must not be empty"
+                );
+            }
         }
 
         if (user.getCity_id() == null || user.getCity_id() == 0) {

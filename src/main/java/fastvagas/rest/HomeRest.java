@@ -6,6 +6,7 @@ import fastvagas.json.JobPagination;
 import fastvagas.service.AuthService;
 import fastvagas.service.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +22,7 @@ public class HomeRest {
     @Autowired
     HomeService homeService;
 
-    @GetMapping(value = "/all-jobs", produces = "application/json")
+    @GetMapping(value = "/all-jobs", produces = MediaType.APPLICATION_JSON_VALUE)
     public HomeJson getAllJobs() {
         return homeService.getAllJobs(authService.getCurrentUser());
     }
