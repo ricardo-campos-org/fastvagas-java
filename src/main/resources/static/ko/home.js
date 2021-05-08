@@ -46,6 +46,16 @@ $(document).ready(function(){
                     self.cityId(response.cityId || 0);
 
                     ko.mapping.fromJS(response.lastJobPagination, self.lastJobPagination);
+
+                    // Spark Line widgets
+                    $('#sparklinedash').sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
+                        type: 'bar',
+                        height: '30',
+                        barWidth: '4',
+                        resize: true,
+                        barSpacing: '5',
+                        barColor: '#7ace4c'
+                    });
                 });
             }
 
