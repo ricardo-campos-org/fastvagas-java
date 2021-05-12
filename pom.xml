@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>br.com.fastvagas</groupId>
+    <groupId>br.com.ondetemvagas</groupId>
     <artifactId>webapp</artifactId>
     <version>1.0</version>
-    <url>https://fastvagas.com.br</url>
+    <url>https://ondetemvagas.com.br</url>
     <name>Spring Security - ${project.artifactId}</name>
     <description>Demo project for Spring Boot</description>
     <packaging>jar</packaging>
