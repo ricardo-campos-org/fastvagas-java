@@ -19,11 +19,11 @@ public class PostgressApplication {
     @Autowired
     ThymeleafProperties thymeleafProperties;
 
-    @Value("${spring.thymleaf.templates_root:}")
+    @Value("${spring.thymeleaf.templates_root:}")
     private String templatesRoot;
 
     public static void main(String[] args) {
-        System.out.println("123456: " + new BCryptPasswordEncoder().encode("123456"));
+        //System.out.println("123456: " + new BCryptPasswordEncoder().encode("123456"));
         SpringApplication.run(PostgressApplication.class, args);
     }
 

@@ -185,7 +185,7 @@ h5, h6          { font-weight: bolder }
 .billboard .caption hr{
     display: inline-block;
     height: 1px;
-    width: 30px;
+    width: 300px;
     border: 0!important;   
     margin: 0;
     padding: 0;
@@ -269,15 +269,13 @@ header.dark nav ul li a:hover{
 .services ul li{
     list-style: none;
     display: block;
-    width: 313px;
-    float: left;
-    margin-left: 80px;
+    /*width: 313px;*/
+    /*float: left;*/
+    /*margin-left: 80px;*/
     text-align: center;
 }
 
-.services ul li:first-child{
-    margin-left: 0;
-}
+
 
 .services ul li .separator{
     display: block;

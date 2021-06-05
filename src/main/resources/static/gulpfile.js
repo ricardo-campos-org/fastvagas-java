@@ -166,6 +166,6 @@ gulp.task('default', gulp.series(
 ));
 
 gulp.task('watch', function() {
-    watch(['js/*.js', 'ko/*.js', 'model/*.js'], gulp.series('default'))
+    watch(['js/*.js', 'ko/*.js', 'model/*.js', 'css/*.css'], gulp.series('default'))
 });
 

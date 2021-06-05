@@ -10,7 +10,8 @@
     <meta name="author" content="Ricardo Montania Prado de Campos">
     <meta name="description" content="Ferramenta de busca de vagas"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900">
-    <link rel="stylesheet" type="text/css" href="/dist/css/login.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/dist/css/app.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/dist/css/login.css}">
 
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
@@ -31,15 +32,16 @@
     <div id="index">
     <!-- Header top -->
     <section class="billboard light">
-        <header class="wrapper light">
-            <a th:href="@{/}">
+        <header class="container-fluid light">
+            <a class="navbar-brand" th:href="@{/}">
                 <img class="logo" src="/img/fast_logo2a.png" width="56" alt="Logo Ontem Tem Vagas"/>
                 <span class="logo-index">Onde Tem Vagas</span>
             </a>
-            <nav>
-                <ul>
-                    <li><a href="#" id="contato-header">Contato</a></li>
-                    <li><a href="javascript:;" class="cadastre-se">Cadastre-se</a></li>
+
+            <nav class="hidden-xs hidden-sm" id="header-menu-colps1">
+                <ul class="nav navbar-nav">
+                    <li><a href="#" class="contato-header">Contato</a></li>
+                    <li><a href="#" class="cadastre-se">Cadastre-se</a></li>
                     <li><a th:href="@{/app}" class="acessar-conta">Minhas vagas</a></li>
                 </ul>
             </nav>
@@ -47,30 +49,39 @@
 
         <div class="caption light animated wow fadeInDown clearfix">
             <h1>Eficiência na busca de vagas</h1>
-            <p>Somos um serviço de busca de anúncios que varre,<br>
-                filtra e coloca o resultado na sua mão. Simples assim!</p>
+            <p>Somos um serviço de busca de anúncios que varre,
+                filtra e coloca o resultado na sua mão. Simples assim!
+            </p>
             <hr>
         </div>
+
+        <div class="row visible-xs visible-sm" style="margin-top:30px;">
+            <div class="col-sm-12 text-center">
+                <button type="button" class="btn btn-default contato-header">Contato</button>
+                <button type="button" class="btn btn-default cadastre-se">Cadastre-se</button>
+                <a th:href="@{/app}" class="btn btn-default">Minhas vagas</a>
+            </div>
+        </div>
+
         <div class="shadow"></div>
     </section>
 
     <!-- Serviços -->
-    <section class="services wrapper">
-        <div class="clearfix"></div>
+    <section class="container-fluid services">
         <ul class="row">
-            <li class="col-sm-4 col-xs-12 animated wow fadeInDown">
+            <li class="col-xs-12 col-md-4 animated wow fadeInDown">
                 <img class="icon" src="/img/icon1.png" alt="Eficiência"/>
 
                 <h2>Vamos lá!</h2>
                 <p>Você informa o nome da vaga e a cidade que está procurando.</p>
             </li>
-            <li class="col-sm-4 col-xs-12 animated wow fadeInDown" data-wow-delay=".2s">
+            <li class="col-xs-12 col-md-4 animated wow fadeInDown" data-wow-delay=".2s">
                 <img class="icon" src="/img/icon2.png" alt="Seus filtros"/>
 
                 <h2>Filtros</h2>
                 <p>Define todas os termos que podem ser usados como filtro de pesquisa.</p>
             </li>
-            <li class="col-sm-4 col-xs-12 animated wow fadeInDown" data-wow-delay=".4s">
+            <li class="col-xs-12 col-md-4 animated wow fadeInDown" data-wow-delay=".4s">
                 <img class="icon" src="/img/icon3.png" alt="De olho"/>
 
                 <h2>E fica de olho</h2>
@@ -91,7 +102,7 @@
 
     <!-- Contato -->
     <section class="blog_posts" id="contato">
-        <div class="wrapper">
+        <div class="container-fluid">
             <div class="title animated wow fadeInDown">
                 <h2>Contato</h2>
                 <h3>Quer saber mais ou ficou alguma dúvida? Escreva-nos agora mesmo!</h3>
@@ -155,11 +166,11 @@
                         <ul class="ul-contato">
                             <li>
                                 <i class="fa fa-phone"></i>
-                                <a href="tel:47991699982">(47) 99169-9982</a> (Claro)
+                                <a href="https://api.whatsapp.com/send?phone=5547991699982text=Hey">(47) 99169-9982</a> (Claro)
                             </li>
                             <li>
                                 <i class="fa fa-envelope"></i>
-                                <a href="mailto:ricardompcampos@gmail.com">ricardompcampos@gmail.com</a>
+                                <a href="mailto:ricardo@ricardocampos.blog">ricardo@ricardocampos.blog</a>
                             </li>
                             <li>
                                 <i class="fab fa-facebook"></i>
@@ -190,7 +201,7 @@
                     <li><a href="#">Termos de uso</a></li>
                     <li><a href="#" id="contato-footer">Contato</a></li>
                     <li><a href="javascript:;" class="cadastre-se">Cadastre-se</a></li>
-                    <li><a href="/app" class="acessar-conta">Minhas vagas</a></li>
+                    <li><a th:href="@{/app}" class="acessar-conta">Minhas vagas</a></li>
                 </ul>
             </nav>
         </div>
@@ -341,9 +352,9 @@
 
     </div>
 
-    <script src="/dist/js/app.js"></script>
-    <script src="/js/app.js"></script>
-    <script src="/js/index.js"></script>
-    <script src="/js/vm-index.js"></script>
+    <script th:src="@{/dist/js/app.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/index.js}"></script>
+    <script th:src="@{/js/vm-index.js}"></script>
 </body>
 </html>

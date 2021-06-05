@@ -10,7 +10,7 @@ $(document).ready(function(){
 	*/
     
     // Evento ao clicar no link 'contato' no header: rola até o form no rodapé
-    $('#contato-header').click(function(e) {
+    $('.contato-header').click(function(e) {
         e.preventDefault();
         $([document.documentElement, document.body]).animate({
             scrollTop: $("#contato").offset().top
