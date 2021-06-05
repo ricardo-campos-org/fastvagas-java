@@ -1,4 +1,4 @@
-CALL compilar.bat
+CALL compilarDev.bat
 @IF %ERRORLEVEL% NEQ 0 (
     EXIT /B 1
 )

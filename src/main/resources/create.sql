@@ -1,1 +1,1 @@
-CREATE DATABASE fastvagas;
+CREATE DATABASE ondetemvagas;
