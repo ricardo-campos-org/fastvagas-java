@@ -3,8 +3,10 @@
       xmlns:th="http://www.thymeleaf.org"
       lang="pt">
 <head>
-    <title>Fast Vagas - Ferramenta de busca de vagas</title>
+    <title>Onde Tem Vagas - A sua ferramenta de busca de vagas</title>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Ricardo Montania Prado de Campos">
     <meta name="description" content="Ferramenta de busca de vagas"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900">
@@ -21,9 +23,9 @@
     <meta property="og:image:width" content="1027">
     <meta property="og:image:height" content="538">
     <meta property="og:description" content="A sua melhor ferramenta na busca por vagas de emprego">
-    <meta property="og:title" content="Fast Vagas">
-    <meta property="og:url" content="https://www.fastvagas.com.br">
-    <meta property="og:image" content="https://www.fastvagas.com.br/faceog/og-image.jpg">
+    <meta property="og:title" content="Ontem Tem Vagas">
+    <meta property="og:url" content="https://ondetemvagas.com.br">
+    <meta property="og:image" content="https://ondetemvagas.com.br/faceog/og-image.jpg">
 </head>
 <body>
     <div id="index">
@@ -31,8 +33,8 @@
     <section class="billboard light">
         <header class="wrapper light">
             <a th:href="@{/}">
-                <img class="logo" src="/img/fast_logo2a.png" width="56" alt="Logo Fast Vagas"/>
-                <span class="logo-index">Fast Vagas</span>
+                <img class="logo" src="/img/fast_logo2a.png" width="56" alt="Logo Ontem Tem Vagas"/>
+                <span class="logo-index">Onde Tem Vagas</span>
             </a>
             <nav>
                 <ul>
@@ -54,20 +56,21 @@
 
     <!-- Serviços -->
     <section class="services wrapper">
-        <ul class="clearfix">
-            <li class="animated wow fadeInDown">
+        <div class="clearfix"></div>
+        <ul class="row">
+            <li class="col-sm-4 col-xs-12 animated wow fadeInDown">
                 <img class="icon" src="/img/icon1.png" alt="Eficiência"/>
 
                 <h2>Vamos lá!</h2>
                 <p>Você informa o nome da vaga e a cidade que está procurando.</p>
             </li>
-            <li class="animated wow fadeInDown"  data-wow-delay=".2s">
+            <li class="col-sm-4 col-xs-12 animated wow fadeInDown" data-wow-delay=".2s">
                 <img class="icon" src="/img/icon2.png" alt="Seus filtros"/>
 
                 <h2>Filtros</h2>
                 <p>Define todas os termos que podem ser usados como filtro de pesquisa.</p>
             </li>
-            <li class="animated wow fadeInDown"  data-wow-delay=".4s">
+            <li class="col-sm-4 col-xs-12 animated wow fadeInDown" data-wow-delay=".4s">
                 <img class="icon" src="/img/icon3.png" alt="De olho"/>
 
                 <h2>E fica de olho</h2>
@@ -177,7 +180,7 @@
     <footer>
         <div class="wrapper">
             <div class="rights">
-                <p>2021 &copy; Fast Vagas. Todos os direitos reservados.</p>
+                <p>2021 &copy; Ontem Tem Vagas. Todos os direitos reservados.</p>
             </div>
 
             <nav>
@@ -201,7 +204,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title" id="modal_cadastro_label">Criar sua conta no Fast Vagas</h4>
+                    <h4 class="modal-title" id="modal_cadastro_label">Criar sua conta</h4>
                 </div>
                 <form id="conta_form" class="form" novalidate>
                     <div class="modal-body">

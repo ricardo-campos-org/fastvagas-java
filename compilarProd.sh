@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd src/main/resouces/static
+cd src/main/resources/static
 npm install
 gulp --production
 if [ "$?" -ne 0 ]; then
