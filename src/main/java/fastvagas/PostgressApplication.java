@@ -22,6 +22,9 @@ public class PostgressApplication {
     @Value("${spring.thymeleaf.templates_root:}")
     private String templatesRoot;
 
+    @Value("${spring.profiles.active}")
+    private String profileActive;
+
     public static void main(String[] args) {
         //System.out.println("123456: " + new BCryptPasswordEncoder().encode("123456"));
         SpringApplication.run(PostgressApplication.class, args);
@@ -31,7 +34,9 @@ public class PostgressApplication {
     public ITemplateResolver defaultTemplateResolver() {
         FileTemplateResolver resolver = new FileTemplateResolver();
         resolver.setSuffix(thymeleafProperties.getSuffix());
-        resolver.setPrefix(templatesRoot);
+        if ("dev".equals(profileActive)) {
+            resolver.setPrefix(templatesRoot);
+        }
         resolver.setTemplateMode(thymeleafProperties.getMode());
         resolver.setCacheable(thymeleafProperties.isCache());
         return resolver;
