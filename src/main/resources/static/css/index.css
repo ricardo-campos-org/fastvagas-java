@@ -245,6 +245,7 @@ header.light nav ul li a{
 
 header.light nav ul li a:hover{
     color: #B9B9B9;
+    background-color: rgba(0,0,0,0);
 }
 
 header.dark nav ul li a{  
