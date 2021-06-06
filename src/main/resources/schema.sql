@@ -46,7 +46,7 @@ CREATE TABLE users (
     first_name     VARCHAR(20) NOT NULL,
     last_name      VARCHAR(30) NOT NULL,
     email          VARCHAR(100) UNIQUE NOT NULL,
-    password       VARCHAR(255) NOT NULL,
+    password       VARCHAR(60) NOT NULL,
     city_id        INTEGER NOT NULL REFERENCES cities (city_id),
     enabled        INT NOT NULL DEFAULT 1,
     last_login     TIMESTAMP NULL,

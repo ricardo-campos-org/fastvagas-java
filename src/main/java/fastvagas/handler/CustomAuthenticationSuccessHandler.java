@@ -27,6 +27,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         User user = userService.findByEmail(authentication.getName());
         if (user != null) {
             user.setLast_login(new Date());
+            user.setPassword("");
             userService.update(user);
         }
 
