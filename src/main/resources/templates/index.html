@@ -55,19 +55,20 @@
             <hr>
         </div>
 
-        <div class="row visible-xs visible-sm" style="margin-top:30px;">
-            <div class="col-sm-12 text-center">
-                <button type="button" class="btn btn-default contato-header">Contato</button>
-                <button type="button" class="btn btn-default cadastre-se">Cadastre-se</button>
-                <a th:href="@{/app}" class="btn btn-default">Minhas vagas</a>
-            </div>
-        </div>
-
         <div class="shadow"></div>
     </section>
 
     <!-- Serviços -->
     <section class="container-fluid services">
+        <div class="row visible-xs visible-sm" style="margin-top:30px;">
+            <div class="col-xs-6">
+                <button type="button" class="btn btn-inverse btn-block cadastre-se">Cadastre-se</button>
+            </div>
+            <div class="col-xs-6">
+                <a th:href="@{/app}" class="btn btn-inverse btn-block">Minhas vagas</a>
+            </div>
+        </div>
+
         <ul class="row">
             <li class="col-xs-12 col-md-4 animated wow fadeInDown">
                 <img class="icon" src="/img/icon1.png" alt="Eficiência"/>
@@ -92,12 +93,14 @@
 
     <!-- Botões app -->
     <section class="video">
+        <!--
         <a href="#" class="wow">
             <img src="/img/appstore.png" height="150" alt="App Store Download" class="video_logo animated wow fadeInDown animated"/>
         </a>
         <a href="#2" class="wow">
             <img src="/img/googleplay.png" height="150" alt="App Store Download" class="video_logo animated wow fadeInDown animated"/>
         </a>
+        -->
     </section>
 
     <!-- Contato -->
@@ -189,18 +192,18 @@
 
     <!-- Footer -->
     <footer>
-        <div class="wrapper">
+        <div class="container-fluid">
             <div class="rights">
                 <p>2021 &copy; Ontem Tem Vagas. Todos os direitos reservados.</p>
             </div>
 
-            <nav>
+            <nav class="hidden-xs hidden-sm">
                 <ul>
                     <li><a href="#" id="to-top">Início</a></li>
                     <li><a href="#">Política de privacidade</a></li>
                     <li><a href="#">Termos de uso</a></li>
                     <li><a href="#" id="contato-footer">Contato</a></li>
-                    <li><a href="javascript:;" class="cadastre-se">Cadastre-se</a></li>
+                    <li><a href="#" class="cadastre-se">Cadastre-se</a></li>
                     <li><a th:href="@{/app}" class="acessar-conta">Minhas vagas</a></li>
                 </ul>
             </nav>
