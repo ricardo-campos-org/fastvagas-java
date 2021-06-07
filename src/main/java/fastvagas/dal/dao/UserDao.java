@@ -3,6 +3,7 @@ package fastvagas.dal.dao;
 import fastvagas.dal.entity.User;
 import fastvagas.dal.mapper.UserRowMapper;
 import fastvagas.util.DateUtil;
+import fastvagas.util.ObjectUtil;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -90,7 +91,9 @@ public class UserDao extends Dao<User> {
         sb.append("SET ").append(User.FIRST_NAME).append("=:").append(User.FIRST_NAME);
         sb.append(",").append(User.LAST_NAME).append("=:").append(User.LAST_NAME);
         sb.append(",").append(User.EMAIL).append("=:").append(User.EMAIL);
-        sb.append(",").append(User.PASSWORD).append("=:").append(User.PASSWORD);
+        if (ObjectUtil.hasValue(user.getPassword())) {
+            sb.append(",").append(User.PASSWORD).append("=:").append(User.PASSWORD);
+        }
         sb.append(",").append(User.CITY_ID).append("=:").append(User.CITY_ID);
         if (user.getDisabled_at() != null) {
             sb.append(",").append(User.DISABLED_AT).append("=:").append(User.DISABLED_AT);
