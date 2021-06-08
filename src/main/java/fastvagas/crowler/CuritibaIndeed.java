@@ -1,0 +1,16 @@
+package fastvagas.crowler;
+
+import fastvagas.crowler.shared.Indeed;
+import fastvagas.dal.entity.PortalJob;
+import org.jsoup.nodes.Document;
+
+import java.util.List;
+
+public class CuritibaIndeed implements Crowler {
+
+    @Override
+    public List<PortalJob> findJobs(Document document) {
+        Indeed indeed = new Indeed();
+        return indeed.findJobs(document);
+    }
+}

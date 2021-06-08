@@ -33,7 +33,7 @@ CREATE TABLE portal_jobs (
     job_type       VARCHAR(30) NULL,
     description    VARCHAR(600) NOT NULL,
     published_at   TIMESTAMP NULL, -- e.g. 1999-01-08
-    url            VARCHAR(300) NOT NULL,
+    url            VARCHAR(1000) NOT NULL,
     seen           TIMESTAMP NULL, -- e.g. 1999-01-08 04:05:06
     portal_id      INTEGER NOT NULL REFERENCES portals (portal_id),
     city_id        INTEGER NOT NULL REFERENCES cities (city_id)
@@ -92,7 +92,7 @@ CREATE TABLE user_terms (
 );
 
 CREATE TABLE crowler_log (
-    created_at TIMESTAMP NOT NULL,
+    created_at DATE NOT NULL,
     sequence   INTEGER NOT NULL,
     portal_id  INTEGER NOT NULL REFERENCES portals (portal_id),
     text       VARCHAR(2000) NOT NULL,

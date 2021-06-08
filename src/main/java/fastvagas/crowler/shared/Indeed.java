@@ -46,7 +46,7 @@ public class Indeed implements Crowler {
             }
 
             // Tipo da vaga
-            portalJob.setJob_type("Not set!");
+            portalJob.setJob_type("");
 
             // Descrição
             Element divSummary = div.selectFirst("div.summary");

@@ -3,6 +3,10 @@ package fastvagas.util;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -35,6 +39,12 @@ public class DateUtil {
 
         return null;
     }
+
+    public static String formatLocalDate(LocalDate localDate) {
+        String fmt = "dd/MM/yyyy";
+        return DateTimeFormatter.ofPattern(fmt).format(localDate);
+    }
+
     public static String formatDate(Date pDate, boolean withSeconds) {
         if (pDate == null) {
             return "null";
@@ -74,6 +84,12 @@ public class DateUtil {
         c.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         return c.getTime();
+    }
+
+    public static LocalDate getLocalDateFromDate(Date date) {
+        return Instant.ofEpochMilli(date.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
     public static Date addMonths(Date pDate, Integer pMonths) {
@@ -148,5 +164,9 @@ public class DateUtil {
         calendar.set(Calendar.SECOND, c2.get(Calendar.SECOND));
 
         return calendar.getTime();
+    }
+
+    public static LocalDate getCurrentLocalDate() {
+        return getLocalDateFromDate(new Date());
     }
 }

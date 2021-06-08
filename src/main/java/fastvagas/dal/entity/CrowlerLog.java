@@ -2,6 +2,7 @@ package fastvagas.dal.entity;
 
 import fastvagas.util.DateUtil;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,17 +14,17 @@ public class CrowlerLog {
     public static final String PORTAL_ID = "portal_id";
     public static final String TEXT = "text";
 
-    private Date created_at;
+    private LocalDate created_at;
     private Integer sequence;
     private Long portal_id;
     private String text;
 
 
-    public Date getCreated_at() {
+    public LocalDate getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Date created_at) {
+    public void setCreated_at(LocalDate created_at) {
         this.created_at = created_at;
     }
 
@@ -68,7 +69,7 @@ public class CrowlerLog {
     @Override
     public String toString() {
         return "crowler_log={"
-            + CREATED_AT + "='" + DateUtil.formatDate(created_at, true) + "'"
+            + CREATED_AT + "='" + DateUtil.formatLocalDate(created_at) + "'"
             + "," + SEQUENCE + "=" + sequence
             + "," + PORTAL_ID + "=" + portal_id
             + "," + TEXT + "='" + text + "'"

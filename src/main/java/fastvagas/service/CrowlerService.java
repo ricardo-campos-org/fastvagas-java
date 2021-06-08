@@ -54,7 +54,7 @@ public class CrowlerService {
         Map<Long, City> cityCache = cityService.findAll().stream()
                 .collect(Collectors.toMap(City::getCity_id, Function.identity()));
 
-        int nextSequence = crowlerLogService.getLastSequenceByDate(new Date()) + 1;
+        int nextSequence = crowlerLogService.getLastSequenceByDate(DateUtil.getCurrentLocalDate()) + 1;
 
         for (Portal portal : portals) {
             City city = cityCache.get(portal.getCity_id());
@@ -157,7 +157,7 @@ public class CrowlerService {
             List<CrowlerLog> crowlerLogs = new ArrayList<>();
             for (String log : logToSave) {
                 CrowlerLog crowlerLog = new CrowlerLog();
-                crowlerLog.setCreated_at(new Date());
+                crowlerLog.setCreated_at(DateUtil.getCurrentLocalDate());
                 crowlerLog.setSequence(nextSequence++);
                 crowlerLog.setPortal_id(portal.getPortal_id());
                 crowlerLog.setText(log);

@@ -22,7 +22,7 @@ public class JobsCrowlerTask {
     @Autowired
     private CrowlerService crowlerService;
 
-    @Scheduled(cron = "* */2 * * *")
+    @Scheduled(cron = "0 0 */2 * * *")
     public void reportCurrentTime() {
         logger.info("Starting jobs crowler at {}", dateFormat.format(new Date()));
 

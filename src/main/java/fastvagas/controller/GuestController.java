@@ -2,21 +2,22 @@ package fastvagas.controller;
 
 import fastvagas.dal.entity.City;
 import fastvagas.dal.entity.Contact;
+import fastvagas.dal.entity.CrowlerLog;
 import fastvagas.dal.entity.User;
 import fastvagas.dal.service.CityService;
 import fastvagas.dal.service.ContactService;
+import fastvagas.dal.service.CrowlerLogService;
 import fastvagas.dal.service.UserService;
 import fastvagas.exception.InvalidEmailException;
 import fastvagas.service.CrowlerService;
 import fastvagas.service.MailService;
+import fastvagas.util.DateUtil;
 import fastvagas.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.AddressException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/guest")
@@ -36,6 +37,9 @@ public class GuestController {
 
     @Autowired
     private CrowlerService crowlerService;
+
+    @Autowired
+    private CrowlerLogService crowlerLogService;
 
     // New account modal form URLs
     @GetMapping(value = "/find-all-cities-by-state/{uf}")
@@ -78,11 +82,15 @@ public class GuestController {
     }
 
     // Crowler tests
-    @GetMapping(value = "/crowler", produces = "application/json")
-    public Map<String, String> crowlerTests() {
+    @PostMapping(value = "/do-crowler", produces = "application/json")
+    public List<CrowlerLog> crowlerTests() {
         crowlerService.start();
-        Map<String, String> map = new HashMap<>();
-        map.put("status", "success");
-        return map;
+
+        return crowlerLogService.findAllByPrimaryKey(DateUtil.getCurrentLocalDate(), null);
+    }
+
+    @PostMapping(value = "/get-logs", produces = "application/json")
+    public List<CrowlerLog> getLogs() {
+        return crowlerLogService.findAllByPrimaryKey(DateUtil.getCurrentLocalDate(), null);
     }
 }

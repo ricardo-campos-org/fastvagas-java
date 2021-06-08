@@ -1,15 +1,12 @@
 package fastvagas.dal.dao;
 
 import fastvagas.dal.entity.CrowlerLog;
-import fastvagas.dal.entity.PortalJob;
-import fastvagas.dal.entity.User;
 import fastvagas.dal.mapper.CrowlerLogRowMapper;
-import fastvagas.util.DateUtil;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +18,7 @@ public class CrowlerLogDao extends Dao<CrowlerLog> {
         super(CrowlerLog.class, template, new CrowlerLogRowMapper());
     }
 
-    public Integer getLastSequenceByDate(Date pDate) {
+    public Integer getLastSequenceByDate(LocalDate pDate) {
         List<CrowlerLog> list = findAllByPrimaryKey(pDate, null);
 
         if (list.isEmpty()) {
@@ -32,7 +29,7 @@ public class CrowlerLogDao extends Dao<CrowlerLog> {
         return last.getSequence();
     }
 
-    public List<CrowlerLog> findAllByPrimaryKey(Date created_at, Integer sequence) {
+    public List<CrowlerLog> findAllByPrimaryKey(LocalDate created_at, Integer sequence) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT * FROM ").append(CrowlerLog.TABLE).append(" WHERE 1 = 1");
 
@@ -47,7 +44,7 @@ public class CrowlerLogDao extends Dao<CrowlerLog> {
 
         Map<String, Object> params = new HashMap<>();
         if (created_at != null) {
-            params.put(CrowlerLog.CREATED_AT, DateUtil.getGmtTimestamp(created_at));
+            params.put(CrowlerLog.CREATED_AT, created_at);
         }
         if (sequence != null) {
             params.put(CrowlerLog.SEQUENCE, sequence);
