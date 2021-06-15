@@ -13,7 +13,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 
 @SpringBootApplication(scanBasePackages = "fastvagas")
-@EnableScheduling
+//@EnableScheduling
 public class PostgressApplication {
 
     @Autowired
