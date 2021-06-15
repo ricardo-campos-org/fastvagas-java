@@ -26,6 +26,10 @@ public class Indeed implements Crowler {
             // Nome da vaga e URL
             Element a = div.selectFirst("a");
             if (a != null) {
+                // Ignora vagas patrocinadas
+                if (a.hasClass("sponsoredJob")) {
+                    continue;
+                }
                 portalJob.setName(StringUtil.capitalize(a.text().toLowerCase()));
                 portalJob.setUrl(a.absUrl("href"));
             }
