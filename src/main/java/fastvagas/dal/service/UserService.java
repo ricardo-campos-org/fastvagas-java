@@ -1,6 +1,7 @@
 package fastvagas.dal.service;
 
 import fastvagas.dal.dao.UserDao;
+import fastvagas.dal.entity.Authority;
 import fastvagas.dal.entity.City;
 import fastvagas.dal.entity.User;
 import fastvagas.exception.EntityNotFoundException;
@@ -9,8 +10,8 @@ import fastvagas.exception.InvalidEmailException;
 import fastvagas.exception.InvalidFieldException;
 import fastvagas.util.MailUtil;
 import fastvagas.util.ObjectUtil;
-import fastvagas.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.AddressException;
@@ -25,6 +26,9 @@ public class UserService {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private AuthorityService authorityService;
 
     public User findById(Long id) {
         return userDao.findById(id);
@@ -59,17 +63,24 @@ public class UserService {
     public User create(User user) {
         validations(user, true);
 
-        user.setPassword(PasswordUtil.getSaltedHash(user.getPassword()));
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setCreated_at(new Date());
         user.setDisabled_at(null);
-        return userDao.create(user);
+        User userBd = userDao.create(user);
+
+        Authority authority = new Authority();
+        authority.setEmail(user.getEmail());
+        authority.setAuthority("ROLE_USER");
+        authorityService.create(authority);
+
+        return userBd;
     }
 
     public User update(User user) {
         validations(user, false);
 
         if (ObjectUtil.hasValue(user.getPassword())) {
-            user.setPassword(PasswordUtil.getSaltedHash(user.getPassword()));
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         }
 
         user.setDisabled_at(null);
