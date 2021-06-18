@@ -1,9 +1,14 @@
 package fastvagas.service;
 
+import fastvagas.config.MailConfig;
 import fastvagas.dal.entity.Contact;
 import fastvagas.dal.entity.PortalJob;
 import fastvagas.exception.SendMailException;
 import fastvagas.util.DateUtil;
+import fastvagas.util.ObjectUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -16,25 +21,39 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 @Service
 public class MailService {
 
+    @Autowired
+    MailConfig mailConfig;
+
+    private final Logger logger = LoggerFactory.getLogger(getClass().getName());
+
     public void send(Contact contact) {
-        String origemEmail = "contato.ondetemvagas@ricardocampos.blog";
-        String origemEmailSenha = "";
-        String origemNome = "Contato Onde Tem Vagas";
-        String adminEmail = "ricardo@ricardocampos.blog";
-        String leEmail = "leandro@bussolainvestments.com.br";
+        if (!mailConfig.getEnabled()) {
+            logger.info("Mail system not enabled!! Leaving!");
+            return;
+        }
+
+        String origemEmail = mailConfig.getFromAdress();
+        String origemEmailSenha = mailConfig.getFromPassword();
+        String origemNome = mailConfig.getFromName();
+        String adminEmail = mailConfig.getAdminToAddress();
 
         Properties propvls = System.getProperties();
-        propvls.setProperty("mail.smtp.host", "smtp.zoho.com");
-        propvls.put("mail.debug", "true");
-        propvls.put("mail.smtp.port", "587");
-        propvls.put("mail.smtp.auth", "true");
-        propvls.put("mail.smtp.starttls.enable", "true");
-        propvls.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        propvls.setProperty("mail.smtp.host", mailConfig.getSmtpHost());
+        if (ObjectUtil.hasValue(mailConfig.getDebug())) {
+            propvls.put("mail.debug", mailConfig.getDebug());
+        }
+        propvls.put("mail.smtp.port", mailConfig.getSmtpPort());
+        if (ObjectUtil.hasValue(mailConfig.getSmtpAuth())) {
+            propvls.put("mail.smtp.auth", mailConfig.getSmtpAuth());
+        }
+        if (ObjectUtil.hasValue(mailConfig.getStartTlsEnable())) {
+            propvls.put("mail.smtp.starttls.enable", mailConfig.getStartTlsEnable());
+        }
+        propvls.put("mail.smtp.socketFactory.class", mailConfig.getSocketFactoryClass());
 
         Session session = Session.getInstance(propvls, new Authenticator() {
             @Override
@@ -48,14 +67,16 @@ public class MailService {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(origemEmail, origemNome));
             message.setReplyTo(new Address[]{ new InternetAddress(origemEmail, origemNome) });
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(adminEmail, "Ricardo Campos"));
-            message.setRecipient(Message.RecipientType.CC, new InternetAddress(leEmail, "Leandro Alves"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(adminEmail, mailConfig.getAdminToName()));
+            if (ObjectUtil.hasValue(mailConfig.getAdminCcAddress())) {
+                message.setRecipient(Message.RecipientType.CC, new InternetAddress(mailConfig.getAdminCcAddress(), mailConfig.getAdminCcName()));
+            }
             message.setSubject("Contato Onde Tem Vagas. Assunto: " + contact.getSubject());
             message.setText("Novo contato feito a partir do site: " + contact.getMessage());
             message.setSentDate(new java.util.Date());
 
             Transport.send(message);
-            Logger.getLogger(getClass().getName()).info("E-mail admin enviado com sucesso!");
+            logger.info("E-mail admin enviado com sucesso!");
         } catch (MessagingException | UnsupportedEncodingException me) {
             me.printStackTrace();
             throw new SendMailException(
@@ -79,7 +100,7 @@ public class MailService {
             message.setContent(content, "text/html; charset=UTF-8");
 
             Transport.send(message);
-            Logger.getLogger(getClass().getName()).info("E-mail para a pessoa enviado com sucesso!");
+            logger.info("E-mail para a pessoa enviado com sucesso!");
         } catch (MessagingException | UnsupportedEncodingException me) {
             me.printStackTrace();
             throw new SendMailException(
@@ -91,17 +112,27 @@ public class MailService {
     }
 
     public void jobNotification(String name, String email, List<PortalJob> portalJobs) {
-        String origemEmail = "contato.ondetemvagas@ricardocampos.blog";
-        String origemEmailSenha = "";
+        if (!mailConfig.getEnabled()) {
+            logger.info("Mail system not enabled for job notifications!! Leaving!");
+            return;
+        }
+
+        String origemEmail = mailConfig.getFromAdress();
+        String origemEmailSenha = mailConfig.getFromPassword();
 
         Properties propvls = System.getProperties();
-        propvls.setProperty("mail.smtp.host", "smtp.zoho.com");
-        propvls.put("mail.debug", "true");
-        propvls.put("mail.smtp.port", "587");
-        propvls.put("mail.smtp.auth", "true");
-        propvls.put("mail.smtp.starttls.enable", "true");
-        propvls.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        propvls.put("mail.mime.charset", "UTF-8");
+        propvls.setProperty("mail.smtp.host", mailConfig.getSmtpHost());
+        if (ObjectUtil.hasValue(mailConfig.getDebug())) {
+            propvls.put("mail.debug", mailConfig.getDebug());
+        }
+        propvls.put("mail.smtp.port", mailConfig.getSmtpPort());
+        if (ObjectUtil.hasValue(mailConfig.getSmtpAuth())) {
+            propvls.put("mail.smtp.auth", mailConfig.getSmtpAuth());
+        }
+        if (ObjectUtil.hasValue(mailConfig.getStartTlsEnable())) {
+            propvls.put("mail.smtp.starttls.enable", mailConfig.getStartTlsEnable());
+        }
+        propvls.put("mail.smtp.socketFactory.class", mailConfig.getSocketFactoryClass());
 
         Session session = Session.getDefaultInstance(propvls, new Authenticator() {
             @Override
@@ -184,7 +215,7 @@ public class MailService {
             message.setSentDate(new java.util.Date());
 
             Transport.send(message);
-            Logger.getLogger(getClass().getName()).info("E-mail para a pessoa enviado com sucesso!");
+            logger.info("E-mail para a pessoa enviado com sucesso!");
         } catch (MessagingException | IOException | NullPointerException me) {
             throw new SendMailException(
                 "Problema no servidor ao registrar contato.",

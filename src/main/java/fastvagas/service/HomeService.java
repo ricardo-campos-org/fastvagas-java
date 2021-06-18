@@ -111,7 +111,9 @@ public class HomeService {
         });
 
         long count = portalJobService.findAllLastByCityId(city_id).size();
-
+        if (count > 50) {
+            count = 50L;
+        }
         // sort jobList list
 
         return createJobPagination(jobList, page, count);

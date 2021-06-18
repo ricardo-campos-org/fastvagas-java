@@ -50,7 +50,16 @@
                         </p>
                         <div class="collapse" id="collapseStartNow">
                             <div class="well">
-                                Hey teste
+                                <h4>Escolha seu plano:</h4>
+                                <button type="button" class="btn btn-secondary">Starter - R$ 0,00</button>
+                                <p>Como funciona: <br>- No plano starter você tem acesso até 3 filtros de pesquisa!<br>
+                                - Pode acessar de até 1 dispositivo quantas vezes quiser</p>
+                                <button type="button" class="btn btn-secondary">Medium - R$ 2,99</button>
+                                <p>Como funciona: <br>- No plano medium você tem acesso até 6 filtros de pesquisa!<br>
+                                    - Pode acessar de até 2 dispositivo quantas vezes quiser</p>
+                                <button type="button" class="btn btn-secondary">Master - R$ 4,99</button>
+                                <p>Como funciona: <br>- No plano master você tem acesso a 10 filtros de pesquisa!<br>
+                                    - Pode acessar de até 3 dispositivo quantas vezes quiser</p>
                             </div>
                         </div>
                     </li>
@@ -157,21 +166,23 @@
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th>#</th>
+                                <tr class="hidden-xs">
+                                    <th>QUANDO</th>
                                     <th>TÍTULO</th>
-                                    <th>ORIGEM</th>
-                                    <th>PUBLICAÇÃO</th>
-                                    <th>DETALHAR</th>
+                                    <th>MAIS</th>
+                                </tr>
+                                <tr class="visible-xs">
+                                    <th>TÍTULO</th>
                                 </tr>
                             </thead>
                             <tbody data-bind="foreach: ultimasVagas">
-                                <tr>
-                                    <td data-bind="text: $index()+1"></td>
-                                    <td data-bind="text: name"></td>
-                                    <td data-bind="text: portal_name"></td>
+                                <tr class="hidden-xs">
                                     <td data-bind="text: published_at"></td>
+                                    <td data-bind="text: name"></td>
                                     <td><a href="#" data-bind="click: $parent.verVaga">Ver vaga</a></td>
+                                </tr>
+                                <tr class="visible-xs">
+                                    <td><a href="#" data-bind="click: $parent.verVaga, text: name"></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -291,7 +302,7 @@
                         </small></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Voltar</button>
                     </div>
                 </div>
             </div>
