@@ -12,6 +12,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
@@ -21,9 +22,11 @@ import java.util.logging.Logger;
 public class MailService {
 
     public void send(Contact contact) {
-        String origemEmail = "contato.fastvagas@ricardocampos.blog";
+        String origemEmail = "contato.ondetemvagas@ricardocampos.blog";
         String origemEmailSenha = "";
+        String origemNome = "Contato Onde Tem Vagas";
         String adminEmail = "ricardo@ricardocampos.blog";
+        String leEmail = "leandro@bussolainvestments.com.br";
 
         Properties propvls = System.getProperties();
         propvls.setProperty("mail.smtp.host", "smtp.zoho.com");
@@ -43,10 +46,11 @@ public class MailService {
         // Envia um e-mail para alguém do fastvagas
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(contact.getEmail(), contact.getName()));
-            message.setReplyTo(new Address[]{ new InternetAddress(contact.getEmail(), contact.getName()) });
+            message.setFrom(new InternetAddress(origemEmail, origemNome));
+            message.setReplyTo(new Address[]{ new InternetAddress(origemEmail, origemNome) });
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(adminEmail, "Ricardo Campos"));
-            message.setSubject("Contato Fastvagas. Assunto: " + contact.getSubject());
+            message.setRecipient(Message.RecipientType.CC, new InternetAddress(leEmail, "Leandro Alves"));
+            message.setSubject("Contato Onde Tem Vagas. Assunto: " + contact.getSubject());
             message.setText("Novo contato feito a partir do site: " + contact.getMessage());
             message.setSentDate(new java.util.Date());
 
@@ -67,10 +71,10 @@ public class MailService {
                     "Em breve responderemos!<br><br>Sua mensagem:<br>" + contact.getMessage();
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(origemEmail, "Contato Fast Vagas"));
-            message.setReplyTo(new Address[]{ new InternetAddress(origemEmail, "Contato Fast Vagas")});
+            message.setFrom(new InternetAddress(origemEmail, origemNome));
+            message.setReplyTo(new Address[]{ new InternetAddress(origemEmail, origemNome)});
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(contact.getEmail(), contact.getName()));
-            message.setSubject("Contato Fastvagas. Assunto: " + contact.getSubject());
+            message.setSubject("Contato Onte Tem Vagas. Assunto: " + contact.getSubject());
             message.setSentDate(new java.util.Date());
             message.setContent(content, "text/html; charset=UTF-8");
 
@@ -87,7 +91,7 @@ public class MailService {
     }
 
     public void jobNotification(String name, String email, List<PortalJob> portalJobs) {
-        String origemEmail = "contato.fastvagas@ricardocampos.blog";
+        String origemEmail = "contato.ondetemvagas@ricardocampos.blog";
         String origemEmailSenha = "";
 
         Properties propvls = System.getProperties();
@@ -108,7 +112,14 @@ public class MailService {
 
         // Envia um e-mail para a pessoa que fez o contato
         try {
-            File file = new File(getClass().getClassLoader().getResource("email_template.html").getFile());
+            URL url = getClass().getClassLoader().getResource("email_template.html");
+            if (url == null) {
+                throw new SendMailException(
+                        "Problema ao obter template para envio!",
+                        "Problema ao obter template para envio!"
+                );
+            }
+            File file = new File(url.getFile());
             String mailTemplate = new String(Files.readAllBytes(file.toPath()));
 
             // nome da pessoa
@@ -174,23 +185,11 @@ public class MailService {
 
             Transport.send(message);
             Logger.getLogger(getClass().getName()).info("E-mail para a pessoa enviado com sucesso!");
-        } catch (MessagingException me) {
+        } catch (MessagingException | IOException | NullPointerException me) {
             throw new SendMailException(
                 "Problema no servidor ao registrar contato.",
                 me,
                 "Erro ao enviar e-mail para o usuário que solicitou: " + me.getLocalizedMessage()
-            );
-        } catch (NullPointerException npe) {
-            throw new SendMailException(
-                "Problema no servidor ao registrar contato.",
-                npe,
-                "Erro ao enviar e-mail para o usuário que solicitou: " + npe.getLocalizedMessage()
-            );
-        } catch (IOException ioe) {
-            throw new SendMailException(
-                "Problema no servidor ao registrar contato.",
-                ioe,
-                "Erro ao enviar e-mail para o usuário que solicitou: " + ioe.getLocalizedMessage()
             );
         }
     }

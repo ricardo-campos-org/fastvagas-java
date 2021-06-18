@@ -279,7 +279,7 @@ function main() {
         });
     }
 
-    function contactFormReset() {
+    function contactFormReset(clearForm) {
         const spans = document.querySelectorAll('#contact_form .help-block');
         const divs = document.querySelectorAll('#contact_form .form-group');
 
@@ -294,6 +294,9 @@ function main() {
         document.getElementById('contact_wait').style.display = 'none';
         document.getElementById('contact_buttons').style.display = 'block';
         document.getElementById('contact_result').style.display = 'none';
+        if (clearForm) {
+            document.getElementById('contact_form').reset();
+        }
     }
 
     // OK
@@ -556,7 +559,7 @@ function main() {
         const selD = '#contact_form button[type=button]';
         document.querySelector(selD).addEventListener('click', (e) => {
             e.preventDefault();
-            contactFormReset();
+            contactFormReset(true);
         });
 
         // buscar cidades ao alterar select de estados no cadastro
