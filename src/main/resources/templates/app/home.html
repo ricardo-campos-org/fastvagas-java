@@ -49,17 +49,50 @@
                              </button>
                         </p>
                         <div class="collapse" id="collapseStartNow">
-                            <div class="well">
-                                <h4>Escolha seu plano:</h4>
-                                <button type="button" class="btn btn-secondary">Starter - R$ 0,00</button>
-                                <p>Como funciona: <br>- No plano starter você tem acesso até 3 filtros de pesquisa!<br>
-                                - Pode acessar de até 1 dispositivo quantas vezes quiser</p>
-                                <button type="button" class="btn btn-secondary">Medium - R$ 2,99</button>
-                                <p>Como funciona: <br>- No plano medium você tem acesso até 6 filtros de pesquisa!<br>
-                                    - Pode acessar de até 2 dispositivo quantas vezes quiser</p>
-                                <button type="button" class="btn btn-secondary">Master - R$ 4,99</button>
-                                <p>Como funciona: <br>- No plano master você tem acesso a 10 filtros de pesquisa!<br>
-                                    - Pode acessar de até 3 dispositivo quantas vezes quiser</p>
+                            <div class="well text-center">
+                                <h3>Escolha seu plano</h3>
+                                <div class="row" data-bind="visible: passoPlano() === 0">
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">Starter - R$ 0,00</div>
+                                            <div class="panel-body">
+                                                <p>- 3 filtros de pesquisa!</p>
+                                                <p>- 1 dispositivo.</p>
+                                                <p>- Consultas ilimitadas.</p>
+                                                <button type="button" class="btn btn-secondary" data-bind="click: selecionarPlano1">Quero este!</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">Medium - R$ 2,99</div>
+                                            <div class="panel-body">
+                                                <p>- 6 filtros de pesquisa!</p>
+                                                <p>- 2 dispositivos</p>
+                                                <p>- Consultas ilimitadas.</p>
+                                                <button type="button" class="btn btn-secondary" data-bind="click: selecionarPlano2">Quero este!</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">Master - R$ 4,99</div>
+                                            <div class="panel-body">
+                                                <p>- 10 filtros de pesquisa!</p>
+                                                <p>- 3 dispositivos.</p>
+                                                <p>- Consultas ilimitadas.</p>
+                                                <button type="button" class="btn btn-secondary" data-bind="click: selecionarPlano3">Quero este!</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" data-bind="visible: passoPlano() === 1">
+                                    <div class="col-sm-12 col-xs-12">
+                                        <h2>Starter</h2>
+
+                                        <button type="button" class="btn btn-secondary" data-bind="click: selecionarPlano">Voltar</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </li>

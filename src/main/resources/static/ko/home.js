@@ -21,6 +21,7 @@ $(document).ready(function(){
             self.currentPageTop = ko.observable(1);
             self.cityId = ko.observable(1);
             self.lastJobPagination = ko.mapping.fromJS(HomePagination.getData());
+            self.passoPlano = ko.observable(0);
 
             iniciar();
 
@@ -135,6 +136,22 @@ $(document).ready(function(){
                         self.ultimasVagas(response.jobList);
                     }
                 });
+            };
+
+            self.selecionarPlano1 = function() {
+                self.passoPlano(1);
+            };
+
+            self.selecionarPlano2 = function() {
+                self.passoPlano(1);
+            };
+
+            self.selecionarPlano3 = function() {
+                self.passoPlano(1);
+            };
+
+            self.selecionarPlano = function() {
+                self.passoPlano(0);
             };
         }
 
