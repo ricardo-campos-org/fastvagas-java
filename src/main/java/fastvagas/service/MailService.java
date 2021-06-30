@@ -193,7 +193,9 @@ public class MailService {
                         jobDetails += ".";
                     }
 
-                    jobDetails += " Publicado em: " + DateUtil.formatDate(portalJob.getPublished_at()) + ".";
+                    if (ObjectUtil.hasValue(portalJob.getPublished_at())) {
+                        jobDetails += " Publicado em: " + portalJob.getPublished_at() + ".";
+                    }
                 }
 
                 String job = jobTemplate;

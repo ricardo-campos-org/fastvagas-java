@@ -200,7 +200,7 @@
                         <table class="table">
                             <thead>
                                 <tr class="hidden-xs">
-                                    <th>QUANDO</th>
+                                    <th>LEITURA</th>
                                     <th>TÍTULO</th>
                                     <th>MAIS</th>
                                 </tr>
@@ -210,7 +210,7 @@
                             </thead>
                             <tbody data-bind="foreach: ultimasVagas">
                                 <tr class="hidden-xs">
-                                    <td data-bind="text: published_at"></td>
+                                    <td data-bind="text: created_at"></td>
                                     <td data-bind="text: name"></td>
                                     <td><a href="#" data-bind="click: $parent.verVaga">Ver vaga</a></td>
                                 </tr>

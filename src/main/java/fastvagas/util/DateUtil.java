@@ -92,6 +92,10 @@ public class DateUtil {
                 .toLocalDate();
     }
 
+    public static Date getDateFromLocalDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
     public static Date addMonths(Date pDate, Integer pMonths) {
         if (pDate == null || pMonths == null || pMonths.equals(0)) {
             return pDate;

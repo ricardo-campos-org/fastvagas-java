@@ -191,7 +191,10 @@ public class PortalJobDao extends Dao<PortalJob> {
         params.put(PortalJob.COMPANY_NAME, portalJob.getCompany_name());
         params.put(PortalJob.JOB_TYPE, portalJob.getJob_type());
         params.put(PortalJob.DESCRIPTION, portalJob.getDescription());
-        params.put(PortalJob.PUBLISHED_AT, DateUtil.getGmtTimestamp(portalJob.getPublished_at()));
+        params.put(PortalJob.PUBLISHED_AT, portalJob.getPublished_at());
+        if (portalJob.getPublished_at().length() > 30) {
+            params.put(PortalJob.PUBLISHED_AT, portalJob.getPublished_at().substring(0, 30));
+        }
         params.put(PortalJob.URL, portalJob.getUrl());
         params.put(PortalJob.SEEN, DateUtil.getGmtTimestamp(portalJob.getSeen()));
         params.put(PortalJob.PORTAL_ID, portalJob.getPortal_id());

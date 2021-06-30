@@ -62,13 +62,14 @@ public class HomeService {
         );
 
         for (PortalJob portalJob : cityJobs) {
+            Date dataLeitura = DateUtil.getDateFromLocalDate(portalJob.getCreatedAt());
             /* This week jobs */
-            if (DateUtil.isGreater(weekDate, portalJob.getPublished_at())) {
+            if (DateUtil.isGreater(weekDate, dataLeitura)) {
                 weekJobs += 1;
             }
 
             /* Today jobs */
-            if (DateUtil.equalsIgnoringHours(portalJob.getPublished_at(), today)) {
+            if (DateUtil.equalsIgnoringHours(dataLeitura, today)) {
                 todayJobs += 1;
             }
         }

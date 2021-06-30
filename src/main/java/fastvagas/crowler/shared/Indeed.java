@@ -2,7 +2,6 @@ package fastvagas.crowler.shared;
 
 import fastvagas.crowler.Crowler;
 import fastvagas.dal.entity.PortalJob;
-import fastvagas.util.DateUtil;
 import fastvagas.util.ObjectUtil;
 import fastvagas.util.StringUtil;
 import org.jsoup.nodes.Document;
@@ -10,7 +9,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Indeed implements Crowler {
@@ -65,12 +63,7 @@ public class Indeed implements Crowler {
                 if (!ObjectUtil.hasValue(portalJob.getCompany_name())) {
                     portalJob.setCompany_name("");
                 }
-                if (portalJob.getPublished_at() == null) {
-                    portalJob.setPublished_at(new Date());
-                } else if (DateUtil.formatHour(portalJob.getPublished_at()).equals("00:00:00")) {
-                    Date newDate = DateUtil.setCurrentHour(portalJob.getPublished_at());
-                    portalJob.setPublished_at(newDate);
-                }
+
                 portalJobList.add(portalJob);
             }
         }

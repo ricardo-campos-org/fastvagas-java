@@ -2,6 +2,7 @@ package fastvagas.dal.entity;
 
 import fastvagas.util.DateUtil;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -17,17 +18,23 @@ public class PortalJob {
     public static final String SEEN = "seen";
     public static final String PORTAL_ID = "portal_id";
     public static final String CITY_ID = "city_id";
+    public static final String CREATED_AT = "created_at";
 
     private Long portal_job_id;
     private String name;
     private String company_name;
     private String job_type;
     private String description;
-    private Date published_at;
+    private String published_at;
     private String url;
     private Date seen;
     private Long portal_id;
     private Long city_id;
+    private LocalDate createdAt;
+
+    public PortalJob() {
+        this.createdAt = DateUtil.getCurrentLocalDate();
+    }
 
     public Long getPortal_job_id() {
         return portal_job_id;
@@ -69,11 +76,11 @@ public class PortalJob {
         this.description = description;
     }
 
-    public Date getPublished_at() {
+    public String getPublished_at() {
         return published_at;
     }
 
-    public void setPublished_at(Date published_at) {
+    public void setPublished_at(String published_at) {
         this.published_at = published_at;
     }
 
@@ -122,10 +129,12 @@ public class PortalJob {
             + "," + COMPANY_NAME + "='" + company_name + "'"
             + "," + JOB_TYPE + "='" + job_type + "'"
             + "," + DESCRIPTION + "='" + description + "'"
-            + "," + PUBLISHED_AT + "='" + DateUtil.formatDate(published_at, true) + "'"
+            + "," + PUBLISHED_AT + "='" + published_at + "'"
             + "," + URL + "='" + url + "'"
             + "," + SEEN + "='" + DateUtil.formatDate(seen, true) + "'"
             + "," + PORTAL_ID + "=" + portal_id
+            + "," + CITY_ID + "=" + city_id
+            + "," + CREATED_AT + "='" + DateUtil.formatLocalDate(createdAt) + "'"
             + "}";
     }
 
@@ -135,5 +144,13 @@ public class PortalJob {
 
     public void setCity_id(Long city_id) {
         this.city_id = city_id;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
     }
 }

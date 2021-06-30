@@ -3,6 +3,7 @@ package fastvagas.json;
 import fastvagas.dal.entity.PortalJob;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class JobDetail implements Serializable {
@@ -13,10 +14,11 @@ public class JobDetail implements Serializable {
     private String company_name;
     private String job_type;
     private String description;
-    private Date published_at;
+    private String published_at;
     private String url;
     private Long portal_id;
     private String portal_name;
+    private LocalDate created_at;
 
     public JobDetail(PortalJob portalJob) {
         setPortal_job_id(portalJob.getPortal_job_id());
@@ -27,6 +29,7 @@ public class JobDetail implements Serializable {
         setPublished_at(portalJob.getPublished_at());
         setUrl(portalJob.getUrl());
         setPortal_id(portalJob.getPortal_id());
+        setCreated_at(portalJob.getCreatedAt());
     }
 
     public Long getPortal_job_id() {
@@ -69,11 +72,11 @@ public class JobDetail implements Serializable {
         this.description = description;
     }
 
-    public Date getPublished_at() {
+    public String getPublished_at() {
         return published_at;
     }
 
-    public void setPublished_at(Date published_at) {
+    public void setPublished_at(String published_at) {
         this.published_at = published_at;
     }
 
@@ -99,5 +102,13 @@ public class JobDetail implements Serializable {
 
     public void setPortal_name(String portal_name) {
         this.portal_name = portal_name;
+    }
+
+    public LocalDate getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(LocalDate created_at) {
+        this.created_at = created_at;
     }
 }
