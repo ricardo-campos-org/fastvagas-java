@@ -1,6 +1,5 @@
 package fastvagas.rest;
 
-import fastvagas.dal.entity.User;
 import fastvagas.json.HomeJson;
 import fastvagas.json.JobPagination;
 import fastvagas.service.AuthService;

@@ -50,7 +50,7 @@ public class StateService {
             throw new EntityNotFoundException(
                 State.class,
                 State.STATE_ID,
-                String.valueOf(state.getState_id())
+                String.valueOf(state_id)
             );
         }
 

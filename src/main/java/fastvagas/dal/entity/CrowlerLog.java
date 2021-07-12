@@ -3,7 +3,6 @@ package fastvagas.dal.entity;
 import fastvagas.util.DateUtil;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 public class CrowlerLog {

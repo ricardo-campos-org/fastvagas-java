@@ -4,7 +4,6 @@ import fastvagas.config.MailConfig;
 import fastvagas.dal.entity.Contact;
 import fastvagas.dal.entity.PortalJob;
 import fastvagas.exception.SendMailException;
-import fastvagas.util.DateUtil;
 import fastvagas.util.ObjectUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

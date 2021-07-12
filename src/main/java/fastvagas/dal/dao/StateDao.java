@@ -1,15 +1,10 @@
 package fastvagas.dal.dao;
 
-import fastvagas.dal.entity.City;
 import fastvagas.dal.entity.State;
-import fastvagas.dal.mapper.CityRowMapper;
 import fastvagas.dal.mapper.StateRowMapper;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

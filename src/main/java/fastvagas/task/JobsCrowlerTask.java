@@ -15,9 +15,6 @@ public class JobsCrowlerTask {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     private final Logger logger = LoggerFactory.getLogger(JobsCrowlerTask.class);
-    private final long SECOND = 1000;
-    private final long MINUTE = SECOND * 60;
-    private final long HOUR = MINUTE * 60;
 
     @Autowired
     private CrowlerService crowlerService;

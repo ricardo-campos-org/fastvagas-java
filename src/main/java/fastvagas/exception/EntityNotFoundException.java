@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class EntityNotFoundException extends GeneralException {
 
-    public EntityNotFoundException(Class classe, Object... searchParamsMap) {
+    public EntityNotFoundException(Class<?> classe, Object... searchParamsMap) {
         super(EntityNotFoundException.generateMessage(classe.getSimpleName(), toMap(String.class, String.class, searchParamsMap)));
     }
 

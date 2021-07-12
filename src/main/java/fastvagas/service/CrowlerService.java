@@ -1,6 +1,7 @@
 package fastvagas.service;
 
 import fastvagas.crowler.Crowler;
+import fastvagas.crowler.CrowlerFactory;
 import fastvagas.dal.entity.City;
 import fastvagas.dal.entity.CrowlerLog;
 import fastvagas.dal.entity.Portal;
@@ -178,29 +179,15 @@ public class CrowlerService {
             String cityName = StringUtil.replaceToPlainText(city.getName().replace(" ", ""));
             String portalName = StringUtil.replaceToPlainText(portal.getName().replace(" ", ""));
 
-            Class clazz = Class.forName("fastvagas.crowler." + cityName + portalName);
-            Crowler crowler = (Crowler) clazz.newInstance();
-
+            Crowler crowler = CrowlerFactory.createInstance(cityName + portalName);
             return crowler.findJobs(doc);
-
+        
         } catch (IOException ioe) {
-            // TODO: handle it
-            logger.info("IOException: {}", ioe.getLocalizedMessage());
-        } catch (ClassNotFoundException cnfe) {
-            // TODO: handle it
-            logger.info("ClassNotFoundException: {}", cnfe.getLocalizedMessage());
-        } catch (InstantiationException ie) {
-            // TODO: handle it
-            logger.info("InstantiationException: {}", ie.getLocalizedMessage());
-        } catch (IllegalAccessException ile) {
-            // TODO: handle it
-            logger.info("IllegalAccessException: {}", ile.getLocalizedMessage());
+            logger.error("IOException: {}", ioe.getLocalizedMessage());
         } catch (ClassCastException cce) {
-            // TODO: handle it
-            logger.info("ClassCastException: {}", cce.getLocalizedMessage());
+            logger.error("ClassCastException: {}", cce.getLocalizedMessage());
         } catch (NullPointerException npe) {
-            // TODO: handle it
-            logger.info("NullPointerException: {}", npe.getLocalizedMessage());
+            logger.error("NullPointerException: {}", npe.getLocalizedMessage());
         }
 
         return new ArrayList<>();

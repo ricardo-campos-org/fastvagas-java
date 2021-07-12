@@ -1,7 +1,5 @@
 package fastvagas.exception;
 
-import org.springframework.http.HttpStatus;
-
 public class DatabaseException extends GeneralException {
 
     public DatabaseException(String returnMessage, String debugMessage) {

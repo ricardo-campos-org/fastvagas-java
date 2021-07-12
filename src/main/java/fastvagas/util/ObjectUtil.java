@@ -2,7 +2,6 @@ package fastvagas.util;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 

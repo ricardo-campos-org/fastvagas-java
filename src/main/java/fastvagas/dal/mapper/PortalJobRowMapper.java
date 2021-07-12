@@ -3,7 +3,6 @@ package fastvagas.dal.mapper;
 import fastvagas.dal.entity.PortalJob;
 import fastvagas.util.DateUtil;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.util.unit.DataUnit;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
