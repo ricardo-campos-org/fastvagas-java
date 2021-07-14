@@ -2,7 +2,7 @@ package fastvagas.dal.entity;
 
 import fastvagas.util.DateUtil;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -30,10 +30,10 @@ public class PortalJob {
     private Date seen;
     private Long portal_id;
     private Long city_id;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     public PortalJob() {
-        this.createdAt = DateUtil.getCurrentLocalDate();
+        this.createdAt = DateUtil.getCurrentLocalDateTime();
     }
 
     public Long getPortal_job_id() {
@@ -134,7 +134,7 @@ public class PortalJob {
             + "," + SEEN + "='" + DateUtil.formatDate(seen, true) + "'"
             + "," + PORTAL_ID + "=" + portal_id
             + "," + CITY_ID + "=" + city_id
-            + "," + CREATED_AT + "='" + DateUtil.formatLocalDate(createdAt) + "'"
+            + "," + CREATED_AT + "='" + DateUtil.formatLocalDateTime(createdAt) + "'"
             + "}";
     }
 
@@ -146,11 +146,11 @@ public class PortalJob {
         this.city_id = city_id;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }

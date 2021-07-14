@@ -4,6 +4,7 @@ import fastvagas.dal.entity.PortalJob;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class JobDetail implements Serializable {
 
@@ -17,7 +18,7 @@ public class JobDetail implements Serializable {
     private String url;
     private Long portal_id;
     private String portal_name;
-    private LocalDate created_at;
+    private LocalDateTime created_at;
 
     public JobDetail(PortalJob portalJob) {
         setPortal_job_id(portalJob.getPortal_job_id());
@@ -103,11 +104,11 @@ public class JobDetail implements Serializable {
         this.portal_name = portal_name;
     }
 
-    public LocalDate getCreated_at() {
+    public LocalDateTime getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(LocalDate created_at) {
+    public void setCreated_at(LocalDateTime created_at) {
         this.created_at = created_at;
     }
 }

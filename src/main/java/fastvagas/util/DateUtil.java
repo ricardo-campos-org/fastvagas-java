@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -43,6 +44,11 @@ public class DateUtil {
     public static String formatLocalDate(LocalDate localDate) {
         String fmt = "dd/MM/yyyy";
         return DateTimeFormatter.ofPattern(fmt).format(localDate);
+    }
+
+    public static String formatLocalDateTime(LocalDateTime localDateTime) {
+        String fmt = "dd/MM/yyyy hh:mm:ss";
+        return DateTimeFormatter.ofPattern(fmt).format(localDateTime);
     }
 
     public static String formatDate(Date pDate, boolean withSeconds) {
@@ -92,8 +98,18 @@ public class DateUtil {
                 .toLocalDate();
     }
 
+    public static LocalDateTime getLocalDateTimeFromDate(Date date) {
+        return Instant.ofEpochMilli(date.getTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+    }
+
     public static Date getDateFromLocalDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static Date getDateFromLocalDateTime(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     public static Date addMonths(Date pDate, Integer pMonths) {
@@ -120,11 +136,6 @@ public class DateUtil {
 
     public static Date subtractMonths(Date pDate, Integer pMonths) {
         return addMonths(pDate, pMonths * -1 );
-    }
-
-    public static Integer getCurrentDayOfWeek() {
-        Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     public static Date subtractDays(Date pDate, Integer pDays) {
@@ -172,5 +183,9 @@ public class DateUtil {
 
     public static LocalDate getCurrentLocalDate() {
         return getLocalDateFromDate(new Date());
+    }
+
+    public static LocalDateTime getCurrentLocalDateTime() {
+        return getLocalDateTimeFromDate(new Date());
     }
 }

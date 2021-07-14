@@ -62,7 +62,7 @@ public class HomeService {
         );
 
         for (PortalJob portalJob : cityJobs) {
-            Date dataLeitura = DateUtil.getDateFromLocalDate(portalJob.getCreatedAt());
+            Date dataLeitura = DateUtil.getDateFromLocalDateTime(portalJob.getCreatedAt());
             /* This week jobs */
             if (DateUtil.isGreater(weekDate, dataLeitura)) {
                 weekJobs += 1;
@@ -88,6 +88,7 @@ public class HomeService {
         return homeJson;
     }
 
+    // TODO: implement here
     public JobPagination getUserJobs(User user, Integer page) {
         return new JobPagination();
     }
@@ -120,6 +121,7 @@ public class HomeService {
         return createJobPagination(jobList, page, count);
     }
 
+    // TODO: implement here
     public JobPagination getTopJobs(Integer page) {
         return new JobPagination();
     }

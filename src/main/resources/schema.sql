@@ -37,7 +37,7 @@ CREATE TABLE portal_jobs (
     seen           TIMESTAMP NULL,
     portal_id      INTEGER NOT NULL REFERENCES portals (portal_id),
     city_id        INTEGER NOT NULL REFERENCES cities (city_id),
-    created_at     DATE NOT NULL
+    created_at     TIMESTAMP NOT NULL
 );
 
 CREATE INDEX idx_portal_jobs_url ON portal_jobs (url);
