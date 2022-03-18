@@ -30,10 +30,10 @@ public class PortalJob {
     private Date seen;
     private Long portal_id;
     private Long city_id;
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
 
     public PortalJob() {
-        this.createdAt = DateUtil.getCurrentLocalDateTime();
+        this.created_at = DateUtil.getCurrentLocalDateTime();
     }
 
     public Long getPortal_job_id() {
@@ -49,7 +49,10 @@ public class PortalJob {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
+        if (this.name.length() > 600) {
+            this.name = this.name.substring(0, 600);
+        }
     }
 
     public String getCompany_name() {
@@ -57,7 +60,10 @@ public class PortalJob {
     }
 
     public void setCompany_name(String company_name) {
-        this.company_name = company_name;
+        this.company_name = company_name.trim();
+        if (this.company_name.length() > 600) {
+            this.company_name = this.company_name.substring(0, 600);
+        }
     }
 
     public String getJob_type() {
@@ -65,7 +71,10 @@ public class PortalJob {
     }
 
     public void setJob_type(String job_type) {
-        this.job_type = job_type;
+        this.job_type = job_type.trim();
+        if (this.job_type.length() > 30) {
+            this.job_type = this.job_type.substring(0, 30);
+        }
     }
 
     public String getDescription() {
@@ -73,7 +82,10 @@ public class PortalJob {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.trim();
+        if (this.description.length() > 600) {
+            this.description = this.description.substring(0, 600);
+        }
     }
 
     public String getPublished_at() {
@@ -81,7 +93,10 @@ public class PortalJob {
     }
 
     public void setPublished_at(String published_at) {
-        this.published_at = published_at;
+        this.published_at = published_at.trim();
+        if (this.published_at.length() > 30) {
+            this.published_at = this.published_at.substring(0, 30);
+        }
     }
 
     public String getUrl() {
@@ -89,7 +104,10 @@ public class PortalJob {
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.url = url.trim();
+        if (this.url.length() > 1000) {
+            this.url = this.url.substring(0, 1000);
+        }
     }
 
     public Date getSeen() {
@@ -134,7 +152,7 @@ public class PortalJob {
             + "," + SEEN + "='" + DateUtil.formatDate(seen, true) + "'"
             + "," + PORTAL_ID + "=" + portal_id
             + "," + CITY_ID + "=" + city_id
-            + "," + CREATED_AT + "='" + DateUtil.formatLocalDateTime(createdAt) + "'"
+            + "," + CREATED_AT + "='" + DateUtil.formatLocalDateTime(created_at) + "'"
             + "}";
     }
 
@@ -146,11 +164,11 @@ public class PortalJob {
         this.city_id = city_id;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 }

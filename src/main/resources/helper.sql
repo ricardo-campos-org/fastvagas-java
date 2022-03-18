@@ -265,9 +265,9 @@ VALUES ('Vagas', 'https://www.vagas.com.br/vagas-de-joinville,-santa-catarina', 
 -- Mauá - SP
 
 INSERT INTO users (first_name, last_name, email, password, city_id, enabled, created_at)
-    VALUES ('Ricardo', 'Campos', 'ricardo@ricardocampos.blog', '', 1, 1, '2021-04-19 20:28:10');
+    VALUES ('Ricardo', 'Campos', 'ricardompcampos@gmail.com', '', 1, 1, '2022-03-17 20:26:10');
 INSERT INTO users (first_name, last_name, email, password, city_id, enabled, created_at)
       VALUES ('Leandro', 'Alves', 'leandro@bussolainvestments.com.br', '', 8, 1, '2021-04-19 20:28:10');
 
-INSERT INTO authorities (email, authority) VALUES ('ricardo@ricardocampos.blog', 'ROLE_USER');
+INSERT INTO authorities (email, authority) VALUES ('ricardompcampos@gmail.com', 'ROLE_USER');
 INSERT INTO authorities (email, authority) VALUES ('leandro@bussolainvestments.com.br', 'ROLE_USER');

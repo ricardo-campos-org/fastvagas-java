@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -188,6 +189,7 @@ public class CrowlerService {
             logger.error("ClassCastException: {}", cce.getLocalizedMessage());
         } catch (NullPointerException npe) {
             logger.error("NullPointerException: {}", npe.getLocalizedMessage());
+            npe.printStackTrace();
         }
 
         return new ArrayList<>();

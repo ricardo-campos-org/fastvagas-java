@@ -62,7 +62,7 @@ public class HomeService {
         );
 
         for (PortalJob portalJob : cityJobs) {
-            Date dataLeitura = DateUtil.getDateFromLocalDateTime(portalJob.getCreatedAt());
+            Date dataLeitura = DateUtil.getDateFromLocalDateTime(portalJob.getCreated_at());
             /* This week jobs */
             if (DateUtil.isGreater(weekDate, dataLeitura)) {
                 weekJobs += 1;

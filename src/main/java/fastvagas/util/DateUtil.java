@@ -47,6 +47,9 @@ public class DateUtil {
     }
 
     public static String formatLocalDateTime(LocalDateTime localDateTime) {
+        if (localDateTime == null) {
+            return null;
+        }
         String fmt = "dd/MM/yyyy hh:mm:ss";
         return DateTimeFormatter.ofPattern(fmt).format(localDateTime);
     }

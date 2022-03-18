@@ -29,8 +29,14 @@ public class PortalDao extends Dao<Portal> {
         return getObjectFromResult(query, params);
     }
 
-    public List<Portal> findAll() {
-        return getListFromResult("SELECT * FROM " + Portal.TABLE);
+    public List<Portal> findAll(Character active) {
+        String query = "SELECT * FROM " + Portal.TABLE +
+                " WHERE " + Portal.ACTIVE + "=:" + Portal.ACTIVE;
+
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue(Portal.ACTIVE, active);
+
+        return getListFromResult(query, params);
     }
 
     public List<Portal> findAllByUsersActive() {
@@ -38,6 +44,7 @@ public class PortalDao extends Dao<Portal> {
             + " ," + Portal.TABLE + "." + Portal.NAME
             + " ," + Portal.TABLE + "." + Portal.URL
             + " ," + Portal.TABLE + "." + Portal.CITY_ID
+            + " ," + Portal.ACTIVE + "." + Portal.ACTIVE
             + " FROM " + Portal.TABLE
             + " JOIN " + User.TABLE + " ON ("
             + User.TABLE + "." + User.CITY_ID + " = " + Portal.TABLE + "." + Portal.CITY_ID
@@ -46,7 +53,8 @@ public class PortalDao extends Dao<Portal> {
             + " GROUP BY " + Portal.TABLE + "." + Portal.PORTAL_ID
             + " ," + Portal.TABLE + "." + Portal.NAME
             + " ," + Portal.TABLE + "." + Portal.URL
-            + " ," + Portal.TABLE + "." + Portal.CITY_ID;
+            + " ," + Portal.TABLE + "." + Portal.CITY_ID
+            + " ," + Portal.ACTIVE + "." + Portal.ACTIVE;
         return getListFromResult(query);
     }
 
@@ -65,10 +73,12 @@ public class PortalDao extends Dao<Portal> {
             + Portal.NAME
             + "," + Portal.URL
             + "," + Portal.CITY_ID
+            + "," + Portal.ACTIVE
             + ") values ("
             + ":" + Portal.NAME
             + ",:" + Portal.URL
             + ",:" + Portal.CITY_ID
+            + ",:" + Portal.ACTIVE
             + ")";
 
         if (executeInsert(query, getParams(portal)) == 1) {
@@ -84,6 +94,7 @@ public class PortalDao extends Dao<Portal> {
             + " SET " + Portal.NAME + "=:" + Portal.NAME
             + "," + Portal.URL + "=:" + Portal.URL
             + "," + Portal.CITY_ID + "=:" + Portal.CITY_ID
+            + "," + Portal.ACTIVE + "=:" + Portal.ACTIVE
             + " WHERE " + Portal.PORTAL_ID + "=:" + Portal.PORTAL_ID;
 
         if (executeUpdateDelete(query, getParams(portal)) == 1) {
@@ -110,6 +121,7 @@ public class PortalDao extends Dao<Portal> {
         params.put(Portal.NAME, portal.getName());
         params.put(Portal.URL, portal.getUrl());
         params.put(Portal.CITY_ID, portal.getCity_id());
+        params.put(Portal.ACTIVE, portal.getActive());
         return params;
     }
 }

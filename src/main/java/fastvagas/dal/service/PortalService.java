@@ -14,7 +14,11 @@ public class PortalService {
     private PortalDao portalDao;
 
     public List<Portal> findAll() {
-        return portalDao.findAll();
+        return findAllByStatus('Y');
+    }
+
+    public List<Portal> findAllByStatus(Character active) {
+        return portalDao.findAll(active);
     }
 
     public List<Portal> findAllByUsersActive() {

@@ -17,54 +17,72 @@ public class Indeed implements Crowler {
     public List<PortalJob> findJobs(Document document) {
         List<PortalJob> portalJobList = new ArrayList<>();
 
-        Elements divResult = document.select(".row.result");
-        for (Element div : divResult) {
-            PortalJob portalJob = new PortalJob();
+        Element divCard = document.getElementById("mosaic-zone-jobcards");
+        if (divCard != null) {
+            Elements aList = divCard.select("a.tapItem");
+            for (Element a : aList) {
+                PortalJob portalJob = new PortalJob();
 
-            // Nome da vaga e URL
-            Element a = div.selectFirst("a");
-            if (a != null) {
-                // Ignora vagas patrocinadas
-                if (a.hasClass("sponsoredJob")) {
-                    continue;
-                }
-                portalJob.setName(StringUtil.capitalize(a.text().toLowerCase()));
+                // URL
                 portalJob.setUrl(a.absUrl("href"));
-            }
 
-            // Nome da empresa
-            Element divSjcl = div.selectFirst("div.sjcl");
-            if (divSjcl != null) {
-                Element divAux = divSjcl.selectFirst("div");
-                if (divAux != null) {
-                    Element span = divAux.selectFirst("span.company");
-                    if (span != null) {
-                        Element aComp = span.selectFirst("a");
-                        if (aComp != null) {
-                            portalJob.setCompany_name(StringUtil.capitalize(aComp.text().trim().toLowerCase()));
+                // Nome da vaga e URL
+                Element h2JobTitle = a.selectFirst("h2.jobTitle");
+                if (h2JobTitle != null) {
+                    Elements spanList = h2JobTitle.select("span");
+                    for (Element span : spanList) {
+                        if (span.hasAttr("title")) {
+                            portalJob.setName(StringUtil.capitalize(span.text().toLowerCase()));
+                            break;
                         }
                     }
                 }
-            }
 
-            // Tipo da vaga
-            portalJob.setJob_type("");
-
-            // Descrição
-            Element divSummary = div.selectFirst("div.summary");
-            if (divSummary != null) {
-                portalJob.setDescription(StringUtil.capitalize(divSummary.text().trim().toLowerCase()));
-            }
-
-            // Data da publicação
-
-
-            if (!portalJob.getName().isEmpty() && !portalJob.getUrl().isEmpty()) {
-                if (!ObjectUtil.hasValue(portalJob.getCompany_name())) {
-                    portalJob.setCompany_name("");
+                // Nome da empresa
+                Element divCompany = a.selectFirst("div.companyInfo");
+                if (divCompany != null) {
+                    Element span = divCompany.selectFirst("span.companyName");
+                    if (span != null) {
+                        portalJob.setCompany_name(StringUtil.capitalize(span.text().trim().toLowerCase()));
+                    }
                 }
 
-                portalJobList.add(portalJob);
+                // Salário
+                Element divMetadata = a.selectFirst("div.salary-snippet-container");
+                if (divMetadata != null) {
+                    Element divAria = divMetadata.selectFirst("div.salary-snippet");
+                    if (divAria != null) {
+                        String salario = divAria.attr("aria-label").trim();
+                        portalJob.setDescription(salario);
+                    }
+                }
+
+                // Tipo da vaga
+                portalJob.setJob_type("");
+
+                // Descrição
+                Element divJobSnippet = a.selectFirst("div.job-snippet");
+                if (divJobSnippet != null) {
+                    Elements liList = divJobSnippet.select("li");
+                    for (Element li : liList) {
+                        portalJob.setDescription(portalJob.getDescription() +
+                                StringUtil.capitalize(li.text().trim().toLowerCase()));
+                    }
+
+                    if (liList.isEmpty()) {
+                        portalJob.setDescription(portalJob.getDescription() +
+                                StringUtil.capitalize(divJobSnippet.text().trim().toLowerCase()));
+                    }
+
+                }
+
+                if (!portalJob.getName().isEmpty() && !portalJob.getUrl().isEmpty()) {
+                    if (!ObjectUtil.hasValue(portalJob.getCompany_name())) {
+                        portalJob.setCompany_name("");
+                    }
+
+                    portalJobList.add(portalJob);
+                }
             }
         }
         return portalJobList;

@@ -1,3 +1,6 @@
+-- psql --host=localhost --username=retsuko --dbname=ondetemvagas --password
+-- password: retsuko123
+
 CREATE TABLE contacts (
     contact_id SERIAL PRIMARY KEY,
     name       VARCHAR(30) NOT NULL,
@@ -23,7 +26,8 @@ CREATE TABLE portals (
     portal_id  SERIAL PRIMARY KEY,
     name       VARCHAR(50) NOT NULL,
     url        VARCHAR(300) NOT NULL,
-    city_id    INTEGER NOT NULL REFERENCES cities (city_id)
+    city_id    INTEGER NOT NULL REFERENCES cities (city_id),
+    active     CHAR(1) NULL
 );
 
 CREATE TABLE portal_jobs (

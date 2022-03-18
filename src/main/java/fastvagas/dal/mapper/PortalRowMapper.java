@@ -15,6 +15,7 @@ public class PortalRowMapper implements RowMapper<Portal> {
         portal.setName(resultSet.getString(Portal.NAME));
         portal.setUrl(resultSet.getString(Portal.URL));
         portal.setCity_id(resultSet.getLong(Portal.CITY_ID));
+        portal.setActive(resultSet.getString(Portal.ACTIVE).charAt(0));
         return portal;
     }
 }

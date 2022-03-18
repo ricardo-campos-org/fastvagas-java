@@ -29,7 +29,7 @@ public class JobDetail implements Serializable {
         setPublished_at(portalJob.getPublished_at());
         setUrl(portalJob.getUrl());
         setPortal_id(portalJob.getPortal_id());
-        setCreated_at(portalJob.getCreatedAt());
+        setCreated_at(portalJob.getCreated_at());
     }
 
     public Long getPortal_job_id() {

@@ -8,11 +8,17 @@ public class Portal {
     public static final String NAME = "name";
     public static final String URL = "url";
     public static final String CITY_ID = "city_id";
+    public static final String ACTIVE = "active";
 
     private Long portal_id;
     private String name;
     private String url;
     private Long city_id;
+    private Character active;
+
+    public Portal() {
+        this.active = 'Y';
+    }
 
     public Long getPortal_id() {
         return portal_id;
@@ -46,6 +52,14 @@ public class Portal {
         this.city_id = city_id;
     }
 
+    public Character getActive() {
+        return active;
+    }
+
+    public void setActive(Character active) {
+        this.active = active;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,6 +80,7 @@ public class Portal {
             + "," + NAME + "='" + name + "'"
             + "," + URL + "='" + url + "'"
             + "," + CITY_ID + "=" + city_id
+            + "," + ACTIVE + "='" + active + "'"
             + "}";
     }
 }

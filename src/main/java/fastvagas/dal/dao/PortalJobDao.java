@@ -103,6 +103,7 @@ public class PortalJobDao extends Dao<PortalJob> {
             + "," + PortalJob.SEEN
             + "," + PortalJob.PORTAL_ID
             + "," + PortalJob.CITY_ID
+            + "," + PortalJob.CREATED_AT
             + ") values ("
             + ":" + PortalJob.NAME
             + ",:" + PortalJob.COMPANY_NAME
@@ -113,6 +114,7 @@ public class PortalJobDao extends Dao<PortalJob> {
             + ",:" + PortalJob.SEEN
             + ",:" + PortalJob.PORTAL_ID
             + ",:" + PortalJob.CITY_ID
+            + ",:" + PortalJob.CREATED_AT
             + ")";
 
         if (executeInsert(query, getParams(portalJob)) == 1) {
@@ -134,6 +136,7 @@ public class PortalJobDao extends Dao<PortalJob> {
                 + "," + PortalJob.SEEN
                 + "," + PortalJob.PORTAL_ID
                 + "," + PortalJob.CITY_ID
+                + "," + PortalJob.CREATED_AT
                 + ") values ("
                 + ":" + PortalJob.NAME
                 + ",:" + PortalJob.COMPANY_NAME
@@ -144,6 +147,7 @@ public class PortalJobDao extends Dao<PortalJob> {
                 + ",:" + PortalJob.SEEN
                 + ",:" + PortalJob.PORTAL_ID
                 + ",:" + PortalJob.CITY_ID
+                + ",:" + PortalJob.CREATED_AT
                 + ")";
 
         if (executeInsertBatch(query, list).length > 0) {
@@ -199,6 +203,9 @@ public class PortalJobDao extends Dao<PortalJob> {
         params.put(PortalJob.SEEN, DateUtil.getGmtTimestamp(portalJob.getSeen()));
         params.put(PortalJob.PORTAL_ID, portalJob.getPortal_id());
         params.put(PortalJob.CITY_ID, portalJob.getCity_id());
+        if (portalJob.getCreated_at() != null) {
+            params.put(PortalJob.CREATED_AT, portalJob.getCreated_at());
+        }
         return params;
     }
 }
