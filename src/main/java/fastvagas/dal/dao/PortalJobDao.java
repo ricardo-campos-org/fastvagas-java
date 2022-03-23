@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +89,17 @@ public class PortalJobDao extends Dao<PortalJob> {
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue(PortalJob.CITY_ID, city_id);
+
+        return getListFromResult(query, params);
+    }
+
+    public List<PortalJob> findAllByCreatedAt(LocalDateTime localDateTime) {
+        final String query = "SELECT * "
+                + " FROM " + PortalJob.TABLE
+                + " WHERE " + PortalJob.CREATED_AT + ">= :" + PortalJob.CREATED_AT;
+
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue(PortalJob.CREATED_AT, localDateTime);
 
         return getListFromResult(query, params);
     }

@@ -53,7 +53,9 @@ public class Indeed implements Crowler {
                     Element divAria = divMetadata.selectFirst("div.salary-snippet");
                     if (divAria != null) {
                         String salario = divAria.attr("aria-label").trim();
-                        portalJob.setDescription(salario);
+                        if (!salario.equals("null")) {
+                            portalJob.setDescription(salario + ". ");
+                        }
                     }
                 }
 

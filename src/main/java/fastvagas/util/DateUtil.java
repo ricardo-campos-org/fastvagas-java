@@ -95,6 +95,15 @@ public class DateUtil {
         return c.getTime();
     }
 
+    public static LocalDateTime getLocalDateTimeFromTimestamp(Timestamp ts) {
+        Date d = getDateFromTimestamp(ts);
+        if (d == null) {
+            return null;
+        }
+
+        return getLocalDateTimeFromDate(d);
+    }
+
     public static LocalDate getLocalDateFromDate(Date date) {
         return Instant.ofEpochMilli(date.getTime())
                 .atZone(ZoneId.systemDefault())

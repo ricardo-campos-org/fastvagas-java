@@ -81,14 +81,17 @@ public class CrowlerService {
             logger.info(logToSave.get(logToSave.size()-1));
 
             // Last 30 days jobs for this portal
-            logToSave.add("Finding last 30 days jobs...");
+            logToSave.add("Finding last 30 days jobs from this portal...");
             logger.info(logToSave.get(logToSave.size()-1));
-            Map<String, PortalJob> portalJobMap = portalJobService.listToMapByUrl(
-                portalJobService.findAllByPortalIdPublishedRange(
+            List<PortalJob> savedList = portalJobService.findAllByPortalIdPublishedRange(
                     portal.getPortal_id(),
                     DateUtil.subtractMonths(new Date(), 1)
-                )
             );
+
+            Map<String, PortalJob> portalJobMap = portalJobService.listToMapByUrl(savedList);
+
+            logToSave.add(portalJobMap.size() + " job(s) already saved at this portal.");
+            logger.info(logToSave.get(logToSave.size()-1));
 
             logToSave.add("Finding users and terms to search...");
             logger.info(logToSave.get(logToSave.size()-1));
@@ -98,7 +101,7 @@ public class CrowlerService {
             );
 
             if (userTermPortals.isEmpty()) {
-                logToSave.add("Zero users or terms on this portal.");
+                logToSave.add("No users or terms on this portal.");
                 logger.info(logToSave.get(logToSave.size()-1));
             }
 

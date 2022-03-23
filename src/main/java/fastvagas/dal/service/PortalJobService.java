@@ -5,6 +5,8 @@ import fastvagas.dal.entity.PortalJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -40,5 +42,9 @@ public class PortalJobService {
         Map<String, PortalJob> portalJobMap = new HashMap<>();
         list.forEach((portalJob) -> portalJobMap.put(portalJob.getUrl(), portalJob));
         return portalJobMap;
+    }
+
+    public List<PortalJob> findAllByCreatedAt(LocalDateTime localDateTime) {
+        return portalJobDao.findAllByCreatedAt(localDateTime);
     }
 }

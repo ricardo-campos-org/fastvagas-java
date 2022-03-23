@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,18 @@ public class CrowlerLogDao extends Dao<CrowlerLog> {
         if (sequence != null) {
             params.put(CrowlerLog.SEQUENCE, sequence);
         }
+
+        return getListFromResult(sb.toString(), new MapSqlParameterSource().addValues(params));
+    }
+
+    public List<CrowlerLog> findAllByGreaterDateTime(LocalDateTime dateTime) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM ").append(CrowlerLog.TABLE).append(" WHERE 1 = 1");
+        sb.append(" AND ").append(CrowlerLog.CREATED_AT).append(">=:").append(CrowlerLog.CREATED_AT);
+        sb.append(" ORDER BY ").append(CrowlerLog.CREATED_AT).append(", ").append(CrowlerLog.SEQUENCE);
+
+        Map<String, Object> params = new HashMap<>();
+        params.put(CrowlerLog.CREATED_AT, dateTime);
 
         return getListFromResult(sb.toString(), new MapSqlParameterSource().addValues(params));
     }

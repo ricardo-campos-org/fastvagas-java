@@ -3,12 +3,15 @@ package fastvagas.controller;
 import fastvagas.dal.entity.City;
 import fastvagas.dal.entity.Contact;
 import fastvagas.dal.entity.CrowlerLog;
+import fastvagas.dal.entity.PortalJob;
 import fastvagas.dal.entity.User;
 import fastvagas.dal.service.CityService;
 import fastvagas.dal.service.ContactService;
 import fastvagas.dal.service.CrowlerLogService;
+import fastvagas.dal.service.PortalJobService;
 import fastvagas.dal.service.UserService;
 import fastvagas.exception.InvalidEmailException;
+import fastvagas.json.PortalJobResponse;
 import fastvagas.service.CrowlerService;
 import fastvagas.service.MailService;
 import fastvagas.util.DateUtil;
@@ -17,29 +20,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.AddressException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/guest")
 public class GuestController {
 
-    @Autowired
-    private CityService cityService;
+    private final CityService cityService;
+    private final UserService userService;
+    private final ContactService contactService;
+    private final MailService mailService;
+    private final CrowlerService crowlerService;
+    private final CrowlerLogService crowlerLogService;
+    private final PortalJobService portalJobService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ContactService contactService;
-
-    @Autowired
-    private MailService mailService;
-
-    @Autowired
-    private CrowlerService crowlerService;
-
-    @Autowired
-    private CrowlerLogService crowlerLogService;
+    public GuestController(CityService cityService, UserService userService, ContactService contactService,
+                           MailService mailService, CrowlerService crowlerService, CrowlerLogService crowlerLogService,
+                           PortalJobService portalJobService) {
+        this.cityService = cityService;
+        this.userService = userService;
+        this.contactService = contactService;
+        this.mailService = mailService;
+        this.crowlerService = crowlerService;
+        this.crowlerLogService = crowlerLogService;
+        this.portalJobService = portalJobService;
+    }
 
     // New account modal form URLs
     @GetMapping(value = "/find-all-cities-by-state/{uf}")
@@ -83,14 +92,31 @@ public class GuestController {
 
     // Crowler tests
     @PostMapping(value = "/do-crowler", produces = "application/json")
-    public List<CrowlerLog> crowlerTests() {
+    public List<PortalJobResponse> crowlerTests() {
         crowlerService.start();
 
-        return crowlerLogService.findAllByPrimaryKey(DateUtil.getCurrentLocalDate(), null);
+        LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
+
+        List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(ontem);
+        List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
+        portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
+        return respList;
     }
 
-    @PostMapping(value = "/get-logs", produces = "application/json")
+    @GetMapping(value = "/get-logs", produces = "application/json")
     public List<CrowlerLog> getLogs() {
-        return crowlerLogService.findAllByPrimaryKey(DateUtil.getCurrentLocalDate(), null);
+        LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
+
+        return crowlerLogService.findAllByGreaterDateTime(ontem);
+    }
+
+    @GetMapping(value = "/get-jobs", produces = "application/json")
+    public List<PortalJobResponse> getJobs() {
+        LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
+
+        List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(ontem);
+        List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
+        portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
+        return respList;
     }
 }
