@@ -1,8 +1,8 @@
 package fastvagas.service;
 
 import fastvagas.config.MailConfig;
-import fastvagas.dal.entity.Contact;
-import fastvagas.dal.entity.PortalJob;
+import fastvagas.data.entity.Contact;
+import fastvagas.data.entity.PortalJob;
 import fastvagas.exception.SendMailException;
 import fastvagas.util.ObjectUtil;
 import org.slf4j.Logger;

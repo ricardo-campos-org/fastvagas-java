@@ -1,7 +1,7 @@
 package fastvagas.handler;
 
-import fastvagas.dal.entity.User;
-import fastvagas.dal.service.UserService;
+import fastvagas.data.entity.User;
+import fastvagas.data.repository.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;

@@ -1,6 +1,6 @@
 package fastvagas.rest;
 
-import fastvagas.dal.entity.User;
+import fastvagas.data.entity.User;
 import fastvagas.json.UserAccountJson;
 import fastvagas.service.AuthService;
 import fastvagas.service.MinhaContaService;

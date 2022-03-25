@@ -1,7 +1,7 @@
 package fastvagas.rest;
 
-import fastvagas.dal.entity.State;
-import fastvagas.dal.service.StateService;
+import fastvagas.data.entity.State;
+import fastvagas.data.repository.StateService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

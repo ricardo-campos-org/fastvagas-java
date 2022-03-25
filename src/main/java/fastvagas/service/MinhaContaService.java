@@ -1,7 +1,7 @@
 package fastvagas.service;
 
-import fastvagas.dal.entity.User;
-import fastvagas.dal.service.UserService;
+import fastvagas.data.entity.User;
+import fastvagas.data.repository.UserService;
 import fastvagas.json.UserAccountJson;
 import fastvagas.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;

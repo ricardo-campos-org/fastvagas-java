@@ -1,6 +1,6 @@
 package fastvagas.crowler;
 
-import fastvagas.dal.entity.PortalJob;
+import fastvagas.data.entity.PortalJob;
 import fastvagas.util.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

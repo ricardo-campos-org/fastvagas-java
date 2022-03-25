@@ -1,9 +1,8 @@
 package fastvagas.json;
 
-import fastvagas.dal.entity.PortalJob;
+import fastvagas.data.entity.PortalJob;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class JobDetail implements Serializable {

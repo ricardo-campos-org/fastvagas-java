@@ -1,7 +1,7 @@
 package fastvagas.rest;
 
-import fastvagas.dal.entity.City;
-import fastvagas.dal.service.CityService;
+import fastvagas.data.entity.City;
+import fastvagas.data.repository.CityService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

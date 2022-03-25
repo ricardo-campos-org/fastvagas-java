@@ -1,10 +1,10 @@
 package fastvagas.service;
 
-import fastvagas.dal.entity.*;
-import fastvagas.dal.service.CityService;
-import fastvagas.dal.service.PortalJobService;
-import fastvagas.dal.service.PortalService;
-import fastvagas.dal.service.StateService;
+import fastvagas.data.entity.*;
+import fastvagas.data.repository.CityService;
+import fastvagas.data.repository.PortalJobService;
+import fastvagas.data.repository.PortalRepositoryBean;
+import fastvagas.data.repository.StateService;
 import fastvagas.exception.EntityNotFoundException;
 import fastvagas.json.HomeJson;
 import fastvagas.json.JobDetail;
@@ -30,7 +30,7 @@ public class HomeService {
     PortalJobService portalJobService;
 
     @Autowired
-    PortalService portalService;
+    PortalRepositoryBean portalServiceBean;
 
     public HomeJson getAllJobs(User user) {
         City city = cityService.findById(user.getCity_id());
@@ -100,7 +100,7 @@ public class HomeService {
 
         // Map para agilizar
         Map<Long, String> portalNameMap = new HashMap<>();
-        List<Portal> portals = portalService.findAllByCityId(city_id);
+        List<Portal> portals = portalServiceBean.findAllByCityId(city_id);
         portals.forEach(portal -> portalNameMap.put(portal.getPortal_id(), portal.getName()));
 
         List<JobDetail> jobList = new ArrayList<>();

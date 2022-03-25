@@ -1,10 +1,10 @@
 package fastvagas.service;
 
-import fastvagas.dal.entity.City;
-import fastvagas.dal.entity.State;
-import fastvagas.dal.entity.User;
-import fastvagas.dal.service.CityService;
-import fastvagas.dal.service.StateService;
+import fastvagas.data.entity.City;
+import fastvagas.data.entity.State;
+import fastvagas.data.entity.User;
+import fastvagas.data.repository.CityService;
+import fastvagas.data.repository.StateService;
 import fastvagas.json.UserAccountJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

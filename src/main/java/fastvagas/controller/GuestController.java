@@ -1,15 +1,15 @@
 package fastvagas.controller;
 
-import fastvagas.dal.entity.City;
-import fastvagas.dal.entity.Contact;
-import fastvagas.dal.entity.CrowlerLog;
-import fastvagas.dal.entity.PortalJob;
-import fastvagas.dal.entity.User;
-import fastvagas.dal.service.CityService;
-import fastvagas.dal.service.ContactService;
-import fastvagas.dal.service.CrowlerLogService;
-import fastvagas.dal.service.PortalJobService;
-import fastvagas.dal.service.UserService;
+import fastvagas.data.entity.City;
+import fastvagas.data.entity.Contact;
+import fastvagas.data.entity.CrowlerLog;
+import fastvagas.data.entity.PortalJob;
+import fastvagas.data.entity.User;
+import fastvagas.data.repository.CityService;
+import fastvagas.data.repository.ContactService;
+import fastvagas.data.repository.CrowlerLogService;
+import fastvagas.data.repository.PortalJobService;
+import fastvagas.data.repository.UserService;
 import fastvagas.exception.InvalidEmailException;
 import fastvagas.json.PortalJobResponse;
 import fastvagas.service.CrowlerService;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.internet.AddressException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController

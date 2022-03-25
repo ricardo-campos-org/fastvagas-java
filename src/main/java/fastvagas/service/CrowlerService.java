@@ -2,54 +2,56 @@ package fastvagas.service;
 
 import fastvagas.crowler.Crowler;
 import fastvagas.crowler.CrowlerFactory;
-import fastvagas.dal.entity.City;
-import fastvagas.dal.entity.CrowlerLog;
-import fastvagas.dal.entity.Portal;
-import fastvagas.dal.entity.PortalJob;
-import fastvagas.dal.service.*;
-import fastvagas.dal.vo.UserTermPortal;
+import fastvagas.data.entity.City;
+import fastvagas.data.entity.CrowlerLog;
+import fastvagas.data.entity.Portal;
+import fastvagas.data.entity.PortalJob;
+import fastvagas.data.repository.*;
+import fastvagas.data.vo.UserTermPortal;
 import fastvagas.util.DateUtil;
 import fastvagas.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CrowlerService {
 
-    private final Logger logger = LoggerFactory.getLogger(CrowlerService.class);
+    private final PortalRepositoryBean portalServiceBean;
+    private final UserTermPortalService userTermPortalService;
+    private final PortalJobService portalJobService;
+    private final CityService cityService;
+    private final CrowlerLogService crowlerLogService;
+    private final MailService mailService;
 
     @Autowired
-    private PortalService portalService;
+    public CrowlerService(PortalRepositoryBean portalServiceBean, UserTermPortalService userTermPortalService,
+                          PortalJobService portalJobService, CityService cityService,
+                          CrowlerLogService crowlerLogService, MailService mailService) {
+        this.portalServiceBean = portalServiceBean;
+        this.userTermPortalService = userTermPortalService;
+        this.portalJobService = portalJobService;
+        this.cityService = cityService;
+        this.crowlerLogService = crowlerLogService;
+        this.mailService = mailService;
+    }
 
-    @Autowired
-    private UserTermPortalService userTermPortalService;
-
-    @Autowired
-    private PortalJobService portalJobService;
-
-    @Autowired
-    private CityService cityService;
-
-    @Autowired
-    private CrowlerLogService crowlerLogService;
-
-    @Autowired
-    private MailService mailService;
-
+    @Transactional()
     public void start() {
-        List<Portal> portals = portalService.findAll();
+        List<Portal> portals = portalServiceBean.findAll();
         if (portals.isEmpty()) {
-            logger.info("Zero portals with active users. Leaving..");
+            log.info("Zero portals with active users. Leaving..");
             return;
         }
 
@@ -67,22 +69,22 @@ public class CrowlerService {
             List<String> logToSave = new ArrayList<>();
 
             logToSave.add("Starting crowler for " + portal.getName() + " portal (city of " + city.getName() + ").");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
 
             List<PortalJob> portalJobList = findJobs(portal, city);
 
             if (portalJobList.isEmpty()) {
                 logToSave.add("Zero jobs received from the portal. Going to next");
-                logger.info(logToSave.get(logToSave.size()-1));
+                log.info(logToSave.get(logToSave.size()-1));
                 continue;
             }
 
             logToSave.add(portalJobList.size() + " job(s) received from the portal.");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
 
             // Last 30 days jobs for this portal
             logToSave.add("Finding last 30 days jobs from this portal...");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
             List<PortalJob> savedList = portalJobService.findAllByPortalIdPublishedRange(
                     portal.getPortal_id(),
                     DateUtil.subtractMonths(new Date(), 1)
@@ -91,10 +93,10 @@ public class CrowlerService {
             Map<String, PortalJob> portalJobMap = portalJobService.listToMapByUrl(savedList);
 
             logToSave.add(portalJobMap.size() + " job(s) already saved at this portal.");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
 
             logToSave.add("Finding users and terms to search...");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
             // obter termos de todos os usuários desse portal
             List<UserTermPortal> userTermPortals = userTermPortalService.findAllByPortalId(
                     portal.getPortal_id()
@@ -102,14 +104,14 @@ public class CrowlerService {
 
             if (userTermPortals.isEmpty()) {
                 logToSave.add("No users or terms on this portal.");
-                logger.info(logToSave.get(logToSave.size()-1));
+                log.info(logToSave.get(logToSave.size()-1));
             }
 
             Map<Long, List<PortalJob>> userIdPortalJobMap = new HashMap<>();
             List<PortalJob> portalJobToSave = new ArrayList<>();
 
             logToSave.add("Iterating over job list received, looking for new jobs and users terms that match.");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
             for (PortalJob portalJob : portalJobList) {
                 // Save the job, if it's not already saved
                 if (!portalJobMap.containsKey(portalJob.getUrl())) {
@@ -134,7 +136,7 @@ public class CrowlerService {
             }
 
             logToSave.add(userIdPortalJobMap.size() + " user(s) to notify. " + userIdPortalJobMap.values().size() + " job(s).");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
             for (Map.Entry<Long, List<PortalJob>> entry : userIdPortalJobMap.entrySet()) {
                 Long userId = entry.getKey();
 
@@ -152,11 +154,11 @@ public class CrowlerService {
             }
 
             logToSave.add(portalJobToSave.size() + " new job(s) found. Registering...");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
             portalJobService.createBatch(portalJobToSave);
 
             logToSave.add("Done crowling for " + portal.getName() + " portal (city of " + city.getName() + ").");
-            logger.info(logToSave.get(logToSave.size()-1));
+            log.info(logToSave.get(logToSave.size()-1));
 
             // saving log
             List<CrowlerLog> crowlerLogs = new ArrayList<>();
@@ -187,11 +189,11 @@ public class CrowlerService {
             return crowler.findJobs(doc);
         
         } catch (IOException ioe) {
-            logger.error("IOException: {}", ioe.getLocalizedMessage());
+            log.error("IOException: {}", ioe.getLocalizedMessage());
         } catch (ClassCastException cce) {
-            logger.error("ClassCastException: {}", cce.getLocalizedMessage());
+            log.error("ClassCastException: {}", cce.getLocalizedMessage());
         } catch (NullPointerException npe) {
-            logger.error("NullPointerException: {}", npe.getLocalizedMessage());
+            log.error("NullPointerException: {}", npe.getLocalizedMessage());
             npe.printStackTrace();
         }
 

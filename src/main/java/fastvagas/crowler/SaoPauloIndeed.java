@@ -1,7 +1,7 @@
 package fastvagas.crowler;
 
 import fastvagas.crowler.shared.Indeed;
-import fastvagas.dal.entity.PortalJob;
+import fastvagas.data.entity.PortalJob;
 import org.jsoup.nodes.Document;
 
 import java.util.List;

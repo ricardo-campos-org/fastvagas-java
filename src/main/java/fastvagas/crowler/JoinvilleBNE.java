@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jsoup.nodes.Document;
 
-import fastvagas.dal.entity.PortalJob;
+import fastvagas.data.entity.PortalJob;
 
 public class JoinvilleBNE implements Crowler {
 

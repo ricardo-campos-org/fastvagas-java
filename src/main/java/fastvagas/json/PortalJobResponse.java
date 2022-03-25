@@ -1,6 +1,6 @@
 package fastvagas.json;
 
-import fastvagas.dal.entity.PortalJob;
+import fastvagas.data.entity.PortalJob;
 import fastvagas.util.ObjectUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
