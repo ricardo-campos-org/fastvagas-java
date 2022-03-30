@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.internet.AddressException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -99,6 +100,9 @@ public class GuestController {
         List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(ontem);
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
         portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
+
+        respList.sort(Comparator.comparing(PortalJobResponse::getName));
+
         return respList;
     }
 
@@ -116,6 +120,9 @@ public class GuestController {
         List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(ontem);
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
         portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
+
+        respList.sort(Comparator.comparing(PortalJobResponse::getName));
+
         return respList;
     }
 }

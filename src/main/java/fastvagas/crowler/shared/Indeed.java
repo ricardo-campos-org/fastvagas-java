@@ -32,7 +32,7 @@ public class Indeed implements Crowler {
                     Elements spanList = h2JobTitle.select("span");
                     for (Element span : spanList) {
                         if (span.hasAttr("title")) {
-                            portalJob.setName(StringUtil.capitalize(span.text().toLowerCase()));
+                            portalJob.setName(StringUtil.parseJobName(span.text()));
                             break;
                         }
                     }
@@ -43,7 +43,7 @@ public class Indeed implements Crowler {
                 if (divCompany != null) {
                     Element span = divCompany.selectFirst("span.companyName");
                     if (span != null) {
-                        portalJob.setCompany_name(StringUtil.capitalize(span.text().trim().toLowerCase()));
+                        portalJob.setCompany_name(span.text().trim());
                     }
                 }
 

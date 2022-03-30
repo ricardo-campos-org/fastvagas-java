@@ -1,14 +1,34 @@
 package fastvagas.util;
 
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StringUtil {
 
+    public static String parseJobName(@NonNull String text) {
+        List<String> words = List.of(text.split(" "));
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            if (!sb.toString().isEmpty()) {
+                sb.append(" ");
+            }
+
+            sb.append(capitalize(word));
+        }
+
+        return sb.toString();
+    }
+
     public static String capitalize(String text) {
-        return StringUtils.capitalize(text);
+        if (TextUtil.isIgnore(text)) {
+            return text;
+        }
+
+        return TextUtil.replace(text);
     }
 
     public static String replaceToPlainText(String text) {

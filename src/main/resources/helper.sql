@@ -271,3 +271,6 @@ INSERT INTO users (first_name, last_name, email, password, city_id, enabled, cre
 
 INSERT INTO authorities (email, authority) VALUES ('ricardompcampos@gmail.com', 'ROLE_USER');
 INSERT INTO authorities (email, authority) VALUES ('leandro@bussolainvestments.com.br', 'ROLE_USER');
+
+SELECT * FROM portal_jobs WHERE seen IS NULL;
+UPDATE portal_jobs SET SEEN = NOW() WHERE seen IS NULL;

@@ -35,7 +35,7 @@ public class JoinvilleJoinvilleVagas implements Crowler {
             if (h3JobListingTitle != null) {
                 Element a = h3JobListingTitle.selectFirst("a");
                 if (a != null) {
-                    portalJob.setName(StringUtil.capitalize(a.text().toLowerCase()));
+                    portalJob.setName(StringUtil.parseJobName(a.text()));
                     portalJob.setUrl(a.absUrl("href"));
                 }
             }
@@ -43,7 +43,7 @@ public class JoinvilleJoinvilleVagas implements Crowler {
             // Nome da empresa
             Element divJobListingCompany = li.selectFirst(".job_listing-company");
             if (divJobListingCompany != null) {
-                portalJob.setCompany_name(StringUtil.capitalize(divJobListingCompany.text().trim().toLowerCase()));
+                portalJob.setCompany_name(divJobListingCompany.text().trim().toLowerCase());
             }
 
             // Tipo da vaga
