@@ -95,9 +95,7 @@ public class GuestController {
     public List<PortalJobResponse> crowlerTests() {
         crowlerService.start();
 
-        LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
-
-        List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(ontem);
+        List<PortalJob> portalJobList = portalJobService.findAllByNotSeen();
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
         portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
 
@@ -117,7 +115,7 @@ public class GuestController {
     public List<PortalJobResponse> getJobs() {
         LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
 
-        List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(ontem);
+        List<PortalJob> portalJobList = portalJobService.findAllByNotSeen();
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
         portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
 

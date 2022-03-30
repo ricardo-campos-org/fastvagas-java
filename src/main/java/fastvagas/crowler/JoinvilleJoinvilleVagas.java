@@ -2,6 +2,7 @@ package fastvagas.crowler;
 
 import fastvagas.data.entity.PortalJob;
 import fastvagas.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -11,9 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class JoinvilleJoinvilleVagas implements Crowler {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public List<PortalJob> findJobs(Document document) {
@@ -21,7 +21,7 @@ public class JoinvilleJoinvilleVagas implements Crowler {
 
         Element olJobListings = document.selectFirst(".job_listings");
         if (olJobListings == null) {
-            logger.warn("Nenhuma vaga encontrada para o seletor .job_listings");
+            log.warn("Nenhuma vaga encontrada para o seletor .job_listings");
             return portalJobList;
         }
 

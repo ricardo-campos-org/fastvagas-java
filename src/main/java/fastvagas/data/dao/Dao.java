@@ -1,6 +1,7 @@
 package fastvagas.data.dao;
 
 import fastvagas.exception.DatabaseException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,8 +14,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
+@Slf4j
 class Dao<T> {
     private final NamedParameterJdbcTemplate template;
     private final Class<T> entityClass;
@@ -31,15 +32,15 @@ class Dao<T> {
 
     T getObjectFromResult(String query, SqlParameterSource params) {
         try {
-            Logger.getLogger(entityClass.getName()).info(query);
+            log.info(query);
 
             List<?> list = template.query(query, params, rowMapper);
             if (list.isEmpty()) {
-                Logger.getLogger(entityClass.getName()).info("0 results.");
+                log.info("0 results.");
                 return null;
             }
 
-            Logger.getLogger(entityClass.getName()).info("1 row.");
+            log.info("1 row.");
 
             return (T) list.get(0);
         } catch (DataAccessException ex) {
@@ -53,15 +54,15 @@ class Dao<T> {
 
     List<T> getListFromResult(String query) {
         try {
-            Logger.getLogger(entityClass.getName()).info(query);
+            log.info(query);
 
             List<T> list = template.query(query, rowMapper);
             if (list.isEmpty()) {
-                Logger.getLogger(entityClass.getName()).info("0 results.");
+                log.info("0 results.");
                 return new ArrayList<>();
             }
 
-            Logger.getLogger(entityClass.getName()).info(list.size() + " row(s).");
+            log.info(list.size() + " row(s).");
 
             return list;
         } catch (DataAccessException ex) {
@@ -75,15 +76,15 @@ class Dao<T> {
 
     List<T> getListFromResult(String query, SqlParameterSource params) {
         try {
-            Logger.getLogger(entityClass.getName()).info("SQL: " + query);
+            log.info("SQL: " + query);
 
             List<T> list = template.query(query, params, rowMapper);
             if (list.isEmpty()) {
-                Logger.getLogger(entityClass.getName()).info("0 results.");
+                log.info("0 results.");
                 return new ArrayList<>();
             }
 
-            Logger.getLogger(entityClass.getName()).info(list.size() + " row(s).");
+            log.info(list.size() + " row(s).");
 
             return list;
         } catch (DataAccessException ex) {
@@ -97,14 +98,14 @@ class Dao<T> {
 
     int executeInsert(String query, Map<String, ?> map) {
         try {
-            Logger.getLogger(entityClass.getName()).info("SQL: " + query);
+            log.info("SQL: " + query);
 
             this.keyHolder = new GeneratedKeyHolder();
 
             SqlParameterSource params = new MapSqlParameterSource(map);
 
             int rows = template.update(query, params, this.keyHolder);
-            Logger.getLogger(entityClass.getName()).info(rows + " affected row(s).");
+            log.info(rows + " affected row(s).");
 
             return rows;
         } catch (DataAccessException ex) {
@@ -118,13 +119,13 @@ class Dao<T> {
 
     int[] executeInsertBatch(String query, List<T> list) {
         try {
-            Logger.getLogger(entityClass.getName()).info("SQL: " + query);
+            log.info("SQL: " + query);
 
             SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(list.toArray());
 
             int[] rows = template.batchUpdate(query, batch);
 
-            Logger.getLogger(entityClass.getName()).info(rows.length + " affected row(s).");
+            log.info(rows.length + " affected row(s).");
 
             return rows;
         } catch (DataAccessException ex) {
@@ -138,10 +139,10 @@ class Dao<T> {
 
     int executeUpdateDelete(String query, Map<String, ?> map) {
         try {
-            Logger.getLogger(entityClass.getName()).info("SQL: " + query);
+            log.info("SQL: " + query);
 
             int rows = template.update(query, map);
-            Logger.getLogger(entityClass.getName()).info(rows + " affected row(s).");
+            log.info(rows + " affected row(s).");
 
             return rows;
         } catch (DataAccessException ex) {

@@ -5,8 +5,7 @@ import fastvagas.data.entity.Contact;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.exception.SendMailException;
 import fastvagas.util.ObjectUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +20,16 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
 
+@Slf4j
 @Service
 public class MailService {
 
     @Autowired
     MailConfig mailConfig;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass().getName());
-
     public void send(Contact contact) {
         if (!mailConfig.getEnabled()) {
-            logger.info("Mail system not enabled!! Leaving!");
+            log.info("Mail system not enabled!! Leaving!");
             return;
         }
 
@@ -75,7 +73,7 @@ public class MailService {
             message.setSentDate(new java.util.Date());
 
             Transport.send(message);
-            logger.info("E-mail admin enviado com sucesso!");
+            log.info("E-mail admin enviado com sucesso!");
         } catch (MessagingException | UnsupportedEncodingException me) {
             me.printStackTrace();
             throw new SendMailException(
@@ -99,7 +97,7 @@ public class MailService {
             message.setContent(content, "text/html; charset=UTF-8");
 
             Transport.send(message);
-            logger.info("E-mail para a pessoa enviado com sucesso!");
+            log.info("E-mail para a pessoa enviado com sucesso!");
         } catch (MessagingException | UnsupportedEncodingException me) {
             me.printStackTrace();
             throw new SendMailException(
@@ -112,7 +110,7 @@ public class MailService {
 
     public void jobNotification(String name, String email, List<PortalJob> portalJobs) {
         if (!mailConfig.getEnabled()) {
-            logger.info("Mail system not enabled for job notifications!! Leaving!");
+            log.info("Mail system not enabled for job notifications!! Leaving!");
             return;
         }
 
@@ -216,7 +214,7 @@ public class MailService {
             message.setSentDate(new java.util.Date());
 
             Transport.send(message);
-            logger.info("E-mail para a pessoa enviado com sucesso!");
+            log.info("E-mail para a pessoa enviado com sucesso!");
         } catch (MessagingException | IOException | NullPointerException me) {
             throw new SendMailException(
                 "Problema no servidor ao registrar contato.",

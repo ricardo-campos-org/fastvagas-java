@@ -104,6 +104,14 @@ public class PortalJobDao extends Dao<PortalJob> {
         return getListFromResult(query, params);
     }
 
+    public List<PortalJob> findAllByNotSeen() {
+        final String query = "SELECT * "
+                + " FROM " + PortalJob.TABLE
+                + " WHERE " + PortalJob.SEEN + " IS NULL";
+
+        return getListFromResult(query);
+    }
+
     public PortalJob create(PortalJob portalJob) {
         final String query = "INSERT INTO " + PortalJob.TABLE + " ("
             + PortalJob.NAME

@@ -1,13 +1,13 @@
 package fastvagas.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.logging.Logger;
 
+@Slf4j
 public class ObjectUtil {
-
-    private final static Logger logger = Logger.getLogger(ObjectUtil.class.getName());
 
     public static boolean hasValue(Object... objs) {
         for (Object obj : objs) {
@@ -46,7 +46,7 @@ public class ObjectUtil {
                 return !val.isEmpty();
             }
 
-            logger.info("Classe não tratada: " + obj.getClass());
+            log.info("Classe não tratada: " + obj.getClass());
 
             throw new RuntimeException("Classe não tratada: " + obj.getClass());
         } catch (Exception e) {

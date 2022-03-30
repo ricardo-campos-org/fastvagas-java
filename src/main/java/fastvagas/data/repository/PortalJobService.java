@@ -46,4 +46,8 @@ public class PortalJobService {
     public List<PortalJob> findAllByCreatedAt(LocalDateTime localDateTime) {
         return portalJobDao.findAllByCreatedAt(localDateTime);
     }
+
+    public List<PortalJob> findAllByNotSeen() {
+        return portalJobDao.findAllByNotSeen();
+    }
 }

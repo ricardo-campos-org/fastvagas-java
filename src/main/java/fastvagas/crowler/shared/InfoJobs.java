@@ -4,18 +4,16 @@ import fastvagas.crowler.Crowler;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.util.ObjectUtil;
 import fastvagas.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class InfoJobs implements Crowler {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     @Override
     public List<PortalJob> findJobs(Document document) {
@@ -23,12 +21,12 @@ public class InfoJobs implements Crowler {
 
         Element divMultiple = document.selectFirst("div.multiple");
         if (divMultiple == null) {
-            logger.warn("div.multiple não localizado no documento!");
+            log.warn("div.multiple não localizado no documento!");
             return portalJobList;
         }
 
         Elements divVagas = divMultiple.select("div.element-vaga");
-        logger.info("Divs encontradas: {}", divVagas.size());
+        log.info("Divs encontradas: {}", divVagas.size());
         for (Element div : divVagas) {
             PortalJob portalJob = new PortalJob();
 
