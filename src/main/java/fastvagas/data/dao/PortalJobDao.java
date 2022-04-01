@@ -2,7 +2,6 @@ package fastvagas.data.dao;
 
 import fastvagas.data.entity.PortalJob;
 import fastvagas.data.mapper.PortalJobRowMapper;
-import fastvagas.util.DateUtil;
 import fastvagas.util.PaginationUtil;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -14,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Repository
 public class PortalJobDao extends Dao<PortalJob> {
@@ -93,6 +93,17 @@ public class PortalJobDao extends Dao<PortalJob> {
         return getListFromResult(query, params);
     }
 
+    public List<PortalJob> findAllByPortalJobidList(Set<Long> jobIdList) {
+        final String query = "SELECT * "
+                + " FROM " + PortalJob.TABLE
+                + " WHERE " + PortalJob.PORTAL_JOB_ID + " IN (:" + PortalJob.PORTAL_JOB_ID + ")";
+
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue(PortalJob.PORTAL_JOB_ID, jobIdList);
+
+        return getListFromResult(query, params);
+    }
+
     public List<PortalJob> findAllByCreatedAt(LocalDateTime localDateTime) {
         final String query = "SELECT * "
                 + " FROM " + PortalJob.TABLE
@@ -104,10 +115,10 @@ public class PortalJobDao extends Dao<PortalJob> {
         return getListFromResult(query, params);
     }
 
+    @Deprecated
     public List<PortalJob> findAllByNotSeen() {
         final String query = "SELECT * "
-                + " FROM " + PortalJob.TABLE
-                + " WHERE " + PortalJob.SEEN + " IS NULL";
+                + " FROM " + PortalJob.TABLE;
 
         return getListFromResult(query);
     }
@@ -120,7 +131,6 @@ public class PortalJobDao extends Dao<PortalJob> {
             + "," + PortalJob.DESCRIPTION
             + "," + PortalJob.PUBLISHED_AT
             + "," + PortalJob.URL
-            + "," + PortalJob.SEEN
             + "," + PortalJob.PORTAL_ID
             + "," + PortalJob.CITY_ID
             + "," + PortalJob.CREATED_AT
@@ -131,7 +141,6 @@ public class PortalJobDao extends Dao<PortalJob> {
             + ",:" + PortalJob.DESCRIPTION
             + ",:" + PortalJob.PUBLISHED_AT
             + ",:" + PortalJob.URL
-            + ",:" + PortalJob.SEEN
             + ",:" + PortalJob.PORTAL_ID
             + ",:" + PortalJob.CITY_ID
             + ",:" + PortalJob.CREATED_AT
@@ -153,7 +162,6 @@ public class PortalJobDao extends Dao<PortalJob> {
                 + "," + PortalJob.DESCRIPTION
                 + "," + PortalJob.PUBLISHED_AT
                 + "," + PortalJob.URL
-                + "," + PortalJob.SEEN
                 + "," + PortalJob.PORTAL_ID
                 + "," + PortalJob.CITY_ID
                 + "," + PortalJob.CREATED_AT
@@ -164,7 +172,6 @@ public class PortalJobDao extends Dao<PortalJob> {
                 + ",:" + PortalJob.DESCRIPTION
                 + ",:" + PortalJob.PUBLISHED_AT
                 + ",:" + PortalJob.URL
-                + ",:" + PortalJob.SEEN
                 + ",:" + PortalJob.PORTAL_ID
                 + ",:" + PortalJob.CITY_ID
                 + ",:" + PortalJob.CREATED_AT
@@ -185,7 +192,6 @@ public class PortalJobDao extends Dao<PortalJob> {
             + "," + PortalJob.DESCRIPTION + "=:" + PortalJob.DESCRIPTION
             + "," + PortalJob.PUBLISHED_AT + "=:" + PortalJob.PUBLISHED_AT
             + "," + PortalJob.URL + "=:" + PortalJob.URL
-            + "," + PortalJob.SEEN + "=:" + PortalJob.SEEN
             + "," + PortalJob.PORTAL_ID + "=:" + PortalJob.PORTAL_ID
             + "," + PortalJob.CITY_ID + "=:" + PortalJob.CITY_ID
             + " WHERE " + PortalJob.PORTAL_JOB_ID + "=:" + PortalJob.PORTAL_JOB_ID;
@@ -220,7 +226,6 @@ public class PortalJobDao extends Dao<PortalJob> {
             params.put(PortalJob.PUBLISHED_AT, portalJob.getPublished_at().substring(0, 30));
         }
         params.put(PortalJob.URL, portalJob.getUrl());
-        params.put(PortalJob.SEEN, DateUtil.getGmtTimestamp(portalJob.getSeen()));
         params.put(PortalJob.PORTAL_ID, portalJob.getPortal_id());
         params.put(PortalJob.CITY_ID, portalJob.getCity_id());
         if (portalJob.getCreated_at() != null) {

@@ -13,10 +13,13 @@ import fastvagas.data.repository.UserService;
 import fastvagas.exception.InvalidEmailException;
 import fastvagas.json.PortalJobResponse;
 import fastvagas.service.CrowlerService;
+import fastvagas.service.JobService;
 import fastvagas.service.MailService;
 import fastvagas.util.DateUtil;
 import fastvagas.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.AddressException;
@@ -36,11 +39,12 @@ public class GuestController {
     private final CrowlerService crowlerService;
     private final CrowlerLogService crowlerLogService;
     private final PortalJobService portalJobService;
+    private final JobService jobService;
 
     @Autowired
     public GuestController(CityService cityService, UserService userService, ContactService contactService,
                            MailService mailService, CrowlerService crowlerService, CrowlerLogService crowlerLogService,
-                           PortalJobService portalJobService) {
+                           PortalJobService portalJobService, JobService jobService) {
         this.cityService = cityService;
         this.userService = userService;
         this.contactService = contactService;
@@ -48,6 +52,7 @@ public class GuestController {
         this.crowlerService = crowlerService;
         this.crowlerLogService = crowlerLogService;
         this.portalJobService = portalJobService;
+        this.jobService = jobService;
     }
 
     // New account modal form URLs
@@ -92,16 +97,9 @@ public class GuestController {
 
     // Crowler tests
     @PostMapping(value = "/do-crowler", produces = "application/json")
-    public List<PortalJobResponse> crowlerTests() {
+    public ResponseEntity<?> crowlerTests() {
         crowlerService.start();
-
-        List<PortalJob> portalJobList = portalJobService.findAllByNotSeen();
-        List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
-        portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
-
-        respList.sort(Comparator.comparing(PortalJobResponse::getName));
-
-        return respList;
+        return ResponseEntity.ok().body("Done");
     }
 
     @GetMapping(value = "/get-logs", produces = "application/json")
@@ -113,12 +111,37 @@ public class GuestController {
 
     @GetMapping(value = "/get-jobs", produces = "application/json")
     public List<PortalJobResponse> getJobs() {
-        LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
+        LocalDateTime semanaAtual = DateUtil.getCurrentLocalDateTime().minusDays(7L);
 
-        List<PortalJob> portalJobList = portalJobService.findAllByNotSeen();
+        List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(semanaAtual);
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
         portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
 
+        respList.sort(Comparator.comparing(PortalJobResponse::getName));
+
+        return respList;
+    }
+
+    @PostMapping(value = "/reprocess-user",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> reprocessUser(@RequestBody User user) {
+        try {
+            LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
+            jobService.reprocessUserJobs(user.getUser_id(), ultimoMes);
+            return ResponseEntity.ok().body("Done");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/get-jobs-by-user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PortalJobResponse> getJobsByUser(@RequestParam("user_id") Long user_id) {
+        List<PortalJob> portalJobList = jobService.findUserJobsByTermsNotSeen(user_id);
+        List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
+
+        portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
         respList.sort(Comparator.comparing(PortalJobResponse::getName));
 
         return respList;

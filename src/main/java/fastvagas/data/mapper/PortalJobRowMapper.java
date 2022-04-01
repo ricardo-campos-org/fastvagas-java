@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 public class PortalJobRowMapper implements RowMapper<PortalJob> {
 
@@ -22,9 +21,6 @@ public class PortalJobRowMapper implements RowMapper<PortalJob> {
             portalJob.setPublished_at(resultSet.getString(PortalJob.PUBLISHED_AT));
         }
         portalJob.setUrl(resultSet.getString(PortalJob.URL));
-        if (resultSet.getTimestamp(PortalJob.SEEN) != null) {
-            portalJob.setSeen(new Date(resultSet.getTimestamp(PortalJob.SEEN).getTime()));
-        }
         portalJob.setPortal_id(resultSet.getLong(PortalJob.PORTAL_ID));
         portalJob.setCity_id(resultSet.getLong(PortalJob.CITY_ID));
         portalJob.setCreated_at(DateUtil.getLocalDateTimeFromTimestamp(resultSet.getTimestamp(PortalJob.CREATED_AT)));

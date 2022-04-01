@@ -268,9 +268,14 @@ INSERT INTO users (first_name, last_name, email, password, city_id, enabled, cre
     VALUES ('Ricardo', 'Campos', 'ricardompcampos@gmail.com', '', 1, 1, '2022-03-17 20:26:10');
 INSERT INTO users (first_name, last_name, email, password, city_id, enabled, created_at)
       VALUES ('Leandro', 'Alves', 'leandro@bussolainvestments.com.br', '', 8, 1, '2021-04-19 20:28:10');
+INSERT INTO users (first_name, last_name, email, password, city_id, enabled, created_at)
+      VALUES ('Jaque', 'Schmoller', 'jaquessprung@gmail.com', '', 1, 1, '2022-03-31 20:45:10');
 
 INSERT INTO authorities (email, authority) VALUES ('ricardompcampos@gmail.com', 'ROLE_USER');
 INSERT INTO authorities (email, authority) VALUES ('leandro@bussolainvestments.com.br', 'ROLE_USER');
+INSERT INTO authorities (email, authority) VALUES ('jaquessprung@gmail.com', 'ROLE_USER');
+
+INSERT INTO user_terms values ((SELECT user_id FROM users WHERE email = 'jaquessprung@gmail.com'),'RH;Administrativo');
 
 SELECT * FROM portal_jobs WHERE seen IS NULL;
 UPDATE portal_jobs SET SEEN = NOW() WHERE seen IS NULL;

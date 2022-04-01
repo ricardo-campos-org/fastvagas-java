@@ -5,11 +5,13 @@ import fastvagas.data.mapper.UserTermRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public class UserTermDao extends Dao<UserTerm> {
 
     public UserTermDao(NamedParameterJdbcTemplate template) {
@@ -28,6 +30,17 @@ public class UserTermDao extends Dao<UserTerm> {
 
     public List<UserTerm> findAll() {
         return getListFromResult("SELECT * FROM " + UserTerm.TABLE);
+    }
+
+    public List<UserTerm> findAllByUserId(Long user_id) {
+        final String query = "SELECT * "
+                + " FROM " + UserTerm.TABLE
+                + " WHERE " + UserTerm.USER_ID + "= :" + UserTerm.USER_ID;
+
+        SqlParameterSource params = new MapSqlParameterSource()
+                .addValue(UserTerm.USER_ID, user_id);
+
+        return getListFromResult(query, params);
     }
 
     public UserTerm create(UserTerm userTerm) {

@@ -38,7 +38,6 @@ CREATE TABLE portal_jobs (
     description    VARCHAR(600) NOT NULL,
     published_at   VARCHAR(30) NULL DEFAULT NULL,
     url            VARCHAR(1000) NOT NULL,
-    seen           TIMESTAMP NULL,
     portal_id      INTEGER NOT NULL REFERENCES portals (portal_id),
     city_id        INTEGER NOT NULL REFERENCES cities (city_id),
     created_at     TIMESTAMP NOT NULL
@@ -87,6 +86,7 @@ CREATE TABLE plans (
 CREATE TABLE user_jobs (
     user_id        INTEGER NOT NULL REFERENCES users (user_id),
     portal_job_id  INTEGER NOT NULL REFERENCES portal_jobs (portal_job_id),
+    seen           TIMESTAMP NULL,
     PRIMARY KEY (user_id, portal_job_id)
 );
 

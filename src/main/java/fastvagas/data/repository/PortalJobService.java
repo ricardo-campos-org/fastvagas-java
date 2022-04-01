@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class PortalJobService {
@@ -37,6 +38,10 @@ public class PortalJobService {
         return portalJobDao.findAllLastByCityId(city_id);
     }
 
+    public List<PortalJob> findAllByPortalJobidList(Set<Long> jobIdList) {
+        return portalJobDao.findAllByPortalJobidList(jobIdList);
+    }
+
     public Map<String, PortalJob> listToMapByUrl(List<PortalJob> list) {
         Map<String, PortalJob> portalJobMap = new HashMap<>();
         list.forEach((portalJob) -> portalJobMap.put(portalJob.getUrl(), portalJob));
@@ -47,6 +52,7 @@ public class PortalJobService {
         return portalJobDao.findAllByCreatedAt(localDateTime);
     }
 
+    @Deprecated
     public List<PortalJob> findAllByNotSeen() {
         return portalJobDao.findAllByNotSeen();
     }

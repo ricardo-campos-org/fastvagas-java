@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 import java.util.TimeZone;
 
 public class DateUtil {
@@ -47,8 +48,8 @@ public class DateUtil {
     }
 
     public static String formatLocalDateTime(LocalDateTime localDateTime) {
-        if (localDateTime == null) {
-            return null;
+        if (Optional.ofNullable(localDateTime).isEmpty()) {
+            return "";
         }
         String fmt = "dd/MM/yyyy hh:mm:ss";
         return DateTimeFormatter.ofPattern(fmt).format(localDateTime);
