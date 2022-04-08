@@ -22,8 +22,8 @@ public class PortalJobService {
         return portalJobDao.createBatch(list);
     }
 
-    public List<PortalJob> findAllByPortalIdPublishedRange(Long portal_id, Date published_at_start) {
-        return portalJobDao.findAllByPortalIdPublishedRange(portal_id, published_at_start);
+    public List<PortalJob> findAllByPortalIdCreatedAtFrom(Long portal_id, LocalDateTime createdAtFrom) {
+        return portalJobDao.findAllByPortalIdCreatedAtFrom(portal_id, createdAtFrom);
     }
 
     public List<PortalJob> findAllByCityIdPublishedRange(Long city_id, Date published_at_start) {

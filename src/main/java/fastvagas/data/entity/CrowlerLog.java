@@ -1,10 +1,21 @@
 package fastvagas.data.entity;
 
 import fastvagas.util.DateUtil;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class CrowlerLog {
 
     public static final String TABLE = "crowler_log";
@@ -17,53 +28,6 @@ public class CrowlerLog {
     private Integer sequence;
     private Long portal_id;
     private String text;
-
-
-    public LocalDate getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(LocalDate created_at) {
-        this.created_at = created_at;
-    }
-
-    public Integer getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(Integer sequence) {
-        this.sequence = sequence;
-    }
-
-    public Long getPortal_id() {
-        return portal_id;
-    }
-
-    public void setPortal_id(Long portal_id) {
-        this.portal_id = portal_id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CrowlerLog that = (CrowlerLog) o;
-        return created_at.equals(that.created_at) &&
-                sequence.equals(that.sequence);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(created_at, sequence);
-    }
 
     @Override
     public String toString() {

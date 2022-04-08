@@ -36,17 +36,17 @@ public class PortalJobDao extends Dao<PortalJob> {
         return getListFromResult("SELECT * FROM " + PortalJob.TABLE);
     }
 
-    public List<PortalJob> findAllByPortalIdPublishedRange(Long portal_id, Date published_at_start) {
+    public List<PortalJob> findAllByPortalIdCreatedAtFrom(Long portal_id, LocalDateTime createdAtFrom) {
         final String query = "SELECT * "
                 + " FROM " + PortalJob.TABLE
                 + " WHERE " + PortalJob.PORTAL_ID + "=:" + PortalJob.PORTAL_ID
-                + " AND " + PortalJob.PUBLISHED_AT + " > :" + PortalJob.PUBLISHED_AT
+                + " AND " + PortalJob.CREATED_AT + " >= :" + PortalJob.CREATED_AT
                 + " ORDER BY " + PortalJob.PUBLISHED_AT + " DESC"
                 + " , " + PortalJob.NAME + " ASC";
 
         SqlParameterSource params = new MapSqlParameterSource()
                 .addValue(PortalJob.PORTAL_ID, portal_id)
-                .addValue(PortalJob.PUBLISHED_AT, published_at_start);
+                .addValue(PortalJob.CREATED_AT, createdAtFrom);
 
         return getListFromResult(query, params);
     }

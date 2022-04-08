@@ -23,4 +23,9 @@ public class UserTermRepositoryBean implements UserTermRepository {
     public List<UserTerm> findAllByUserId(Long user_id) {
         return userTermDao.findAllByUserId(user_id);
     }
+
+    @Override
+    public List<UserTerm> findAllEnabledUsersTerms() {
+        return userTermDao.findAllEnabledUsersTerms();
+    }
 }

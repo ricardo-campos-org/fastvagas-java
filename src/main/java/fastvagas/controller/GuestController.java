@@ -99,6 +99,8 @@ public class GuestController {
     @PostMapping(value = "/do-crowler", produces = "application/json")
     public ResponseEntity<?> crowlerTests() {
         crowlerService.start();
+        LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
+        jobService.processUserJobs(ultimoMes);
         return ResponseEntity.ok().body("Done");
     }
 
@@ -128,7 +130,7 @@ public class GuestController {
     public ResponseEntity<?> reprocessUser(@RequestBody User user) {
         try {
             LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
-            jobService.reprocessUserJobs(user.getUser_id(), ultimoMes);
+            jobService.processUserJobs(user.getUser_id(), ultimoMes);
             return ResponseEntity.ok().body("Done");
         } catch (Exception e) {
             e.printStackTrace();

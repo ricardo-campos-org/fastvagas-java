@@ -1,5 +1,6 @@
 package fastvagas.data.dao;
 
+import fastvagas.data.entity.User;
 import fastvagas.data.entity.UserTerm;
 import fastvagas.data.mapper.UserTermRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -41,6 +42,17 @@ public class UserTermDao extends Dao<UserTerm> {
                 .addValue(UserTerm.USER_ID, user_id);
 
         return getListFromResult(query, params);
+    }
+
+    public List<UserTerm> findAllEnabledUsersTerms() {
+        final String query = "SELECT " + UserTerm.TABLE + ".*"
+                + " FROM " + UserTerm.TABLE
+                + " JOIN " + User.TABLE + " ON ("
+                + User.TABLE + "." + User.USER_ID + "=" + UserTerm.TABLE + "." + UserTerm.USER_ID
+                + ")"
+                + " WHERE " + User.ENABLED + "= 1";
+
+        return getListFromResult(query);
     }
 
     public UserTerm create(UserTerm userTerm) {

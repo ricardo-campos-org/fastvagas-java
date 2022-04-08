@@ -5,8 +5,6 @@ import fastvagas.data.entity.UserJob;
 import fastvagas.data.entity.UserTerm;
 import fastvagas.data.repository.PortalJobService;
 import fastvagas.data.repository.UserJobRepository;
-import fastvagas.data.repository.UserJobRepositoryBean;
-import fastvagas.data.repository.UserTermPortalService;
 import fastvagas.data.repository.UserTermRepository;
 import fastvagas.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +26,13 @@ public class JobService {
 
     private final PortalJobService portalJobService;
     private final UserJobRepository userJobRepository;
-    private final UserTermPortalService userTermPortalService;
     private final UserTermRepository userTermRepository;
 
     @Autowired
     public JobService(PortalJobService portalJobService, UserJobRepository userJobRepository,
-                      UserTermPortalService userTermPortalService, UserTermRepository userTermRepository) {
+                      UserTermRepository userTermRepository) {
         this.portalJobService = portalJobService;
         this.userJobRepository = userJobRepository;
-        this.userTermPortalService = userTermPortalService;
         this.userTermRepository = userTermRepository;
     }
 
@@ -46,6 +42,9 @@ public class JobService {
         }
 
         List<UserJob> jobServices = userJobRepository.findAllNotSeen(userId);
+        if (jobServices.isEmpty()) {
+            return new ArrayList<>();
+        }
 
         Set<Long> portalJobIds = jobServices
                 .stream()
@@ -55,8 +54,19 @@ public class JobService {
         return portalJobService.findAllByPortalJobidList(portalJobIds);
     }
 
-    public void reprocessUserJobs(Long userId, LocalDateTime startingAt) {
-        log.info("reprocessUserJobs starting at {}", DateUtil.formatLocalDateTime(startingAt));
+    public void processUserJobs(LocalDateTime startingAt) {
+        Set<Long> userIds = userTermRepository.findAllEnabledUsersTerms()
+                .stream()
+                .map(UserTerm::getUser_id)
+                .collect(Collectors.toSet());
+
+        for (Long user_id : userIds) {
+            processUserJobs(user_id, startingAt);
+        }
+    }
+
+    public void processUserJobs(Long userId, LocalDateTime startingAt) {
+        log.info("ProcessUserJobs starting at {} for user {}", DateUtil.formatLocalDateTime(startingAt), userId);
 
         List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(startingAt);
         List<UserTerm> userTerms = userTermRepository.findAllByUserId(userId);
@@ -73,13 +83,15 @@ public class JobService {
 
                 Boolean match = check(portalJob.getName(), terms);
                 if (match) {
-                    UserJob userJob = UserJob.builder()
-                            .user_id(userTerm.getUser_id())
-                            .portal_job_id(portalJob.getPortal_job_id())
-                            .seen(null)
-                            .build();
+                    if (!userJobRepository.exists(userTerm.getUser_id(), portalJob.getPortal_job_id())) {
+                        UserJob userJob = UserJob.builder()
+                                .user_id(userTerm.getUser_id())
+                                .portal_job_id(portalJob.getPortal_job_id())
+                                .seen(null)
+                                .build();
 
-                    userJobsToSave.add(userJob);
+                        userJobsToSave.add(userJob);
+                    }
                 }
             }
         }
@@ -88,7 +100,7 @@ public class JobService {
             log.info("{} user jobs to save(s)!", userJobsToSave.size());
             userJobRepository.createBatch(new ArrayList<>(userJobsToSave));
         } else {
-            log.info("no user jobs to save(s)!");
+            log.info("No user jobs to save(s)!");
         }
     }
 

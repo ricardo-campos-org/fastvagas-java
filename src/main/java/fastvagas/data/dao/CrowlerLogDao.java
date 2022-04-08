@@ -19,15 +19,14 @@ public class CrowlerLogDao extends Dao<CrowlerLog> {
         super(CrowlerLog.class, template, new CrowlerLogRowMapper());
     }
 
-    public Integer getLastSequenceByDate(LocalDate pDate) {
-        List<CrowlerLog> list = findAllByPrimaryKey(pDate, null);
+    public Integer getNextSequence() {
+        final String query = "SELECT max(" + CrowlerLog.SEQUENCE + ") FROM " + CrowlerLog.TABLE;
+        return queryForObjectInt(query) + 1;
+    }
 
-        if (list.isEmpty()) {
-            return 0;
-        }
-
-        CrowlerLog last = list.get(list.size()-1);
-        return last.getSequence();
+    public Integer selectCount() {
+        final String query = "SELECT count(*) FROM " + CrowlerLog.TABLE;
+        return queryForObjectInt(query);
     }
 
     public List<CrowlerLog> findAllByPrimaryKey(LocalDate created_at, Integer sequence) {

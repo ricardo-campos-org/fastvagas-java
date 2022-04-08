@@ -28,4 +28,9 @@ public class UserJobRepositoryBean implements UserJobRepository {
     public List<UserJob> findAllNotSeen(Long user_id) {
         return userJobDao.findAllNotSeen(user_id);
     }
+
+    @Override
+    public boolean exists(Long user_id, Long portal_job_id) {
+        return userJobDao.findById(user_id, portal_job_id) != null;
+    }
 }

@@ -5,9 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
 
 @Getter
 @Setter
@@ -26,12 +25,25 @@ public class PortalJob {
     public static final String CREATED_AT = "created_at";
 
     private Long portal_job_id;
+
+    @Size(max=600)
     private String name;
+
+    @Size(max=600)
     private String company_name;
+
+    @Size(max=30)
     private String job_type;
+
+    @Size(max=600)
     private String description;
+
+    @Size(max=30)
     private String published_at;
+
+    @Size(max=1000)
     private String url;
+
     private Long portal_id;
     private Long city_id;
     private LocalDateTime created_at;
