@@ -7,14 +7,11 @@ import fastvagas.data.entity.CrowlerLog;
 import fastvagas.data.entity.Portal;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.data.repository.*;
-import fastvagas.data.vo.UserTermPortal;
-import fastvagas.util.DateUtil;
+import fastvagas.jpa.CrowlerLogRepository;
 import fastvagas.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,18 +30,18 @@ public class CrowlerService {
     private final UserTermPortalService userTermPortalService;
     private final PortalJobService portalJobService;
     private final CityService cityService;
-    private final CrowlerLogService crowlerLogService;
+    private final CrowlerLogRepository crowlerLogRepository;
     private final MailService mailService;
 
     @Autowired
     public CrowlerService(PortalRepositoryBean portalServiceBean, UserTermPortalService userTermPortalService,
                           PortalJobService portalJobService, CityService cityService,
-                          CrowlerLogService crowlerLogService, MailService mailService) {
+                          CrowlerLogRepository crowlerLogRepository, MailService mailService) {
         this.portalServiceBean = portalServiceBean;
         this.userTermPortalService = userTermPortalService;
         this.portalJobService = portalJobService;
         this.cityService = cityService;
-        this.crowlerLogService = crowlerLogService;
+        this.crowlerLogRepository = crowlerLogRepository;
         this.mailService = mailService;
     }
 
@@ -58,8 +55,6 @@ public class CrowlerService {
 
         Map<Long, City> cityCache = cityService.findAll().stream()
                 .collect(Collectors.toMap(City::getCity_id, Function.identity()));
-
-        Integer nextSequence = crowlerLogService.getNextSequence();
 
         for (Portal portal : portals) {
             int count = 0;
@@ -82,8 +77,7 @@ public class CrowlerService {
 
                 String[] smallCopy = new String[2];
                 Arrays.asList(logsToSave).subList(0, 2).toArray(smallCopy);
-                crowlerLogService.createBatch(crowlerLogService.fromStringArray(smallCopy, nextSequence, portal.getPortal_id()));
-                nextSequence += smallCopy.length;
+                crowlerLogRepository.saveAll(crowlerLogRepository.fromStringArray(smallCopy, portal.getPortal_id()));
                 continue;
             }
 
@@ -124,9 +118,8 @@ public class CrowlerService {
             log.info(logsToSave[count]);
 
             // saving log
-            List<CrowlerLog> crowlerLogs = crowlerLogService.fromStringArray(logsToSave, nextSequence, portal.getPortal_id());
-            crowlerLogService.createBatch(crowlerLogs);
-            nextSequence += logsToSave.length;
+            List<CrowlerLog> crowlerLogs = crowlerLogRepository.fromStringArray(logsToSave, portal.getPortal_id());
+            crowlerLogRepository.saveAll(crowlerLogs);
         }
     }
 

@@ -97,9 +97,8 @@ CREATE TABLE user_terms (
 );
 
 CREATE TABLE crowler_log (
-    created_at DATE NOT NULL,
-    sequence   INTEGER NOT NULL,
+    id         SERIAL PRIMARY KEY,
     portal_id  INTEGER NOT NULL REFERENCES portals (portal_id),
     text       VARCHAR(2000) NOT NULL,
-    PRIMARY KEY (created_at, sequence)
+    created_at TIMESTAMP NOT NULL
 );

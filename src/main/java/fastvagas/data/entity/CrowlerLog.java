@@ -8,6 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Builder
@@ -16,26 +20,29 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@Entity(name = "crowler_log")
 public class CrowlerLog {
 
-    public static final String TABLE = "crowler_log";
-    public static final String CREATED_AT = "created_at";
-    public static final String SEQUENCE = "sequence";
-    public static final String PORTAL_ID = "portal_id";
-    public static final String TEXT = "text";
+    @Id
+    @GeneratedValue
+    private Integer id;
 
-    private LocalDate created_at;
-    private Integer sequence;
+    @Column
     private Long portal_id;
+
+    @Column
     private String text;
+
+    @Column
+    private LocalDate created_at;
 
     @Override
     public String toString() {
         return "crowler_log={"
-            + CREATED_AT + "='" + DateUtil.formatLocalDate(created_at) + "'"
-            + "," + SEQUENCE + "=" + sequence
-            + "," + PORTAL_ID + "=" + portal_id
-            + "," + TEXT + "='" + text + "'"
-            + "}";
+                + id + "=" + id
+                + "," + portal_id + "=" + portal_id
+                + "," + text + "='" + text + "'"
+                + "," + created_at + "='" + DateUtil.formatLocalDate(created_at) + "'"
+                + "}";
     }
 }

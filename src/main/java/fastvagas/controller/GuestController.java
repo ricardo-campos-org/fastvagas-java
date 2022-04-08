@@ -7,10 +7,10 @@ import fastvagas.data.entity.PortalJob;
 import fastvagas.data.entity.User;
 import fastvagas.data.repository.CityService;
 import fastvagas.data.repository.ContactService;
-import fastvagas.data.repository.CrowlerLogService;
 import fastvagas.data.repository.PortalJobService;
 import fastvagas.data.repository.UserService;
 import fastvagas.exception.InvalidEmailException;
+import fastvagas.jpa.CrowlerLogRepository;
 import fastvagas.json.PortalJobResponse;
 import fastvagas.service.CrowlerService;
 import fastvagas.service.JobService;
@@ -37,20 +37,20 @@ public class GuestController {
     private final ContactService contactService;
     private final MailService mailService;
     private final CrowlerService crowlerService;
-    private final CrowlerLogService crowlerLogService;
+    private final CrowlerLogRepository crowlerLogRepository;
     private final PortalJobService portalJobService;
     private final JobService jobService;
 
     @Autowired
     public GuestController(CityService cityService, UserService userService, ContactService contactService,
-                           MailService mailService, CrowlerService crowlerService, CrowlerLogService crowlerLogService,
+                           MailService mailService, CrowlerService crowlerService, CrowlerLogRepository crowlerLogRepository,
                            PortalJobService portalJobService, JobService jobService) {
         this.cityService = cityService;
         this.userService = userService;
         this.contactService = contactService;
         this.mailService = mailService;
         this.crowlerService = crowlerService;
-        this.crowlerLogService = crowlerLogService;
+        this.crowlerLogRepository = crowlerLogRepository;
         this.portalJobService = portalJobService;
         this.jobService = jobService;
     }
@@ -108,7 +108,7 @@ public class GuestController {
     public List<CrowlerLog> getLogs() {
         LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
 
-        return crowlerLogService.findAllByGreaterDateTime(ontem);
+        return crowlerLogRepository.findAllByGreaterDateTime(ontem);
     }
 
     @GetMapping(value = "/get-jobs", produces = "application/json")
