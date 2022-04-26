@@ -11,8 +11,9 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -24,7 +25,7 @@ import java.time.LocalDate;
 public class CrowlerLog {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
@@ -34,7 +35,7 @@ public class CrowlerLog {
     private String text;
 
     @Column
-    private LocalDate created_at;
+    private LocalDateTime created_at;
 
     @Override
     public String toString() {
@@ -42,7 +43,7 @@ public class CrowlerLog {
                 + id + "=" + id
                 + "," + portal_id + "=" + portal_id
                 + "," + text + "='" + text + "'"
-                + "," + created_at + "='" + DateUtil.formatLocalDate(created_at) + "'"
+                + "," + created_at + "='" + DateUtil.formatLocalDateTime(created_at) + "'"
                 + "}";
     }
 }
