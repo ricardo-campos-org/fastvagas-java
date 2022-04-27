@@ -1,4 +1,4 @@
-package fastvagas.jpa;
+package fastvagas.data.repository;
 
 import fastvagas.data.entity.CrowlerLog;
 
@@ -9,5 +9,5 @@ public interface CrowlerLogCustomRepository {
 
     List<CrowlerLog> findAllByGreaterDateTime(LocalDateTime localDateTime);
 
-    List<CrowlerLog> fromStringArray(String[] logs, Long portal_id);
+    List<CrowlerLog> fromStringArray(String[] logs, Integer portal_id);
 }

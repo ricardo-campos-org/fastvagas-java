@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Builder
@@ -21,55 +20,53 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "portal_jobs")
-public class PortalJob {
+@Entity(name = "person")
+public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Size(max=600)
     @Column
-    private String job_title;
-
-    @Size(max=600)
-    @Column
-    private String company_name;
-
-    @Size(max=30)
-    @Column
-    private String job_type;
-
-    @Size(max=600)
-    @Column
-    private String job_description;
-
-    @Size(max=30)
-    @Column
-    private String published_at;
-
-    @Size(max=1000)
-    @Column
-    private String job_uri;
+    private String first_name;
 
     @Column
-    private Integer portal_id;
+    private String last_name;
+
+    @Column
+    private String email;
+
+    @Column
+    private String password;
+
+    @Column
+    private Integer city_id;
+
+    @Column
+    private Boolean enabled;
+
+    @Column
+    private LocalDateTime last_login;
 
     @Column
     private LocalDateTime created_at;
 
+    @Column
+    private LocalDateTime disabled_at;
+
     @Override
     public String toString() {
-        return "PortalJob{" +
+        return "Person{" +
                 "id=" + id +
-                ", job_title='" + job_title + '\'' +
-                ", company_name='" + company_name + '\'' +
-                ", job_type='" + job_type + '\'' +
-                ", job_description='" + job_description + '\'' +
-                ", published_at='" + published_at + '\'' +
-                ", job_uri='" + job_uri + '\'' +
-                ", portal_id=" + portal_id +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", city_id=" + city_id +
+                ", enabled=" + enabled +
+                ", last_login=" + last_login +
                 ", created_at=" + created_at +
+                ", disabled_at=" + disabled_at +
                 '}';
     }
 }

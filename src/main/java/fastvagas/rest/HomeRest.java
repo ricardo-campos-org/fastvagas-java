@@ -27,7 +27,7 @@ public class HomeRest {
     }
 
     @GetMapping(value = "/last-jobs", produces = "application/json")
-    public JobPagination getAllJobs(@RequestParam("city_id") Long city_id,
+    public JobPagination getAllJobs(@RequestParam("city_id") Integer city_id,
                                     @RequestParam("page") Integer page) {
         return homeService.getLastJobs(city_id, page);
     }

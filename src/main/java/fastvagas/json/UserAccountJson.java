@@ -10,7 +10,7 @@ public class UserAccountJson implements Serializable {
     private String firstName;
     private String lastName;
     private String email;
-    private Long cityId;
+    private Integer cityId;
     private Date createdAt;
     private Date lastLogin;
     private String cityName;
@@ -49,11 +49,11 @@ public class UserAccountJson implements Serializable {
         this.email = email;
     }
 
-    public Long getCityId() {
+    public Integer getCityId() {
         return cityId;
     }
 
-    public void setCityId(Long cityId) {
+    public void setCityId(Integer cityId) {
         this.cityId = cityId;
     }
 

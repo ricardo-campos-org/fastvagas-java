@@ -4,7 +4,7 @@
 
 if [ "$?" -ne 0 ]; then
     cd ../../../../
-    echo "Erro ao executar Gulp."
+    echo "Erro ao compilar."
     exit 1
 fi
 

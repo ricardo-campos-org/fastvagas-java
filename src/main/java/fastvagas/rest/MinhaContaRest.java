@@ -1,6 +1,6 @@
 package fastvagas.rest;
 
-import fastvagas.data.entity.User;
+import fastvagas.data.entity.Person;
 import fastvagas.json.UserAccountJson;
 import fastvagas.service.AuthService;
 import fastvagas.service.MinhaContaService;
@@ -23,7 +23,7 @@ public class MinhaContaRest {
 
     @PostMapping(value = "/update-user-data", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void updateUserData(@RequestParam UserAccountJson userAccount) {
-        User user = authService.getCurrentUser();
-        minhaContaService.updateUserData(user, userAccount);
+        Person person = authService.getCurrentUser();
+        minhaContaService.updateUserData(person, userAccount);
     }
 }

@@ -3,14 +3,16 @@ package fastvagas.controller;
 import fastvagas.data.entity.City;
 import fastvagas.data.entity.Contact;
 import fastvagas.data.entity.CrowlerLog;
+import fastvagas.data.entity.Person;
 import fastvagas.data.entity.PortalJob;
-import fastvagas.data.entity.User;
-import fastvagas.data.repository.CityService;
-import fastvagas.data.repository.ContactService;
-import fastvagas.data.repository.PortalJobService;
-import fastvagas.data.repository.UserService;
+import fastvagas.data.entity.State;
+import fastvagas.data.repository.ContactRepository;
+import fastvagas.data.repository.PersonRepository;
+import fastvagas.data.repository.PortalJobRepository;
+import fastvagas.data.repository.StateRepository;
 import fastvagas.exception.InvalidEmailException;
-import fastvagas.jpa.CrowlerLogRepository;
+import fastvagas.data.repository.CityRepository;
+import fastvagas.data.repository.CrowlerLogRepository;
 import fastvagas.json.PortalJobResponse;
 import fastvagas.service.CrowlerService;
 import fastvagas.service.JobService;
@@ -27,53 +29,60 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/guest")
 public class GuestController {
 
-    private final CityService cityService;
-    private final UserService userService;
-    private final ContactService contactService;
+    private final CityRepository cityRepository;
+    private final StateRepository stateRepository;
+    private final PersonRepository personRepository;
+    private final ContactRepository contactRepository;
     private final MailService mailService;
     private final CrowlerService crowlerService;
     private final CrowlerLogRepository crowlerLogRepository;
-    private final PortalJobService portalJobService;
+    private final PortalJobRepository portalJobRepository;
     private final JobService jobService;
 
     @Autowired
-    public GuestController(CityService cityService, UserService userService, ContactService contactService,
+    public GuestController(CityRepository cityRepository, PersonRepository personRepository, ContactRepository contactRepository,
                            MailService mailService, CrowlerService crowlerService, CrowlerLogRepository crowlerLogRepository,
-                           PortalJobService portalJobService, JobService jobService) {
-        this.cityService = cityService;
-        this.userService = userService;
-        this.contactService = contactService;
+                           PortalJobRepository portalJobRepository, JobService jobService, StateRepository stateRepository) {
+        this.cityRepository = cityRepository;
+        this.personRepository = personRepository;
+        this.contactRepository = contactRepository;
         this.mailService = mailService;
         this.crowlerService = crowlerService;
         this.crowlerLogRepository = crowlerLogRepository;
-        this.portalJobService = portalJobService;
+        this.portalJobRepository = portalJobRepository;
         this.jobService = jobService;
+        this.stateRepository = stateRepository;
     }
 
     // New account modal form URLs
     @GetMapping(value = "/find-all-cities-by-state/{uf}")
     public List<City> findAllCitiesByUf(@PathVariable("uf") String uf) {
-        return cityService.findAllByStateSigla(uf);
+        Optional<State> state = stateRepository.findByAcronym(uf);
+        if (state.isEmpty()) {
+            return null; // 204
+        }
+        return cityRepository.findAllByStateId(state.get().getId());
     }
 
     @GetMapping(value = "/validate-state-city/{sigla_uf}/{city_id}")
     public Boolean validateStateCity(@PathVariable("sigla_uf") String sigla_uf, @PathVariable("city_id") Long city_id) {
-        return cityService.validateStateCity(sigla_uf, city_id);
+        return Boolean.FALSE; // cityRepository.validateStateCity(sigla_uf, city_id);
     }
 
     @GetMapping(value = "/email-available/{email}")
     public Boolean isEmailAvailable(@PathVariable("email") String email) {
-        return userService.findByEmail(email) == null;
+        return personRepository.findAllByEmail(email).isEmpty();
     }
 
     @PostMapping(value = "/create-user")
-    public User createUser(@RequestBody User user) {
-        return userService.create(user);
+    public Person createUser(@RequestBody Person person) {
+        return personRepository.save(person);
     }
 
     // Contact form URLs
@@ -90,7 +99,7 @@ public class GuestController {
         }
 
         mailService.send(contact);
-        contactService.create(contact);
+        contactRepository.save(contact);
 
         return contact;
     }
@@ -115,7 +124,7 @@ public class GuestController {
     public List<PortalJobResponse> getJobs() {
         LocalDateTime semanaAtual = DateUtil.getCurrentLocalDateTime().minusDays(7L);
 
-        List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(semanaAtual);
+        List<PortalJob> portalJobList = portalJobRepository.findAllByCreatedAtStartintAt(semanaAtual);
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
         portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
 
@@ -127,10 +136,10 @@ public class GuestController {
     @PostMapping(value = "/reprocess-user",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> reprocessUser(@RequestBody User user) {
+    public ResponseEntity<?> reprocessUser(@RequestBody Person person) {
         try {
             LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
-            jobService.processUserJobs(user.getUser_id(), ultimoMes);
+            jobService.processUserJobs(person.getId(), ultimoMes);
             return ResponseEntity.ok().body("Done");
         } catch (Exception e) {
             e.printStackTrace();
@@ -139,7 +148,7 @@ public class GuestController {
     }
 
     @GetMapping(value = "/get-jobs-by-user", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PortalJobResponse> getJobsByUser(@RequestParam("user_id") Long user_id) {
+    public List<PortalJobResponse> getJobsByUser(@RequestParam("user_id") Integer user_id) {
         List<PortalJob> portalJobList = jobService.findUserJobsByTermsNotSeen(user_id);
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
 

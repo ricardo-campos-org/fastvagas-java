@@ -29,7 +29,7 @@ public class CrowlerLog {
     private Integer id;
 
     @Column
-    private Long portal_id;
+    private Integer portal_id;
 
     @Column
     private String text;

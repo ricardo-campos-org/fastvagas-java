@@ -19,33 +19,25 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "portal")
-public class Portal {
+@Entity(name = "person_terms")
+public class PersonTerm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column
-    private String name;
+    private Long user_id;
 
     @Column
-    private String jobs_uri;
-
-    @Column
-    private Integer city_id;
-
-    @Column
-    private Boolean enabled;
+    private String terms;
 
     @Override
     public String toString() {
-        return "Portal{" +
+        return "UserTerm{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", jobs_uri='" + jobs_uri + '\'' +
-                ", city_id=" + city_id +
-                ", enabled=" + enabled +
+                ", user_id=" + user_id +
+                ", terms='" + terms + '\'' +
                 '}';
     }
 }

@@ -1,49 +1,35 @@
 package fastvagas.data.entity;
 
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@Entity(name = "authorities")
 public class Authority {
-    public final static String TABLE = "authorities";
-    public final static String EMAIL = "email";
-    public final static String AUTHORITY = "authority";
 
+    @Column
     private String email;
+
+    @Column
     private String authority;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(String authority) {
-        this.authority = authority;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Authority authority1 = (Authority) o;
-        return email.equals(authority1.email) && authority.equals(authority1.authority);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, authority);
-    }
 
     @Override
     public String toString() {
-        return "authority={" +
-                EMAIL + "='" + email + "'" +
-                ", " + AUTHORITY +"='" + authority + "'" +
-                "}";
+        return "Authority{" +
+                "email='" + email + '\'' +
+                ", authority='" + authority + '\'' +
+                '}';
     }
 }

@@ -15,7 +15,7 @@ public class JobDetail implements Serializable {
     private String description;
     private String published_at;
     private String url;
-    private Long portal_id;
+    private Integer portal_id;
     private String portal_name;
     private LocalDateTime created_at;
 
@@ -87,11 +87,11 @@ public class JobDetail implements Serializable {
         this.url = url;
     }
 
-    public Long getPortal_id() {
+    public Integer getPortal_id() {
         return portal_id;
     }
 
-    public void setPortal_id(Long portal_id) {
+    public void setPortal_id(Integer portal_id) {
         this.portal_id = portal_id;
     }
 

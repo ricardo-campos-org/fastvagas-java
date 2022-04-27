@@ -1,104 +1,103 @@
 -- psql --host=localhost --username=retsuko --dbname=ondetemvagas --password
 -- password: retsuko123
 
-CREATE TABLE contacts (
-    contact_id SERIAL PRIMARY KEY,
-    name       VARCHAR(30) NOT NULL,
-    email      VARCHAR(100) NOT NULL,
-    subject    VARCHAR(20) NOT NULL,
-    message    VARCHAR(2000) NOT NULL,
-    sent_at    TIMESTAMP NOT NULL
+CREATE TABLE contact (
+    id      SERIAL PRIMARY KEY,
+    name    VARCHAR(30) NOT NULL,
+    email   VARCHAR(100) NOT NULL,
+    subject VARCHAR(20) NOT NULL,
+    message VARCHAR(2000) NOT NULL,
+    sent_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE states (
-    state_id SERIAL PRIMARY KEY,
+CREATE TABLE state (
+    id      SERIAL PRIMARY KEY,
+    name    VARCHAR(30) NOT NULL,
+    acronym CHAR(2) NOT NULL
+);
+
+CREATE TABLE city (
+    id       SERIAL PRIMARY KEY,
     name     VARCHAR(30) NOT NULL,
-    sigla_uf CHAR(2) NOT NULL
+    state_id INTEGER NOT NULL REFERENCES state (id)
 );
 
-CREATE TABLE cities (
-    city_id  SERIAL PRIMARY KEY,
-    name     VARCHAR(30) NOT NULL,
-    state_id INTEGER NOT NULL REFERENCES states (state_id)
-);
-
-CREATE TABLE portals (
-    portal_id  SERIAL PRIMARY KEY,
-    name       VARCHAR(50) NOT NULL,
-    url        VARCHAR(300) NOT NULL,
-    city_id    INTEGER NOT NULL REFERENCES cities (city_id),
-    active     CHAR(1) NULL
+CREATE TABLE portal (
+    id       SERIAL PRIMARY KEY,
+    name     VARCHAR(50) NOT NULL,
+    jobs_uri VARCHAR(300) NOT NULL,
+    city_id  INTEGER NOT NULL REFERENCES city (id),
+    enabled  BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE portal_jobs (
-    portal_job_id  SERIAL PRIMARY KEY,
-    name           VARCHAR(600) NOT NULL,
-    company_name   VARCHAR(600) NOT NULL,
-    job_type       VARCHAR(30) NULL DEFAULT NULL,
-    description    VARCHAR(600) NOT NULL,
-    published_at   VARCHAR(30) NULL DEFAULT NULL,
-    url            VARCHAR(1000) NOT NULL,
-    portal_id      INTEGER NOT NULL REFERENCES portals (portal_id),
-    city_id        INTEGER NOT NULL REFERENCES cities (city_id),
-    created_at     TIMESTAMP NOT NULL
+    id              SERIAL PRIMARY KEY,
+    job_title       VARCHAR(600) NOT NULL,
+    company_name    VARCHAR(600) NOT NULL,
+    job_type        VARCHAR(30) NULL DEFAULT NULL,
+    job_description VARCHAR(600) NOT NULL,
+    published_at    VARCHAR(30) NULL DEFAULT NULL,
+    job_uri         VARCHAR(1000) NOT NULL,
+    portal_id       INTEGER NOT NULL REFERENCES portal (id),
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_portal_jobs_url ON portal_jobs (url);
+CREATE INDEX idx_portal_jobs_uri ON portal_jobs (job_uri);
 
-CREATE TABLE users (
-    user_id        SERIAL PRIMARY KEY,
-    first_name     VARCHAR(20) NOT NULL,
-    last_name      VARCHAR(30) NOT NULL,
-    email          VARCHAR(100) UNIQUE NOT NULL,
-    password       VARCHAR(60) NOT NULL,
-    city_id        INTEGER NOT NULL REFERENCES cities (city_id),
-    enabled        INT NOT NULL DEFAULT 1,
-    last_login     TIMESTAMP NULL,
-    created_at     TIMESTAMP NOT NULL,
-    disabled_at    TIMESTAMP NULL
+CREATE TABLE person (
+    id          SERIAL PRIMARY KEY,
+    first_name  VARCHAR(20) NOT NULL,
+    last_name   VARCHAR(30) NOT NULL,
+    email       VARCHAR(100) UNIQUE NOT NULL,
+    password    VARCHAR(60) NOT NULL,
+    city_id     INTEGER NOT NULL REFERENCES city (id),
+    enabled     BOOLEAN NOT NULL DEFAULT TRUE,
+    last_login  TIMESTAMP NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    disabled_at TIMESTAMP NULL
 );
 
-CREATE INDEX idx_users_email ON users (email);
+CREATE INDEX idx_person_email ON person (email);
 
 CREATE TABLE authorities (
-    email  VARCHAR(100) NOT NULL REFERENCES users (email),
+    email  VARCHAR(100) NOT NULL REFERENCES person (email),
     authority VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE payments (
-    payment_id     SERIAL PRIMARY KEY,
-    user_id        INTEGER NOT NULL REFERENCES users (user_id),
-    amount         DECIMAL(6, 2) NOT NULL,
-    due_date       DATE NOT NULL,
-    payday         TIMESTAMP NULL
+    id        SERIAL PRIMARY KEY,
+    person_id INTEGER NOT NULL REFERENCES person (id),
+    amount    DECIMAL(6, 2) NOT NULL,
+    due_date  DATE NOT NULL,
+    payday    TIMESTAMP NULL
 );
 
 CREATE TABLE plans (
-    plan_id     SERIAL PRIMARY KEY,
+    id          SERIAL PRIMARY KEY,
     name        VARCHAR(50) NOT NULL,
     description VARCHAR(300) NOT NULL,
     amount      DECIMAL(6, 2) NOT NULL,
     plan_type   CHAR(1) NOT NULL, -- 1-semanal, 2-mensal, 3-anual
-    created_at  TIMESTAMP NOT NULL,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     disabled_at TIMESTAMP NULL
 );
 
-CREATE TABLE user_jobs (
-    user_id        INTEGER NOT NULL REFERENCES users (user_id),
-    portal_job_id  INTEGER NOT NULL REFERENCES portal_jobs (portal_job_id),
-    seen           TIMESTAMP NULL,
-    PRIMARY KEY (user_id, portal_job_id)
+CREATE TABLE person_jobs (
+    id             SERIAL PRIMARY KEY,
+    person_id      INTEGER NOT NULL REFERENCES person (id),
+    portal_job_id  INTEGER NOT NULL REFERENCES portal_jobs (id),
+    seen           TIMESTAMP NULL
 );
 
-CREATE TABLE user_terms (
-    user_id INTEGER NOT NULL REFERENCES users (user_id),
-    terms   VARCHAR(300) NOT NULL,
-    PRIMARY KEY (user_id)
+CREATE TABLE person_terms (
+    id        SERIAL PRIMARY KEY,
+    person_id INTEGER NOT NULL REFERENCES person (id),
+    terms     VARCHAR(300) NOT NULL
 );
 
 CREATE TABLE crowler_log (
     id         SERIAL PRIMARY KEY,
-    portal_id  INTEGER NOT NULL REFERENCES portals (portal_id),
+    portal_id  INTEGER NOT NULL REFERENCES portal (id),
     text       VARCHAR(2000) NOT NULL,
     created_at TIMESTAMP NOT NULL
 );

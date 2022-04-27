@@ -1,10 +1,10 @@
 package fastvagas.service;
 
 import fastvagas.data.entity.City;
+import fastvagas.data.entity.Person;
 import fastvagas.data.entity.State;
-import fastvagas.data.entity.User;
-import fastvagas.data.repository.CityService;
-import fastvagas.data.repository.StateService;
+import fastvagas.data.repository.StateRepository;
+import fastvagas.data.repository.CityRepository;
 import fastvagas.json.UserAccountJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,35 +12,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class BaseService {
 
-    @Autowired
-    CityService cityService;
+    private final CityRepository cityRepository;
+    private final StateRepository stateRepository;
 
     @Autowired
-    StateService stateService;
+    public BaseService(CityRepository cityRepository, StateRepository stateRepository) {
+        this.cityRepository = cityRepository;
+        this.stateRepository = stateRepository;
+    }
 
-    public UserAccountJson getCurrentUser(User user) {
-        if (user == null) {
+    public UserAccountJson getCurrentUser(Person person) {
+        if (person == null) {
             return null;
         }
 
-        City city = cityService.findById(user.getCity_id());
-        if (city == null) {
-            city = new City();
-        }
-
-        State state = stateService.findById(city.getState_id());
-        if (state == null) {
-            state = new State();
-        }
+        City city = cityRepository.findById(person.getCity_id()).orElse(new City());
+        State state = stateRepository.findById(city.getState().getId()).orElse(new State());
 
         UserAccountJson userAccountJson = new UserAccountJson();
-        userAccountJson.setUserId(user.getUser_id());
-        userAccountJson.setFirstName(user.getFirst_name());
-        userAccountJson.setLastName(user.getLast_name());
-        userAccountJson.setEmail(user.getEmail());
-        userAccountJson.setCityId(user.getCity_id());
-        userAccountJson.setCreatedAt(user.getCreated_at());
-        userAccountJson.setLastLogin(user.getLast_login());
+        userAccountJson.setUserId(person.getUser_id());
+        userAccountJson.setFirstName(person.getFirst_name());
+        userAccountJson.setLastName(person.getLast_name());
+        userAccountJson.setEmail(person.getEmail());
+        userAccountJson.setCityId(person.getCity_id());
+        userAccountJson.setCreatedAt(person.getCreated_at());
+        userAccountJson.setLastLogin(person.getLast_login());
         userAccountJson.setCityName(city.getName());
         userAccountJson.setStateName(state.getName());
         return userAccountJson;

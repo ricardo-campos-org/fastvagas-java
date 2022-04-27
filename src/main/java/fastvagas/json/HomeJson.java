@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class HomeJson implements Serializable {
 
     private static final long serialVersionUID = -6640904968315898140L;
-    private Long cityId;
+    private Integer cityId;
     private String cityName;
     private String stateName;
     private Integer monthJobs;
@@ -16,7 +16,7 @@ public class HomeJson implements Serializable {
     private JobPagination topJobPagination;
 
     public HomeJson() {
-        this.cityId = 0L;
+        this.cityId = 0;
         this.cityName = "";
         this.stateName = "";
         this.monthJobs = 0;
@@ -91,11 +91,11 @@ public class HomeJson implements Serializable {
         this.topJobPagination = topJobPagination;
     }
 
-    public Long getCityId() {
+    public Integer getCityId() {
         return cityId;
     }
 
-    public void setCityId(Long city_id) {
+    public void setCityId(Integer city_id) {
         this.cityId = city_id;
     }
 }

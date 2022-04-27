@@ -1,4 +1,4 @@
-package fastvagas.jpa;
+package fastvagas.data.repository;
 
 import fastvagas.data.entity.CrowlerLog;
 import fastvagas.util.DateUtil;
@@ -22,6 +22,7 @@ public class CrowlerLogCustomRepositoryImpl implements CrowlerLogCustomRepositor
         final String query = "SELECT * FROM crowler_log "
                 + "WHERE created_at >= ?1 "
                 + "ORDER BY created_at, id";
+        log.info("SQL: {}", query);
         Query q = entityManager.createNativeQuery(query, CrowlerLog.class);
         q.setParameter(1, localDateTime);
         List<?> list = q.getResultList();
@@ -30,7 +31,7 @@ public class CrowlerLogCustomRepositoryImpl implements CrowlerLogCustomRepositor
     }
 
     @Override
-    public List<CrowlerLog> fromStringArray(String[] logs, Long portal_id) {
+    public List<CrowlerLog> fromStringArray(String[] logs, Integer portal_id) {
         List<CrowlerLog> crowlerLogs = new ArrayList<>(logs.length);
         for (String log : logs) {
             CrowlerLog crowlerLog = CrowlerLog.builder()

@@ -1,7 +1,6 @@
 package fastvagas.handler;
 
-import fastvagas.data.entity.User;
-import fastvagas.data.repository.UserService;
+import fastvagas.data.entity.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -24,11 +23,11 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        User user = userService.findByEmail(authentication.getName());
-        if (user != null) {
-            user.setLast_login(new Date());
-            user.setPassword("");
-            userService.update(user);
+        Person person = userService.findByEmail(authentication.getName());
+        if (person != null) {
+            person.setLast_login(new Date());
+            person.setPassword("");
+            userService.update(person);
         }
 
         response.sendRedirect("/home");

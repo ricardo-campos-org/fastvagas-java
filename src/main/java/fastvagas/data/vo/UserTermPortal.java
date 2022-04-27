@@ -1,8 +1,8 @@
 package fastvagas.data.vo;
 
+import fastvagas.data.entity.Person;
 import fastvagas.data.entity.Portal;
-import fastvagas.data.entity.User;
-import fastvagas.data.entity.UserTerm;
+import fastvagas.data.entity.PersonTerm;
 
 import java.util.Objects;
 
@@ -74,10 +74,10 @@ public class UserTermPortal {
     @Override
     public String toString() {
         return "UserTermPortal={"
-            + UserTerm.TABLE + "." + UserTerm.USER_ID + "=" + user_id
-            + "," + User.TABLE + "." + User.FIRST_NAME + "='" + first_name + "'"
-            + "," + User.TABLE + "." + User.EMAIL + "='" + email + "'"
-            + "," + UserTerm.TABLE + "." + UserTerm.TERMS + "='" + terms + "'"
+            + PersonTerm.TABLE + "." + PersonTerm.USER_ID + "=" + user_id
+            + "," + Person.TABLE + "." + Person.FIRST_NAME + "='" + first_name + "'"
+            + "," + Person.TABLE + "." + Person.EMAIL + "='" + email + "'"
+            + "," + PersonTerm.TABLE + "." + PersonTerm.TERMS + "='" + terms + "'"
             + "," + Portal.TABLE + "." + Portal.PORTAL_ID + "=" + portal_id
             + "}";
     }

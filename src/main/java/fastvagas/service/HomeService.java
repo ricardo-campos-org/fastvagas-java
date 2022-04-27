@@ -1,11 +1,9 @@
 package fastvagas.service;
 
 import fastvagas.data.entity.*;
-import fastvagas.data.repository.CityService;
-import fastvagas.data.repository.PortalJobService;
-import fastvagas.data.repository.PortalRepositoryBean;
-import fastvagas.data.repository.StateService;
+import fastvagas.data.repository.PortalRepository;
 import fastvagas.exception.EntityNotFoundException;
+import fastvagas.data.repository.CityRepository;
 import fastvagas.json.HomeJson;
 import fastvagas.json.JobDetail;
 import fastvagas.json.JobPagination;
@@ -20,27 +18,27 @@ import java.util.*;
 @Service
 public class HomeService {
 
-    @Autowired
-    CityService cityService;
+    private final CityRepository cityRepository;
+    private final PortalJobService portalJobService;
+    private final PortalRepository portalRepository;
 
     @Autowired
-    StateService stateService;
+    public HomeService(CityRepository cityRepository, PortalJobService portalJobService,
+                       PortalRepository portalRepository) {
+        this.cityRepository = cityRepository;
+        this.portalJobService = portalJobService;
+        this.portalRepository = portalRepository;
+    }
 
-    @Autowired
-    PortalJobService portalJobService;
-
-    @Autowired
-    PortalRepositoryBean portalServiceBean;
-
-    public HomeJson getAllJobs(User user) {
-        City city = cityService.findById(user.getCity_id());
-        if (city == null) {
-            throw new EntityNotFoundException(City.class, "city_id", String.valueOf(user.getCity_id()));
+    public HomeJson getAllJobs(Person person) {
+        Optional<City> city = cityRepository.findById(person.getCity_id());
+        if (city.isEmpty()) {
+            throw new EntityNotFoundException(City.class, "city_id", String.valueOf(person.getCity_id()));
         }
 
-        State state = stateService.findById(city.getState_id());
+        State state = city.get().getState();
         if (state == null) {
-            throw new EntityNotFoundException(State.class, "state_id", String.valueOf(city.getState_id()));
+            throw new EntityNotFoundException(State.class, "state_id", "state mapped by city");
         }
 
         final Date today = new Date();
@@ -57,7 +55,7 @@ public class HomeService {
         int todayJobs = 0;
 
         List<PortalJob> cityJobs = portalJobService.findAllByCityIdPublishedRange(
-                city.getCity_id(),
+                city.get().getId(),
                 firstDayOfMonth
         );
 
@@ -75,33 +73,33 @@ public class HomeService {
         }
 
         HomeJson homeJson = new HomeJson();
-        homeJson.setCityId(city.getCity_id());
-        homeJson.setCityName(city.getName());
-        homeJson.setStateName(state.getSigla_uf());
+        homeJson.setCityId(city.get().getId());
+        homeJson.setCityName(city.get().getName());
+        homeJson.setStateName(state.getAcronym());
         homeJson.setMonthJobs(cityJobs.size());
         homeJson.setWeekJobs(weekJobs);
         homeJson.setTodayJobs(todayJobs);
         homeJson.setUserJobPagination(createJobPagination(null, null, null));
-        homeJson.setLastJobPagination(getLastJobs(city.getCity_id(), null));
+        homeJson.setLastJobPagination(getLastJobs(city.get().getId(), null));
         homeJson.setTopJobPagination(createJobPagination(null, null, null));
 
         return homeJson;
     }
 
     // TODO: implement here
-    public JobPagination getUserJobs(User user, Integer page) {
+    public JobPagination getUserJobs(Person person, Integer page) {
         return new JobPagination();
     }
 
-    public JobPagination getLastJobs(Long city_id, Integer page) {
+    public JobPagination getLastJobs(Integer city_id, Integer page) {
         if (!ObjectUtil.hasValue(page)) {
             page = 1;
         }
 
         // Map para agilizar
-        Map<Long, String> portalNameMap = new HashMap<>();
-        List<Portal> portals = portalServiceBean.findAllByCityId(city_id);
-        portals.forEach(portal -> portalNameMap.put(portal.getPortal_id(), portal.getName()));
+        Map<Integer, String> portalNameMap = new HashMap<>();
+        List<Portal> portals = portalRepository.findAllByCityId(city_id);
+        portals.forEach(portal -> portalNameMap.put(portal.getId(), portal.getName()));
 
         List<JobDetail> jobList = new ArrayList<>();
 
