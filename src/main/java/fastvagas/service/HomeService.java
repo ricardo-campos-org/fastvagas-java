@@ -1,6 +1,7 @@
 package fastvagas.service;
 
 import fastvagas.data.entity.*;
+import fastvagas.data.repository.PortalJobRepository;
 import fastvagas.data.repository.PortalRepository;
 import fastvagas.exception.EntityNotFoundException;
 import fastvagas.data.repository.CityRepository;
@@ -10,6 +11,7 @@ import fastvagas.json.JobPagination;
 import fastvagas.util.DateUtil;
 import fastvagas.util.ObjectUtil;
 import fastvagas.util.PaginationUtil;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,32 +21,33 @@ import java.util.*;
 public class HomeService {
 
     private final CityRepository cityRepository;
-    private final PortalJobService portalJobService;
+    private final PortalJobRepository portalJobRepository;
     private final PortalRepository portalRepository;
 
     @Autowired
-    public HomeService(CityRepository cityRepository, PortalJobService portalJobService,
+    public HomeService(CityRepository cityRepository, PortalJobRepository portalJobRepository,
                        PortalRepository portalRepository) {
         this.cityRepository = cityRepository;
-        this.portalJobService = portalJobService;
+        this.portalJobRepository = portalJobRepository;
         this.portalRepository = portalRepository;
     }
 
     public HomeJson getAllJobs(Person person) {
-        Optional<City> city = cityRepository.findById(person.getCity_id());
+        Optional<City> city = cityRepository.findById(person.getCityId());
         if (city.isEmpty()) {
-            throw new EntityNotFoundException(City.class, "city_id", String.valueOf(person.getCity_id()));
+            throw new EntityNotFoundException(City.class, "cityId", String.valueOf(person.getCityId()));
         }
 
         State state = city.get().getState();
         if (state == null) {
-            throw new EntityNotFoundException(State.class, "state_id", "state mapped by city");
+            throw new EntityNotFoundException(State.class, "stateId", "state mapped by city");
         }
 
         final Date today = new Date();
         final Integer month = DateUtil.getMonthFromDate(today);
         final Integer year = DateUtil.getYearFromDate(today);
         final Date firstDayOfMonth = DateUtil.createDate(1, month, year);
+        final LocalDateTime firstLocal = DateUtil.getLocalDateTimeFromDate(firstDayOfMonth);
 
         Calendar c = Calendar.getInstance();
         c.setTime(today);
@@ -54,13 +57,14 @@ public class HomeService {
         int weekJobs = 0;
         int todayJobs = 0;
 
-        List<PortalJob> cityJobs = portalJobService.findAllByCityIdPublishedRange(
-                city.get().getId(),
-                firstDayOfMonth
-        );
+        List<PortalJob> cityJobs = portalJobRepository.findAllByCityId(city.get().getId());
 
         for (PortalJob portalJob : cityJobs) {
-            Date dataLeitura = DateUtil.getDateFromLocalDateTime(portalJob.getCreated_at());
+            if (!portalJob.getCreatedAt().isAfter(firstLocal)) {
+                continue;
+            }
+
+            Date dataLeitura = DateUtil.getDateFromLocalDateTime(portalJob.getCreatedAt());
             /* This week jobs */
             if (DateUtil.isGreater(weekDate, dataLeitura)) {
                 weekJobs += 1;
@@ -91,26 +95,26 @@ public class HomeService {
         return new JobPagination();
     }
 
-    public JobPagination getLastJobs(Integer city_id, Integer page) {
+    public JobPagination getLastJobs(Long cityId, Integer page) {
         if (!ObjectUtil.hasValue(page)) {
             page = 1;
         }
 
         // Map para agilizar
-        Map<Integer, String> portalNameMap = new HashMap<>();
-        List<Portal> portals = portalRepository.findAllByCityId(city_id);
+        Map<Long, String> portalNameMap = new HashMap<>();
+        List<Portal> portals = portalRepository.findAllByCityId(cityId);
         portals.forEach(portal -> portalNameMap.put(portal.getId(), portal.getName()));
 
         List<JobDetail> jobList = new ArrayList<>();
 
-        List<PortalJob> portalJobsTmp = portalJobService.findAllLastByCityIdPage(city_id, page);
+        List<PortalJob> portalJobsTmp = portalJobRepository.findAllLastByCityIdPage(cityId);
         portalJobsTmp.forEach((job) -> {
             JobDetail jobDetail = new JobDetail(job);
-            jobDetail.setPortal_name(portalNameMap.get(job.getPortal_id()));
+            jobDetail.setPortal_name(portalNameMap.get(job.getPortalId()));
             jobList.add(jobDetail);
         });
 
-        long count = portalJobService.findAllLastByCityId(city_id).size();
+        long count = portalJobsTmp.size();
         if (count > 50) {
             count = 50L;
         }

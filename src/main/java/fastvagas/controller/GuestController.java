@@ -4,10 +4,12 @@ import fastvagas.data.entity.City;
 import fastvagas.data.entity.Contact;
 import fastvagas.data.entity.CrowlerLog;
 import fastvagas.data.entity.Person;
+import fastvagas.data.entity.PersonTerm;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.data.entity.State;
 import fastvagas.data.repository.ContactRepository;
 import fastvagas.data.repository.PersonRepository;
+import fastvagas.data.repository.PersonTermRepository;
 import fastvagas.data.repository.PortalJobRepository;
 import fastvagas.data.repository.StateRepository;
 import fastvagas.exception.InvalidEmailException;
@@ -44,11 +46,14 @@ public class GuestController {
     private final CrowlerLogRepository crowlerLogRepository;
     private final PortalJobRepository portalJobRepository;
     private final JobService jobService;
+    private final PersonTermRepository personTermRepository;
 
     @Autowired
-    public GuestController(CityRepository cityRepository, PersonRepository personRepository, ContactRepository contactRepository,
-                           MailService mailService, CrowlerService crowlerService, CrowlerLogRepository crowlerLogRepository,
-                           PortalJobRepository portalJobRepository, JobService jobService, StateRepository stateRepository) {
+    public GuestController(CityRepository cityRepository, PersonRepository personRepository,
+        ContactRepository contactRepository, MailService mailService, CrowlerService crowlerService,
+        CrowlerLogRepository crowlerLogRepository, PortalJobRepository portalJobRepository,
+        JobService jobService, StateRepository stateRepository, PersonTermRepository
+        personTermRepository) {
         this.cityRepository = cityRepository;
         this.personRepository = personRepository;
         this.contactRepository = contactRepository;
@@ -58,6 +63,7 @@ public class GuestController {
         this.portalJobRepository = portalJobRepository;
         this.jobService = jobService;
         this.stateRepository = stateRepository;
+        this.personTermRepository = personTermRepository;
     }
 
     // New account modal form URLs
@@ -77,7 +83,7 @@ public class GuestController {
 
     @GetMapping(value = "/email-available/{email}")
     public Boolean isEmailAvailable(@PathVariable("email") String email) {
-        return personRepository.findAllByEmail(email).isEmpty();
+        return personRepository.findByEmail(email).isEmpty();
     }
 
     @PostMapping(value = "/create-user")
@@ -139,7 +145,8 @@ public class GuestController {
     public ResponseEntity<?> reprocessUser(@RequestBody Person person) {
         try {
             LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
-            jobService.processUserJobs(person.getId(), ultimoMes);
+            List<PersonTerm> personTerms = personTermRepository.findAllByPersonId(person.getId());
+            jobService.processUserJobs(personTerms.get(0), ultimoMes);
             return ResponseEntity.ok().body("Done");
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,7 +155,7 @@ public class GuestController {
     }
 
     @GetMapping(value = "/get-jobs-by-user", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PortalJobResponse> getJobsByUser(@RequestParam("user_id") Integer user_id) {
+    public List<PortalJobResponse> getJobsByUser(@RequestParam("user_id") Long user_id) {
         List<PortalJob> portalJobList = jobService.findUserJobsByTermsNotSeen(user_id);
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
 

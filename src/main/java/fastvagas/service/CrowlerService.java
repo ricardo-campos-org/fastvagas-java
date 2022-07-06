@@ -53,14 +53,14 @@ public class CrowlerService {
             return;
         }
 
-        Map<Integer, City> cityCache = cityRepository.findAll().stream()
+        Map<Long, City> cityCache = cityRepository.findAll().stream()
                 .collect(Collectors.toMap(City::getId, Function.identity()));
 
         for (Portal portal : portals) {
             int count = 0;
-            City city = cityCache.get(portal.getCity_id());
+            City city = cityCache.get(portal.getCityId());
             if (city == null) {
-                log.warn("City id not mapped: {}", portal.getCity_id());
+                log.warn("City id not mapped: {}", portal.getCityId());
                 continue;
             }
 
@@ -90,7 +90,7 @@ public class CrowlerService {
             LocalDateTime oneMonthPast = LocalDateTime.now().minusMonths(1L);
             List<PortalJob> savedList = portalJobRepository.findAllByPortalId(portal.getId())
                     .stream()
-                    .filter(x -> x.getCreated_at().isAfter(oneMonthPast))
+                    .filter(x -> x.getCreatedAt().isAfter(oneMonthPast))
                     .collect(Collectors.toList());
 
             Map<String, PortalJob> portalJobMap = PortalJobUtil.listToMapByUrl(savedList);
@@ -104,8 +104,8 @@ public class CrowlerService {
             log.info(logsToSave[count++]);
             for (PortalJob portalJob : portalJobList) {
                 // Save the job, if it's not already saved
-                if (!portalJobMap.containsKey(portalJob.getJob_uri())) {
-                    portalJob.setPortal_id(portal.getId());
+                if (!portalJobMap.containsKey(portalJob.getJobUri())) {
+                    portalJob.setPortalId(portal.getId());
                     portalJobToSave.add(portalJob);
                 }
             }
@@ -126,7 +126,7 @@ public class CrowlerService {
     public List<PortalJob> findJobs(Portal portal, City city) {
         try {
             Document doc = Jsoup
-                .connect(portal.getJobs_uri())
+                .connect(portal.getJobsUri())
                 .ignoreHttpErrors(true)
                 .get();
 

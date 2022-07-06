@@ -1,8 +1,10 @@
 package fastvagas.service;
 
 import fastvagas.data.entity.Person;
+import fastvagas.data.repository.PersonRepository;
 import fastvagas.json.UserAccountJson;
 import fastvagas.util.ObjectUtil;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +12,18 @@ import org.springframework.stereotype.Service;
 public class MinhaContaService {
 
     @Autowired
-    UserService userService;
+    PersonRepository personRepository;
 
-    public void updateUserData(Person person, UserAccountJson userAccount) {
-        person.setFirst_name(userAccount.getFirstName());
-        person.setLast_name(userAccount.getLastName());
-        person.setEmail(userAccount.getEmail());
-        if (ObjectUtil.hasValue(userAccount.getPassword())) {
-            person.setPassword(userAccount.getPassword());
-        }
-
-        userService.update(person);
+    public void updateUserData(Person personReq, UserAccountJson userAccount) {
+        Optional<Person> personDb = personRepository.findById(personReq.getId());
+        personDb.ifPresent(person -> {
+            person.setFirstName(userAccount.getFirstName());
+            person.setLastName(userAccount.getLastName());
+            person.setEmail(userAccount.getEmail());
+            if (ObjectUtil.hasValue(userAccount.getPassword())) {
+                person.setPassword(userAccount.getPassword());
+            }
+            personRepository.save(person);
+        });
     }
 }

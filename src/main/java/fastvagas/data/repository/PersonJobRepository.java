@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PersonJobRepository extends JpaRepository<PersonJob, Integer> {
 
-    List<PersonJob> findAllByPersonId(Integer person_id);
+    List<PersonJob> findAllByPersonId(Long person_id);
 }

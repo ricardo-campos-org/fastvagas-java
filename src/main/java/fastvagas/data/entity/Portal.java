@@ -24,16 +24,16 @@ public class Portal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column
     private String name;
 
-    @Column
-    private String jobs_uri;
+    @Column(name = "jobs_uri")
+    private String jobsUri;
 
-    @Column
-    private Integer city_id;
+    @Column(name = "city_id")
+    private Long cityId;
 
     @Column
     private Boolean enabled;
@@ -43,8 +43,8 @@ public class Portal {
         return "Portal{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", jobs_uri='" + jobs_uri + '\'' +
-                ", city_id=" + city_id +
+                ", jobsUri='" + jobsUri + '\'' +
+                ", cityId=" + cityId +
                 ", enabled=" + enabled +
                 '}';
     }

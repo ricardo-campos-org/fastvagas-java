@@ -24,7 +24,7 @@ public class Indeed implements Crowler {
                 PortalJob portalJob = new PortalJob();
 
                 // URL
-                portalJob.setUrl(a.absUrl("href"));
+                portalJob.setJobUri(a.absUrl("href"));
 
                 // Nome da vaga e URL
                 Element h2JobTitle = a.selectFirst("h2.jobTitle");
@@ -32,7 +32,7 @@ public class Indeed implements Crowler {
                     Elements spanList = h2JobTitle.select("span");
                     for (Element span : spanList) {
                         if (span.hasAttr("title")) {
-                            portalJob.setName(StringUtil.parseJobName(span.text()));
+                            portalJob.setJobTitle(StringUtil.parseJobName(span.text()));
                             break;
                         }
                     }
@@ -43,7 +43,7 @@ public class Indeed implements Crowler {
                 if (divCompany != null) {
                     Element span = divCompany.selectFirst("span.companyName");
                     if (span != null) {
-                        portalJob.setCompany_name(span.text().trim());
+                        portalJob.setCompanyName(span.text().trim());
                     }
                 }
 
@@ -54,33 +54,33 @@ public class Indeed implements Crowler {
                     if (divAria != null) {
                         String salario = divAria.attr("aria-label").trim();
                         if (!salario.equals("null")) {
-                            portalJob.setDescription(salario + ". ");
+                            portalJob.setJobDescription(salario + ". ");
                         }
                     }
                 }
 
                 // Tipo da vaga
-                portalJob.setJob_type("");
+                portalJob.setJobType("");
 
                 // Descrição
                 Element divJobSnippet = a.selectFirst("div.job-snippet");
                 if (divJobSnippet != null) {
                     Elements liList = divJobSnippet.select("li");
                     for (Element li : liList) {
-                        portalJob.setDescription(portalJob.getDescription() +
+                        portalJob.setJobDescription(portalJob.getJobDescription() +
                                 StringUtil.capitalize(li.text().trim().toLowerCase()));
                     }
 
                     if (liList.isEmpty()) {
-                        portalJob.setDescription(portalJob.getDescription() +
+                        portalJob.setJobDescription(portalJob.getJobDescription() +
                                 StringUtil.capitalize(divJobSnippet.text().trim().toLowerCase()));
                     }
 
                 }
 
-                if (!portalJob.getName().isEmpty() && !portalJob.getUrl().isEmpty()) {
-                    if (!ObjectUtil.hasValue(portalJob.getCompany_name())) {
-                        portalJob.setCompany_name("");
+                if (portalJob.isValid()) {
+                    if (!ObjectUtil.hasValue(portalJob.getCompanyName())) {
+                        portalJob.setCompanyName("");
                     }
 
                     portalJobList.add(portalJob);

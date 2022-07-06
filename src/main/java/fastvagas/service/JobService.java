@@ -1,9 +1,11 @@
 package fastvagas.service;
 
+import fastvagas.data.entity.Person;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.data.entity.PersonJob;
 import fastvagas.data.entity.PersonTerm;
 import fastvagas.data.repository.PersonJobRepository;
+import fastvagas.data.repository.PersonRepository;
 import fastvagas.data.repository.PersonTermRepository;
 import fastvagas.data.repository.PortalJobRepository;
 import fastvagas.util.DateUtil;
@@ -28,16 +30,18 @@ public class JobService {
     private final PortalJobRepository portalJobRepository;
     private final PersonJobRepository personJobRepository;
     private final PersonTermRepository personTermRepository;
+    private final PersonRepository personRepository;
 
     @Autowired
     public JobService(PortalJobRepository portalJobRepository, PersonJobRepository personJobRepository,
-                      PersonTermRepository personTermRepository) {
+                      PersonTermRepository personTermRepository, PersonRepository personRepository) {
         this.portalJobRepository = portalJobRepository;
         this.personJobRepository = personJobRepository;
         this.personTermRepository = personTermRepository;
+        this.personRepository = personRepository;
     }
 
-    public List<PortalJob> findUserJobsByTermsNotSeen(Integer personId) {
+    public List<PortalJob> findUserJobsByTermsNotSeen(Long personId) {
         if (Optional.ofNullable(personId).isEmpty()) {
             throw new RuntimeException("User id not provided!!");
         }
@@ -50,13 +54,13 @@ public class JobService {
             return new ArrayList<>();
         }
 
-        Set<Integer> portalJobIds = jobServices
+        Set<Long> portalJobIds = jobServices
                 .stream()
-                .map(PersonJob::getPortal_job_id)
+                .map(PersonJob::getPortalJobId)
                 .collect(Collectors.toSet());
 
         List<PortalJob> portalJobList = new ArrayList<>();
-        for (Integer portalJobId : portalJobIds) {
+        for (Long portalJobId : portalJobIds) {
             portalJobList.addAll(portalJobRepository.findAllByPortalId(portalJobId));
         }
 
@@ -64,43 +68,54 @@ public class JobService {
     }
 
     public void processUserJobs(LocalDateTime startingAt) {
-        Set<Long> userIds = userTermRepository.findAllEnabledUsersTerms()
-                .stream()
-                .map(PersonTerm::getUser_id)
-                .collect(Collectors.toSet());
+        List<Person> enabledUsers = personRepository.findAllByEnabled(Boolean.TRUE);
+        if (enabledUsers.isEmpty()) {
+            return;
+        }
 
-        for (Long user_id : userIds) {
-            processUserJobs(user_id, startingAt);
+        Set<PersonTerm> personTerms = new HashSet<>();
+
+        for (Person p : enabledUsers) {
+            List<PersonTerm> userTerms = personTermRepository.findAllByPersonId(p.getId());
+            if (!userTerms.isEmpty()) {
+                personTerms.addAll(userTerms);
+            }
+        }
+
+        for (PersonTerm personTerm : personTerms) {
+            processUserJobs(personTerm, startingAt);
         }
     }
 
-    public void processUserJobs(Integer userId, LocalDateTime startingAt) {
-        log.info("ProcessUserJobs starting at {} for user {}", DateUtil.formatLocalDateTime(startingAt), userId);
+    public void processUserJobs(PersonTerm personTerm, LocalDateTime startingAt) {
+        final Long personId = personTerm.getPersonId();
+        log.info("ProcessUserJobs starting at {} for user {}", DateUtil.formatLocalDateTime(startingAt), personId);
 
-        List<PortalJob> portalJobList = portalJobService.findAllByCreatedAt(startingAt);
-        List<PersonTerm> userTerms = userTermRepository.findAllByUserId(userId);
+        List<PortalJob> portalJobList = portalJobRepository.findAllByCreatedStartingAt(startingAt);
 
         log.info("{} jobs to check!", portalJobList.size());
-        log.info("{} user term(s)!", userTerms.size());
 
         Set<PersonJob> userJobsToSave = new HashSet<>();
 
-        for (PersonTerm userTerm : userTerms) {
-            List<String> terms = Arrays.asList(userTerm.getTerms().split(";"));
+        List<String> terms = Arrays.asList(personTerm.getTerms().split(";"));
 
-            for (PortalJob portalJob : portalJobList) {
+        for (PortalJob portalJob : portalJobList) {
 
-                Boolean match = check(portalJob.getName(), terms);
-                if (match) {
-                    if (!userJobRepository.exists(userTerm.getUser_id(), portalJob.getPortal_job_id())) {
-                        PersonJob userJob = PersonJob.builder()
-                                .user_id(userTerm.getUser_id())
-                                .portal_job_id(portalJob.getPortal_job_id())
-                                .seen(null)
-                                .build();
+            Boolean match = check(portalJob.getJobTitle(), terms);
+            if (match) {
+                long count = personJobRepository
+                    .findAllByPersonId(personTerm.getPersonId())
+                    .stream().filter(pj -> pj.getPortalJobId().equals(portalJob.getId()))
+                    .count();
 
-                        userJobsToSave.add(userJob);
-                    }
+                if (count == 0L) {
+                    PersonJob userJob = PersonJob.builder()
+                            .personId(personTerm.getPersonId())
+                            .portalJobId(portalJob.getId())
+                            .seen(null)
+                            .build();
+
+                    userJobsToSave.add(userJob);
                 }
             }
         }

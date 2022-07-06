@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobPagination implements Serializable {
+public class JobPagination {
 
-    private static final long serialVersionUID = 1841103238809314161L;
     private Integer currentPage;
     private List<Integer> pages;
     private Boolean hasNextPage;

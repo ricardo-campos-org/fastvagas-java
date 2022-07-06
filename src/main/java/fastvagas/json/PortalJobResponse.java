@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,9 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PortalJobResponse implements Serializable {
+public class PortalJobResponse {
 
-    private static final long serialVersionUID = 1920774283340602960L;
     private Long portalJobId;
     private String name;
     private String company;
@@ -29,25 +27,25 @@ public class PortalJobResponse implements Serializable {
 
     public static PortalJobResponse fromPortalJob(PortalJob portalJob) {
         PortalJobResponse pjr = PortalJobResponse.builder()
-                .portalJobId(portalJob.getPortal_job_id())
-                .name(portalJob.getName())
-                .company(portalJob.getCompany_name())
-                .description(portalJob.getDescription())
-                .url(portalJob.getUrl())
-                .createdAt(portalJob.getCreated_at())
+                .portalJobId(portalJob.getId())
+                .name(portalJob.getJobTitle())
+                .company(portalJob.getCompanyName())
+                .description(portalJob.getJobDescription())
+                .url(portalJob.getJobUri())
+                .createdAt(portalJob.getCreatedAt())
                 .build();
 
-        String share = portalJob.getName() + " - ";
-        if (ObjectUtil.hasValue(portalJob.getCompany_name())) {
-            share += portalJob.getCompany_name() + " - ";
+        String share = portalJob.getJobTitle() + " - ";
+        if (ObjectUtil.hasValue(portalJob.getCompanyName())) {
+            share += portalJob.getCompanyName() + " - ";
         }
         int start = 0;
-        String description = portalJob.getDescription();
+        String description = portalJob.getJobDescription();
         if (description.startsWith("null")) {
             start = 4;
         }
         share += description.substring(start) + " - ";
-        share += portalJob.getUrl();
+        share += portalJob.getJobUri();
         pjr.setShare(share);
 
         return pjr;

@@ -1,28 +1,26 @@
 package fastvagas.json;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-public class UserAccountJson implements Serializable {
+public class UserAccountJson {
 
-    private static final long serialVersionUID = 4818820857520791635L;
-    private Long userId;
+    private Long personId;
     private String firstName;
     private String lastName;
     private String email;
-    private Integer cityId;
-    private Date createdAt;
-    private Date lastLogin;
+    private Long cityId;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastLogin;
     private String cityName;
     private String stateName;
     private String password;
 
-    public Long getUserId() {
-        return userId;
+    public Long getPersonId() {
+        return personId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setPersonId(Long personId) {
+        this.personId = personId;
     }
 
     public String getFirstName() {
@@ -49,27 +47,27 @@ public class UserAccountJson implements Serializable {
         this.email = email;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getLastLogin() {
+    public LocalDateTime getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
 

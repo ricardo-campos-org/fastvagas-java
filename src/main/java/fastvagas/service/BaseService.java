@@ -26,17 +26,17 @@ public class BaseService {
             return null;
         }
 
-        City city = cityRepository.findById(person.getCity_id()).orElse(new City());
+        City city = cityRepository.findById(person.getCityId()).orElse(new City());
         State state = stateRepository.findById(city.getState().getId()).orElse(new State());
 
         UserAccountJson userAccountJson = new UserAccountJson();
-        userAccountJson.setUserId(person.getUser_id());
-        userAccountJson.setFirstName(person.getFirst_name());
-        userAccountJson.setLastName(person.getLast_name());
+        userAccountJson.setPersonId(person.getId());
+        userAccountJson.setFirstName(person.getFirstName());
+        userAccountJson.setLastName(person.getLastName());
         userAccountJson.setEmail(person.getEmail());
-        userAccountJson.setCityId(person.getCity_id());
-        userAccountJson.setCreatedAt(person.getCreated_at());
-        userAccountJson.setLastLogin(person.getLast_login());
+        userAccountJson.setCityId(person.getCityId());
+        userAccountJson.setCreatedAt(person.getCreatedAt());
+        userAccountJson.setLastLogin(person.getLastLogin());
         userAccountJson.setCityName(city.getName());
         userAccountJson.setStateName(state.getName());
         return userAccountJson;

@@ -16,13 +16,13 @@ import java.util.List;
 public class PortalRepositoryBeanTest {
 
     @Mock
-    private PortalRepositoryBean portalRepositoryBean;
+    private PortalRepository portalRepository;
 
     @Test
     public void findAllTest() {
         List<Portal> portals = new ArrayList<>();
 
-        when(portalRepositoryBean.findAll()).thenReturn(portals);
+        when(portalRepository.findAll()).thenReturn(portals);
 
         assertTrue(portals.isEmpty());
     }

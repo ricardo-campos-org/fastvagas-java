@@ -170,35 +170,35 @@ public class MailService {
                 "</div>";
 
             for (PortalJob portalJob : portalJobs) {
-                String jobDetails = portalJob.getDescription();
-                if (portalJob.getCompany_name() != null && !portalJob.getCompany_name().isEmpty()) {
+                String jobDetails = portalJob.getJobDescription();
+                if (portalJob.getCompanyName() != null && !portalJob.getCompanyName().isEmpty()) {
                     boolean addDot =
-                            !portalJob.getDescription().endsWith(".")
-                            && !portalJob.getDescription().endsWith("!");
+                            !portalJob.getJobDescription().endsWith(".")
+                            && !portalJob.getJobDescription().endsWith("!");
 
                     if (addDot) {
                         jobDetails += ".";
                     }
 
-                    jobDetails += " Empresa: " + portalJob.getCompany_name();
+                    jobDetails += " Empresa: " + portalJob.getCompanyName();
                 }
 
-                if (portalJob.getPublished_at() != null) {
+                if (portalJob.getPublishedAt() != null) {
                     boolean addDot = !jobDetails.endsWith(".") && !jobDetails.endsWith("!");
 
                     if (addDot) {
                         jobDetails += ".";
                     }
 
-                    if (ObjectUtil.hasValue(portalJob.getPublished_at())) {
-                        jobDetails += " Publicado em: " + portalJob.getPublished_at() + ".";
+                    if (ObjectUtil.hasValue(portalJob.getPublishedAt())) {
+                        jobDetails += " Publicado em: " + portalJob.getPublishedAt() + ".";
                     }
                 }
 
                 String job = jobTemplate;
-                job = job.replace("__JOB_NAME__", portalJob.getName());
+                job = job.replace("__JOB_NAME__", portalJob.getJobTitle());
                 job = job.replace("__JOB_DETAILS__", jobDetails);
-                job = job.replace("__JOB_URL__", portalJob.getUrl());
+                job = job.replace("__JOB_URL__", portalJob.getJobUri());
 
                 mailTemplate = mailTemplate.replace("__CONTEUDO_VAGA__", job + "__CONTEUDO_VAGA__");
             }

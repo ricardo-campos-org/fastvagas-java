@@ -24,19 +24,19 @@ public class PersonTerm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column
-    private Long user_id;
+    @Column(name = "person_id")
+    private Long personId;
 
     @Column
     private String terms;
 
     @Override
     public String toString() {
-        return "UserTerm{" +
+        return "PersonTerm{" +
                 "id=" + id +
-                ", user_id=" + user_id +
+                ", personId=" + personId +
                 ", terms='" + terms + '\'' +
                 '}';
     }

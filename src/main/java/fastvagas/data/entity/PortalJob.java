@@ -1,5 +1,6 @@
 package fastvagas.data.entity;
 
+import fastvagas.util.ObjectUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -26,50 +27,54 @@ public class PortalJob {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Size(max=600)
-    @Column
-    private String job_title;
+    @Column(name = "job_title")
+    private String jobTitle;
 
     @Size(max=600)
-    @Column
-    private String company_name;
+    @Column(name = "company_name")
+    private String companyName;
 
     @Size(max=30)
-    @Column
-    private String job_type;
+    @Column(name = "job_type")
+    private String jobType;
 
     @Size(max=600)
-    @Column
-    private String job_description;
+    @Column(name = "job_description")
+    private String jobDescription;
 
     @Size(max=30)
-    @Column
-    private String published_at;
+    @Column(name = "published_at")
+    private String publishedAt;
 
     @Size(max=1000)
-    @Column
-    private String job_uri;
+    @Column(name = "job_uri")
+    private String jobUri;
 
-    @Column
-    private Integer portal_id;
+    @Column(name = "portal_id")
+    private Long portalId;
 
-    @Column
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Override
     public String toString() {
         return "PortalJob{" +
                 "id=" + id +
-                ", job_title='" + job_title + '\'' +
-                ", company_name='" + company_name + '\'' +
-                ", job_type='" + job_type + '\'' +
-                ", job_description='" + job_description + '\'' +
-                ", published_at='" + published_at + '\'' +
-                ", job_uri='" + job_uri + '\'' +
-                ", portal_id=" + portal_id +
-                ", created_at=" + created_at +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", jobType='" + jobType + '\'' +
+                ", jobDescription='" + jobDescription + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", job_uri='" + jobUri + '\'' +
+                ", portalId=" + portalId +
+                ", createdAt=" + createdAt +
                 '}';
+    }
+
+    public boolean isValid() {
+        return ObjectUtil.hasValue(jobTitle) && ObjectUtil.hasValue(jobUri);
     }
 }

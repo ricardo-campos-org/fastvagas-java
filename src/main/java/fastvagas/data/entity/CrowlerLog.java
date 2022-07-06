@@ -26,24 +26,24 @@ public class CrowlerLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column
-    private Integer portal_id;
+    @Column(name = "portal_id")
+    private Long portalId;
 
     @Column
     private String text;
 
-    @Column
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Override
     public String toString() {
         return "crowler_log={"
                 + id + "=" + id
-                + "," + portal_id + "=" + portal_id
+                + "," + portalId + "=" + portalId
                 + "," + text + "='" + text + "'"
-                + "," + created_at + "='" + DateUtil.formatLocalDateTime(created_at) + "'"
+                + "," + createdAt + "='" + DateUtil.formatLocalDateTime(createdAt) + "'"
                 + "}";
     }
 }

@@ -39,8 +39,8 @@ public class Contact {
     @Column
     private String message;
 
-    @Column
-    private LocalDateTime sent_at;
+    @Column(name = "sent_at")
+    private LocalDateTime sentAt;
 
     @Override
     public String toString() {
@@ -50,7 +50,7 @@ public class Contact {
                 ", email='" + email + '\'' +
                 ", subject='" + subject + '\'' +
                 ", message='" + message + '\'' +
-                ", sent_at=" + sent_at +
+                ", sentAt=" + sentAt +
                 '}';
     }
 }

@@ -31,12 +31,12 @@ public class CrowlerLogCustomRepositoryImpl implements CrowlerLogCustomRepositor
     }
 
     @Override
-    public List<CrowlerLog> fromStringArray(String[] logs, Integer portal_id) {
+    public List<CrowlerLog> fromStringArray(String[] logs, Long portal_id) {
         List<CrowlerLog> crowlerLogs = new ArrayList<>(logs.length);
         for (String log : logs) {
             CrowlerLog crowlerLog = CrowlerLog.builder()
-                    .created_at(DateUtil.getCurrentLocalDateTime())
-                    .portal_id(portal_id)
+                    .createdAt(DateUtil.getCurrentLocalDateTime())
+                    .portalId(portal_id)
                     .text(log)
                     .build();
             crowlerLogs.add(crowlerLog);

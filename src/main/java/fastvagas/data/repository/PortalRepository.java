@@ -7,11 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PortalRepository extends JpaRepository<Portal, Integer> {
+public interface PortalRepository extends JpaRepository<Portal, Long> {
 
     List<Portal> findAll();
 
     List<Portal> findAllByEnabed(Boolean enabled);
 
-    List<Portal> findAllByCityId(Integer city_id);
+    List<Portal> findAllByCityId(Long city_id);
 }

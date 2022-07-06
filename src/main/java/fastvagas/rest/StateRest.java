@@ -16,7 +16,7 @@ class StateRest {
     private StateRepository stateRepository;
 
     @GetMapping(value = "/find-by-id/{id}")
-    public State findById(@PathVariable("id") Integer id) {
+    public State findById(@PathVariable Long id) {
         Optional<State> state = stateRepository.findById(id);
         if (state.isEmpty()) {
             return null; // 204

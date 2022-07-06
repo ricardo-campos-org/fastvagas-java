@@ -1,6 +1,9 @@
 package fastvagas.handler;
 
 import fastvagas.data.entity.Person;
+import fastvagas.data.repository.PersonRepository;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -16,19 +19,19 @@ import java.util.Date;
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
-    private UserService userService;
+    private PersonRepository personRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException {
 
-        Person person = userService.findByEmail(authentication.getName());
-        if (person != null) {
-            person.setLast_login(new Date());
+        Optional<Person> personOpt = personRepository.findByEmail(authentication.getName());
+        personOpt.ifPresent(person -> {
+            person.setLastLogin(LocalDateTime.now());
             person.setPassword("");
-            userService.update(person);
-        }
+            personRepository.save(person);
+        });
 
         response.sendRedirect("/home");
     }

@@ -35,8 +35,8 @@ public class InfoJobs implements Crowler {
             if (divVaga != null) {
                 Element a = divVaga.selectFirst("a");
                 if (a != null) {
-                    portalJob.setName(StringUtil.capitalize(a.attr("title").toLowerCase()));
-                    portalJob.setUrl(a.absUrl("href"));
+                    portalJob.setJobTitle(StringUtil.capitalize(a.attr("title").toLowerCase()));
+                    portalJob.setJobUri(a.absUrl("href"));
                 }
             }
 
@@ -47,7 +47,7 @@ public class InfoJobs implements Crowler {
                 if (divComp != null) {
                     Element a = divComp.selectFirst("a");
                     if (a != null) {
-                        portalJob.setCompany_name(StringUtil.capitalize(a.text().trim().toLowerCase()));
+                        portalJob.setCompanyName(StringUtil.capitalize(a.text().trim().toLowerCase()));
                     }
                 }
             }
@@ -59,7 +59,7 @@ public class InfoJobs implements Crowler {
             if (divContainerVaga != null) {
                 Element divVagaDesc = divContainerVaga.selectFirst("div.vagaDesc");
                 if (divVagaDesc != null) {
-                    portalJob.setDescription(StringUtil.capitalize(divVagaDesc.text().trim().toLowerCase()));
+                    portalJob.setJobDescription(StringUtil.capitalize(divVagaDesc.text().trim().toLowerCase()));
                 }
             }
 
@@ -74,14 +74,14 @@ public class InfoJobs implements Crowler {
 
                     Element spanData = p.selectFirst("span.data");
                     if (spanData != null) {
-                        portalJob.setPublished_at(spanData.text().trim());
+                        portalJob.setPublishedAt(spanData.text().trim());
                     }
                 }
             }
 
-            if (ObjectUtil.hasValue(portalJob.getName()) && ObjectUtil.hasValue(portalJob.getUrl())) {
-                if (!ObjectUtil.hasValue(portalJob.getCompany_name())) {
-                    portalJob.setCompany_name("");
+            if (portalJob.isValid()) {
+                if (!ObjectUtil.hasValue(portalJob.getCompanyName())) {
+                    portalJob.setCompanyName("");
                 }
 
                 portalJobList.add(portalJob);

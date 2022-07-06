@@ -27,11 +27,11 @@ public class PersonJob {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
-    private Integer person_id;
+    @Column(name = "person_id")
+    private Long personId;
 
-    @Column
-    private Integer portal_job_id;
+    @Column(name = "portal_job_id")
+    private Long portalJobId;
 
     @Column
     private LocalDateTime seen;
@@ -40,8 +40,8 @@ public class PersonJob {
     public String toString() {
         return "UserJob{" +
                 "id=" + id +
-                ", person_id=" + person_id +
-                ", portal_job_id=" + portal_job_id +
+                ", personId=" + personId +
+                ", portalJobId=" + portalJobId +
                 ", seen=" + seen +
                 '}';
     }

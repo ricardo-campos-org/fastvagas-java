@@ -2,12 +2,10 @@ package fastvagas.json;
 
 import fastvagas.data.entity.PortalJob;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class JobDetail implements Serializable {
+public class JobDetail {
 
-    private static final long serialVersionUID = 7812481095695212226L;
     private Long portal_job_id;
     private String name;
     private String company_name;
@@ -15,20 +13,20 @@ public class JobDetail implements Serializable {
     private String description;
     private String published_at;
     private String url;
-    private Integer portal_id;
+    private Long portal_id;
     private String portal_name;
     private LocalDateTime created_at;
 
     public JobDetail(PortalJob portalJob) {
-        setPortal_job_id(portalJob.getPortal_job_id());
-        setName(portalJob.getName());
-        setCompany_name(portalJob.getCompany_name());
-        setJob_type(portalJob.getJob_type());
-        setDescription(portalJob.getDescription());
-        setPublished_at(portalJob.getPublished_at());
-        setUrl(portalJob.getUrl());
-        setPortal_id(portalJob.getPortal_id());
-        setCreated_at(portalJob.getCreated_at());
+        setPortal_job_id(portalJob.getId());
+        setName(portalJob.getJobTitle());
+        setCompany_name(portalJob.getCompanyName());
+        setJob_type(portalJob.getJobType());
+        setDescription(portalJob.getJobDescription());
+        setPublished_at(portalJob.getPublishedAt());
+        setUrl(portalJob.getJobUri());
+        setPortal_id(portalJob.getPortalId());
+        setCreated_at(portalJob.getCreatedAt());
     }
 
     public Long getPortal_job_id() {
@@ -87,11 +85,11 @@ public class JobDetail implements Serializable {
         this.url = url;
     }
 
-    public Integer getPortal_id() {
+    public Long getPortal_id() {
         return portal_id;
     }
 
-    public void setPortal_id(Integer portal_id) {
+    public void setPortal_id(Long portal_id) {
         this.portal_id = portal_id;
     }
 

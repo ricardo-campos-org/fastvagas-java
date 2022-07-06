@@ -25,13 +25,13 @@ public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column
-    private String first_name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column
-    private String last_name;
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column
     private String email;
@@ -39,34 +39,34 @@ public class Person {
     @Column
     private String password;
 
-    @Column
-    private Integer city_id;
+    @Column(name = "city_id")
+    private Long cityId;
 
     @Column
     private Boolean enabled;
 
-    @Column
-    private LocalDateTime last_login;
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
 
-    @Column
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Column
-    private LocalDateTime disabled_at;
+    @Column(name = "disabled_at")
+    private LocalDateTime disabledAt;
 
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", city_id=" + city_id +
+                ", cityId=" + cityId +
                 ", enabled=" + enabled +
-                ", last_login=" + last_login +
-                ", created_at=" + created_at +
-                ", disabled_at=" + disabled_at +
+                ", lastLogin=" + lastLogin +
+                ", createdAt=" + createdAt +
+                ", disabledAt=" + disabledAt +
                 '}';
     }
 }

@@ -20,7 +20,7 @@ class CityRest {
     }
 
     @GetMapping(value = "/find-by-id/{id}")
-    public City findById(@PathVariable("id") Integer id) {
+    public City findById(@PathVariable Long id) {
         Optional<City> cityOptional = cityRepository.findById(id);
         if (cityOptional.isEmpty()) {
             // return 204
@@ -31,7 +31,7 @@ class CityRest {
     }
 
     @GetMapping(value = "/find-all-by-state/{id}")
-    public List<City> findAllByState(@PathVariable("id") Integer id) {
+    public List<City> findAllByState(@PathVariable Long id) {
         return cityRepository.findAllByStateId(id);
     }
 

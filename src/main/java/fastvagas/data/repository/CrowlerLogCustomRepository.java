@@ -9,5 +9,5 @@ public interface CrowlerLogCustomRepository {
 
     List<CrowlerLog> findAllByGreaterDateTime(LocalDateTime localDateTime);
 
-    List<CrowlerLog> fromStringArray(String[] logs, Integer portal_id);
+    List<CrowlerLog> fromStringArray(String[] logs, Long portalId);
 }

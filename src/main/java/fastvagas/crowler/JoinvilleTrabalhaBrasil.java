@@ -32,34 +32,34 @@ public class JoinvilleTrabalhaBrasil implements Crowler {
             // URL
             Element aUrl = div.selectFirst("a");
             if (aUrl != null) {
-                portalJob.setUrl(aUrl.absUrl("href"));
+                portalJob.setJobUri(aUrl.absUrl("href"));
             }
 
             // Nome da Vaga
             Element h3JobName = div.selectFirst(".job__name");
             if (h3JobName != null) {
-                portalJob.setName(StringUtil.parseJobName(h3JobName.text()));
+                portalJob.setJobTitle(StringUtil.parseJobName(h3JobName.text()));
             }
 
             // Nome da empresa
             Element h4JobCompany = div.selectFirst(".job__company");
             if (h4JobCompany != null) {
-                portalJob.setCompany_name(h4JobCompany.text().trim().toLowerCase());
+                portalJob.setCompanyName(h4JobCompany.text().trim().toLowerCase());
             }
 
             // Tipo da vaga
-            portalJob.setJob_type("");
+            portalJob.setJobType("");
 
             // Descrição
             Element pJobDescription = div.selectFirst(".job__description");
             if (pJobDescription != null) {
-                portalJob.setDescription(StringUtil.capitalize(pJobDescription.text().trim().toLowerCase()));
+                portalJob.setJobDescription(StringUtil.capitalize(pJobDescription.text().trim().toLowerCase()));
             }
 
             // Data da publicação
-            portalJob.setPublished_at("");
+            portalJob.setPublishedAt("");
 
-            if (!portalJob.getName().isEmpty() && !portalJob.getUrl().isEmpty()) {
+            if (portalJob.isValid()) {
                 portalJobList.add(portalJob);
             }
         }

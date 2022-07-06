@@ -35,21 +35,21 @@ public class JoinvilleJoinvilleVagas implements Crowler {
             if (h3JobListingTitle != null) {
                 Element a = h3JobListingTitle.selectFirst("a");
                 if (a != null) {
-                    portalJob.setName(StringUtil.parseJobName(a.text()));
-                    portalJob.setUrl(a.absUrl("href"));
+                    portalJob.setJobTitle(StringUtil.parseJobName(a.text()));
+                    portalJob.setJobUri(a.absUrl("href"));
                 }
             }
 
             // Nome da empresa
             Element divJobListingCompany = li.selectFirst(".job_listing-company");
             if (divJobListingCompany != null) {
-                portalJob.setCompany_name(divJobListingCompany.text().trim().toLowerCase());
+                portalJob.setCompanyName(divJobListingCompany.text().trim().toLowerCase());
             }
 
             // Tipo da vaga
             Element divJType = li.selectFirst(".jtype");
             if (divJType != null) {
-                portalJob.setJob_type(StringUtil.capitalize(divJType.text().trim().toLowerCase()));
+                portalJob.setJobType(StringUtil.capitalize(divJType.text().trim().toLowerCase()));
             }
 
             // Descrição
@@ -57,7 +57,7 @@ public class JoinvilleJoinvilleVagas implements Crowler {
             if (divDescriptions.size() >= 2) {
                 Element divDescription = divDescriptions.get(1);
                 if (divDescription != null) {
-                    portalJob.setDescription(StringUtil.capitalize(divDescription.text().trim().toLowerCase()));
+                    portalJob.setJobDescription(StringUtil.capitalize(divDescription.text().trim().toLowerCase()));
                 }
             }
 
@@ -66,11 +66,11 @@ public class JoinvilleJoinvilleVagas implements Crowler {
             if (divDetails != null) {
                 Element span = divDetails.selectFirst("span");
                 if (span != null) {
-                    portalJob.setPublished_at(span.text().trim());
+                    portalJob.setPublishedAt(span.text().trim());
                 }
             }
 
-            if (!portalJob.getName().isEmpty() && !portalJob.getUrl().isEmpty()) {
+            if (portalJob.isValid()) {
                 portalJobList.add(portalJob);
             }
         }
