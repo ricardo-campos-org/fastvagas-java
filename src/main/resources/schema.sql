@@ -1,5 +1,5 @@
--- psql --host=localhost --username=retsuko --dbname=ondetemvagas --password
--- password: retsuko123
+-- psql --host=localhost --username=postgres --dbname=fastservice --password
+-- password: pwd
 
 CREATE TABLE contact (
     id      SERIAL PRIMARY KEY,
@@ -25,24 +25,24 @@ CREATE TABLE city (
 CREATE TABLE portal (
     id       SERIAL PRIMARY KEY,
     name     VARCHAR(50) NOT NULL,
-    jobs_uri VARCHAR(300) NOT NULL,
+    jobs_url VARCHAR(300) NOT NULL,
     city_id  INTEGER NOT NULL REFERENCES city (id),
     enabled  BOOLEAN NOT NULL DEFAULT TRUE
 );
 
-CREATE TABLE portal_jobs (
+CREATE TABLE portal_job (
     id              SERIAL PRIMARY KEY,
     job_title       VARCHAR(600) NOT NULL,
     company_name    VARCHAR(600) NOT NULL,
     job_type        VARCHAR(30) NULL DEFAULT NULL,
     job_description VARCHAR(600) NOT NULL,
     published_at    VARCHAR(30) NULL DEFAULT NULL,
-    job_uri         VARCHAR(1000) NOT NULL,
+    job_url         VARCHAR(1000) NOT NULL,
     portal_id       INTEGER NOT NULL REFERENCES portal (id),
     created_at      TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_portal_jobs_uri ON portal_jobs (job_uri);
+CREATE INDEX idx_portal_jobs_url ON portal_jobs (job_url);
 
 CREATE TABLE person (
     id          SERIAL PRIMARY KEY,
@@ -54,17 +54,20 @@ CREATE TABLE person (
     enabled     BOOLEAN NOT NULL DEFAULT TRUE,
     last_login  TIMESTAMP NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    disabled_at TIMESTAMP NULL
+    disabled_at TIMESTAMP NULL,
+    terms       VARCHAR(500) NULL
 );
 
 CREATE INDEX idx_person_email ON person (email);
 
 CREATE TABLE authorities (
-    email  VARCHAR(100) NOT NULL REFERENCES person (email),
+    id        SERIAL PRIMARY KEY,
+    email     VARCHAR(100) NOT NULL REFERENCES person (email),
     authority VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE payments (
+-- Don't needed for now
+CREATE TABLE payment (
     id        SERIAL PRIMARY KEY,
     person_id INTEGER NOT NULL REFERENCES person (id),
     amount    DECIMAL(6, 2) NOT NULL,
@@ -72,7 +75,8 @@ CREATE TABLE payments (
     payday    TIMESTAMP NULL
 );
 
-CREATE TABLE plans (
+-- Don't needed for now
+CREATE TABLE plan (
     id          SERIAL PRIMARY KEY,
     name        VARCHAR(50) NOT NULL,
     description VARCHAR(300) NOT NULL,
@@ -82,17 +86,11 @@ CREATE TABLE plans (
     disabled_at TIMESTAMP NULL
 );
 
-CREATE TABLE person_jobs (
+CREATE TABLE person_job (
     id             SERIAL PRIMARY KEY,
     person_id      INTEGER NOT NULL REFERENCES person (id),
-    portal_job_id  INTEGER NOT NULL REFERENCES portal_jobs (id),
+    portal_job_id  INTEGER NOT NULL REFERENCES portal_job (id),
     seen           TIMESTAMP NULL
-);
-
-CREATE TABLE person_terms (
-    id        SERIAL PRIMARY KEY,
-    person_id INTEGER NOT NULL REFERENCES person (id),
-    terms     VARCHAR(300) NOT NULL
 );
 
 CREATE TABLE crowler_log (

@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Builder
 @Getter
@@ -18,6 +17,10 @@ import javax.persistence.Entity;
 @EqualsAndHashCode
 @Entity(name = "authorities")
 public class Authority {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column
     private String email;
