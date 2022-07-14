@@ -125,7 +125,7 @@ public class GuestController {
     public List<PortalJobResponse> getJobs() {
         LocalDateTime semanaAtual = DateUtil.getCurrentLocalDateTime().minusDays(7L);
 
-        List<PortalJob> portalJobList = portalJobRepository.findAllByCreatedAtStartintAt(semanaAtual);
+        List<PortalJob> portalJobList = portalJobRepository.findAllByCreatedAtStartingAt(semanaAtual);
         List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
         portalJobList.forEach(p -> respList.add(PortalJobResponse.fromPortalJob(p)));
 

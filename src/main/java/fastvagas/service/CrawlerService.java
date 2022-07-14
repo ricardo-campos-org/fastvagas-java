@@ -100,7 +100,7 @@ public class CrawlerService {
             log.info(logsToSave[count++]);
             for (PortalJob portalJob : portalJobList) {
                 // Save the job, if it's not already saved
-                if (!portalJobMap.containsKey(portalJob.getJobUri())) {
+                if (!portalJobMap.containsKey(portalJob.getJobUrl())) {
                     portalJob.setPortalId(portal.getId());
                     portalJobToSave.add(portalJob);
                 }
@@ -122,7 +122,7 @@ public class CrawlerService {
     public List<PortalJob> findJobs(Portal portal, City city) {
         try {
             Document doc = Jsoup
-                .connect(portal.getJobsUri())
+                .connect(portal.getJobsUrl())
                 .ignoreHttpErrors(true)
                 .get();
 
@@ -130,15 +130,16 @@ public class CrawlerService {
             String portalName = StringUtil.replaceToPlainText(portal.getName().replace(" ", ""));
 
             Crawler crawler = CrawlerFactory.createInstance(cityName + portalName);
+            if (Objects.isNull(crawler)) {
+                return new ArrayList<>();
+            }
+
             return crawler.findJobs(doc);
         
         } catch (IOException ioe) {
             log.error("IOException: {}", ioe.getLocalizedMessage());
         } catch (ClassCastException cce) {
             log.error("ClassCastException: {}", cce.getLocalizedMessage());
-        } catch (NullPointerException npe) {
-            log.error("NullPointerException: {}", npe.getLocalizedMessage());
-            npe.printStackTrace();
         }
 
         return new ArrayList<>();

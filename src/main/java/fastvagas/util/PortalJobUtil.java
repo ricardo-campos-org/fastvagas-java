@@ -10,7 +10,7 @@ public class PortalJobUtil {
 
     public static Map<String, PortalJob> listToMapByUrl(List<PortalJob> list) {
         Map<String, PortalJob> portalJobMap = new HashMap<>();
-        list.forEach((portalJob) -> portalJobMap.put(portalJob.getJobUri(), portalJob));
+        list.forEach((portalJob) -> portalJobMap.put(portalJob.getJobUrl(), portalJob));
         return portalJobMap;
     }
 }

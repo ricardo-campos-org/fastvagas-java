@@ -198,7 +198,7 @@ public class MailService {
                 String job = jobTemplate;
                 job = job.replace("__JOB_NAME__", portalJob.getJobTitle());
                 job = job.replace("__JOB_DETAILS__", jobDetails);
-                job = job.replace("__JOB_URL__", portalJob.getJobUri());
+                job = job.replace("__JOB_URL__", portalJob.getJobUrl());
 
                 mailTemplate = mailTemplate.replace("__CONTEUDO_VAGA__", job + "__CONTEUDO_VAGA__");
             }

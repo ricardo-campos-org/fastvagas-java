@@ -24,7 +24,7 @@ public class Indeed implements Crawler {
                 PortalJob portalJob = new PortalJob();
 
                 // URL
-                portalJob.setJobUri(a.absUrl("href"));
+                portalJob.setJobUrl(a.absUrl("href"));
 
                 // Nome da vaga e URL
                 Element h2JobTitle = a.selectFirst("h2.jobTitle");

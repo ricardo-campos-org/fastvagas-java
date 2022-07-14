@@ -36,7 +36,7 @@ public class InfoJobs implements Crawler {
                 Element a = divVaga.selectFirst("a");
                 if (a != null) {
                     portalJob.setJobTitle(StringUtil.capitalize(a.attr("title").toLowerCase()));
-                    portalJob.setJobUri(a.absUrl("href"));
+                    portalJob.setJobUrl(a.absUrl("href"));
                 }
             }
 

@@ -19,10 +19,8 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "portal_jobs")
+@Entity(name = "portal_job")
 public class PortalJob {
 
     @Id
@@ -50,14 +48,34 @@ public class PortalJob {
     private String publishedAt;
 
     @Size(max=1000)
-    @Column(name = "job_uri")
-    private String jobUri;
+    @Column(name = "job_url")
+    private String jobUrl;
 
     @Column(name = "portal_id")
     private Long portalId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public PortalJob() {
+        this(0L, "", "", "", "", "", "",
+                0L, LocalDateTime.now());
+    }
+
+    public PortalJob(Long id, String jobTitle, String companyName,
+                     String jobType, String jobDescription,
+                     String publishedAt, String jobUrl, Long portalId,
+                     LocalDateTime createdAt) {
+        this.id = id;
+        this.jobTitle = jobTitle;
+        this.companyName = companyName;
+        this.jobType = jobType;
+        this.jobDescription = jobDescription;
+        this.publishedAt = publishedAt;
+        this.jobUrl = jobUrl;
+        this.portalId = portalId;
+        this.createdAt = createdAt;
+    }
 
     @Override
     public String toString() {
@@ -68,13 +86,28 @@ public class PortalJob {
                 ", jobType='" + jobType + '\'' +
                 ", jobDescription='" + jobDescription + '\'' +
                 ", publishedAt='" + publishedAt + '\'' +
-                ", job_uri='" + jobUri + '\'' +
+                ", jobUrl='" + jobUrl + '\'' +
                 ", portalId=" + portalId +
                 ", createdAt=" + createdAt +
                 '}';
     }
 
     public boolean isValid() {
-        return ObjectUtil.hasValue(jobTitle) && ObjectUtil.hasValue(jobUri);
+        boolean valid =
+            ObjectUtil.hasValue(jobTitle) && ObjectUtil.hasValue(jobUrl);
+
+        if (valid) {
+            jobTitle = ObjectUtil.fixMaxLength(jobTitle, 600);
+            companyName = ObjectUtil.fixMaxLength(companyName, 600);
+            jobType = ObjectUtil.fixMaxLength(jobType, 30);
+            jobDescription = ObjectUtil.fixMaxLength(jobDescription, 600);
+            publishedAt = ObjectUtil.fixMaxLength(publishedAt, 30);
+
+            if (jobUrl.length() > 1000) {
+                return false;
+            }
+        }
+
+        return valid;
     }
 }

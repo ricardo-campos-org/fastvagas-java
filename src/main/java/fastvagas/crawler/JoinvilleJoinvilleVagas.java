@@ -34,7 +34,7 @@ public class JoinvilleJoinvilleVagas implements Crawler {
                 Element a = h3JobListingTitle.selectFirst("a");
                 if (a != null) {
                     portalJob.setJobTitle(StringUtil.parseJobName(a.text()));
-                    portalJob.setJobUri(a.absUrl("href"));
+                    portalJob.setJobUrl(a.absUrl("href"));
                 }
             }
 

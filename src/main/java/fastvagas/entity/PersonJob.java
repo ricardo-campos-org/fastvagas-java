@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 @Entity(name = "person_job")
 public class PersonJob {
@@ -35,6 +33,18 @@ public class PersonJob {
 
     @Column
     private LocalDateTime seen;
+
+    public PersonJob() {
+        this(0, 0L, 0L, null);
+    }
+
+    public PersonJob(Integer id, Long personId, Long portalJobId,
+                     LocalDateTime seen) {
+        this.id = id;
+        this.personId = personId;
+        this.portalJobId = portalJobId;
+        this.seen = seen;
+    }
 
     @Override
     public String toString() {

@@ -31,7 +31,7 @@ public class PortalJobResponse {
                 .name(portalJob.getJobTitle())
                 .company(portalJob.getCompanyName())
                 .description(portalJob.getJobDescription())
-                .url(portalJob.getJobUri())
+                .url(portalJob.getJobUrl())
                 .createdAt(portalJob.getCreatedAt())
                 .build();
 
@@ -45,7 +45,7 @@ public class PortalJobResponse {
             start = 4;
         }
         share += description.substring(start) + " - ";
-        share += portalJob.getJobUri();
+        share += portalJob.getJobUrl();
         pjr.setShare(share);
 
         return pjr;

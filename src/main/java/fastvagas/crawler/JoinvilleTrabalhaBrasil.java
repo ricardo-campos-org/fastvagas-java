@@ -32,7 +32,7 @@ public class JoinvilleTrabalhaBrasil implements Crawler {
             // URL
             Element aUrl = div.selectFirst("a");
             if (aUrl != null) {
-                portalJob.setJobUri(aUrl.absUrl("href"));
+                portalJob.setJobUrl(aUrl.absUrl("href"));
             }
 
             // Nome da Vaga

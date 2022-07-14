@@ -281,5 +281,11 @@ INSERT INTO person (first_name, last_name, email, password, city_id, enabled, cr
 
 --INSERT INTO user_terms --VALUES ((SELECT user_id FROM users WHERE email = 'jaquessprung@gmail.com'),'RH;Administrativo');
 
-SELECT * FROM portal_jobs WHERE seen IS NULL;
-UPDATE portal_jobs SET SEEN = NOW() WHERE seen IS NULL;
+SELECT * FROM portal_job WHERE seen IS NULL;
+UPDATE portal_job SET SEEN = NOW() WHERE seen IS NULL;
+
+select p.id, p.terms from Person p;
+update person set terms = 'Atendente,Recepcionista,Assistente' where email = 'jeschmoller@gmail.com';
+select * from person_job pj where pj.person_id = 2;
+select * from portal_job pj ;
+update person_job set seen = NOW() where person_id = 2;

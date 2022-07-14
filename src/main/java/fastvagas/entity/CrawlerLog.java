@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 @Entity(name = "crawler_log")
 public class CrawlerLog {
@@ -36,6 +34,18 @@ public class CrawlerLog {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public CrawlerLog() {
+        this(0L, 0L, "", null);
+    }
+
+    public CrawlerLog(Long id, Long portalId, String text,
+                      LocalDateTime createdAt) {
+        this.id = id;
+        this.portalId = portalId;
+        this.text = text;
+        this.createdAt = createdAt;
+    }
 
     @Override
     public String toString() {

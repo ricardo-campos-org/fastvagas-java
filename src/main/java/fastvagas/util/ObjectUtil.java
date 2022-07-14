@@ -54,4 +54,16 @@ public class ObjectUtil {
             return false;
         }
     }
+
+    public static String fixMaxLength(String text, Integer max) {
+        if (!hasValue(text)) {
+            return text;
+        }
+
+        if (text.length() > max) {
+            return text.substring(0, max);
+        }
+
+        return text;
+    }
 }

@@ -7,6 +7,7 @@ import fastvagas.repository.PersonJobRepository;
 import fastvagas.repository.PersonRepository;
 import fastvagas.repository.PortalJobRepository;
 import fastvagas.util.DateUtil;
+import fastvagas.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,7 @@ public class JobService {
 
         List<PortalJob> portalJobList = new ArrayList<>();
         for (Long portalJobId : portalJobIds) {
-            portalJobList.addAll(portalJobRepository.findAllByPortalId(portalJobId));
+            portalJobRepository.findById(portalJobId).ifPresent(portalJobList::add);
         }
 
         return portalJobList;
@@ -72,7 +73,7 @@ public class JobService {
         Set<Person> personTerms = new HashSet<>();
 
         for (Person p : enabledUsers) {
-            if (!p.getTerms().isEmpty()) {
+            if (ObjectUtil.hasValue(p.getTerms())) {
                 personTerms.add(p);
             }
         }
@@ -92,7 +93,8 @@ public class JobService {
 
         Set<PersonJob> userJobsToSave = new HashSet<>();
 
-        List<String> terms = Arrays.asList(person.getTerms().split(";"));
+        // Note: terms should be separated by comma
+        List<String> terms = Arrays.asList(person.getTerms().split(","));
 
         for (PortalJob portalJob : portalJobList) {
 
