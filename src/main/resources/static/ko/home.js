@@ -22,6 +22,8 @@ $(document).ready(function(){
             self.cityId = ko.observable(1);
             self.lastJobPagination = ko.mapping.fromJS(HomePagination.getData());
             self.passoPlano = ko.observable(0);
+            self.termsCount = ko.observable(0);
+            self.terms = ko.observableArray([]);
 
             iniciar();
 
@@ -32,6 +34,11 @@ $(document).ready(function(){
                         self.ultimoLogin(dateTime[0] + ' às ' + dateTime[1]);
                     }
                     self.nomePessoa(response.firstName || '');
+
+                    // terms
+                    const termsArray = response.terms.split(',');
+                    self.termsCount(termsArray.length);
+                    self.terms(termsArray);
                 });
 
                 jQ.getJSON('/app/home/all-jobs', (response) => {

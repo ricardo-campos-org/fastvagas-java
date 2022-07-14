@@ -39,10 +39,56 @@
         </div>
 
         <div class="row">
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Vagas neste mês</h3>
+                    <ul class="list-inline two-part">
+                        <li>
+                            <div id="sparklinedash"></div>
+                        </li>
+                        <li class="text-right">
+                            <i class="ti-arrow-up text-success"></i>
+                            <span class="counter text-info" data-bind="text: totalMes"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Vagas nesta semana</h3>
+                    <ul class="list-inline two-part">
+                        <li>
+                            <div id="sparklinedash2"></div>
+                        </li>
+                        <li class="text-right">
+                            <i class="ti-arrow-up text-purple"></i>
+                            <span class="counter text-info" data-bind="text: totalSemana"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-6 col-xs-12">
+                <div class="white-box analytics-info">
+                    <h3 class="box-title">Vagas de hoje</h3>
+                    <ul class="list-inline two-part">
+                        <li>
+                            <div id="sparklinedash3"></div>
+                        </li>
+                        <li class="text-right">
+                            <i class="ti-arrow-up text-info"></i>
+                            <span class="counter text-info" data-bind="text: totalHoje"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notamos que você ainda não configurou -->
+        <div class="row" data-bind="visible: termsCount() === 0">
             <div class="col-xs-12">
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <h4>Notamos que você ainda não personalizou sua busca! &#x1F643</h4>
+                        <h4>Notamos que você ainda não configurou seus filtros de busca! &#x1F643</h4>
                         <p class="mt-md">
                              <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseStartNow" aria-expanded="false" aria-controls="collapseStartNow">
                                  Começe agora mesmo!
@@ -100,61 +146,20 @@
             </div>
         </div>
 
-        <div class="row">
+
+        <!-- Você tem X termos configurados -->
+        <div class="row" data-bind="visible: termsCount() > 0">
             <div class="col-xs-12">
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <h4>Você tem 6 termos configurados!! &#x1F609</h4>
+                        <h4>Você tem <span data-bind="text: termsCount"></span> filtro(s) de busca configurado(s)!! &#x1F609</h4>
+                        <!-- ko foreach: terms -->
                         <p class="mt-md">
-                            Ver ou alterar
+                            - <b data-bind="text: $data"></b>
                         </p>
+                        <!-- /ko -->
                     </li>
                 </ul>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-4 col-sm-6 col-xs-12">
-                <div class="white-box analytics-info">
-                    <h3 class="box-title">Vagas neste mês</h3>
-                    <ul class="list-inline two-part">
-                        <li>
-                            <div id="sparklinedash"></div>
-                        </li>
-                        <li class="text-right">
-                            <i class="ti-arrow-up text-success"></i>
-                            <span class="counter text-info" data-bind="text: totalMes"></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6 col-xs-12">
-                <div class="white-box analytics-info">
-                    <h3 class="box-title">Vagas nesta semana</h3>
-                    <ul class="list-inline two-part">
-                        <li>
-                            <div id="sparklinedash2"></div>
-                        </li>
-                        <li class="text-right">
-                            <i class="ti-arrow-up text-purple"></i>
-                            <span class="counter text-info" data-bind="text: totalSemana"></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-4 col-sm-6 col-xs-12">
-                <div class="white-box analytics-info">
-                    <h3 class="box-title">Vagas de hoje</h3>
-                    <ul class="list-inline two-part">
-                        <li>
-                            <div id="sparklinedash3"></div>
-                        </li>
-                        <li class="text-right">
-                            <i class="ti-arrow-up text-info"></i>
-                            <span class="counter text-info" data-bind="text: totalHoje"></span>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
 
@@ -162,25 +167,23 @@
         <div class="row" data-bind="visible: vagasSelecionadas().length > 0">
             <div class="col-md-12 col-lg-12 col-sm-12">
                 <div class="white-box">
-                    <h3 class="box-title">Últimas vagas selecionadas selecionadas para você</h3>
+                    <h3 class="box-title">Últimas vagas selecionadas para você</h3>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>#</th>
+                                <th>LEITURA</th>
                                 <th>TÍTULO</th>
                                 <th>ORIGEM</th>
-                                <th>PUBLICAÇÃO</th>
                                 <th>DETALHAR</th>
                             </tr>
                             </thead>
                             <tbody data-bind="foreach: vagasSelecionadas">
                             <tr>
-                                <td data-bind="text: $index()+1"></td>
+                                <td data-bind="text: created_at"></td>
                                 <td data-bind="text: name"></td>
-                                <td data-bind="text: portal_id"></td>
-                                <td data-bind="text: published_at"></td>
-                                <td><a href="#">Detalhar</a></td>
+                                <td data-bind="text: portal_name"></td>
+                                <td><a href="#" data-bind="click: $parent.verVaga">Detalhar</a></td>
                             </tr>
                             </tbody>
                         </table>

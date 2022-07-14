@@ -23,13 +23,15 @@ public class HomeService {
     private final CityRepository cityRepository;
     private final PortalJobRepository portalJobRepository;
     private final PortalRepository portalRepository;
+    private final JobService jobService;
 
     @Autowired
     public HomeService(CityRepository cityRepository, PortalJobRepository portalJobRepository,
-                       PortalRepository portalRepository) {
+                       PortalRepository portalRepository, JobService jobService) {
         this.cityRepository = cityRepository;
         this.portalJobRepository = portalJobRepository;
         this.portalRepository = portalRepository;
+        this.jobService = jobService;
     }
 
     public HomeJson getAllJobs(Person person) {
@@ -83,7 +85,7 @@ public class HomeService {
         homeJson.setMonthJobs(cityJobs.size());
         homeJson.setWeekJobs(weekJobs);
         homeJson.setTodayJobs(todayJobs);
-        homeJson.setUserJobPagination(createJobPagination(null, null, null));
+        homeJson.setUserJobPagination(getUserJobs(person, city.get().getId(), null));
         homeJson.setLastJobPagination(getLastJobs(city.get().getId(), null));
         homeJson.setTopJobPagination(createJobPagination(null, null, null));
 
@@ -91,8 +93,28 @@ public class HomeService {
     }
 
     // TODO: implement here
-    public JobPagination getUserJobs(Person person, Integer page) {
-        return new JobPagination();
+    public JobPagination getUserJobs(Person person, Long cityId, Integer page) {
+        if (!ObjectUtil.hasValue(page)) {
+            page = 1;
+        }
+
+        List<PortalJob> portalJobList = jobService.findUserJobsByTermsNotSeen(person.getId());
+
+        Map<Long, String> portalNameMap = getPortalNameMap(cityId);
+
+        List<JobDetail> jobList = new ArrayList<>();
+        portalJobList.forEach((portalJob -> {
+            JobDetail jobDetail = new JobDetail(portalJob);
+            jobDetail.setPortal_name(portalNameMap.get(portalJob.getPortalId()));
+            jobList.add(jobDetail);
+        }));
+
+        long count = portalJobList.size();
+        if (count > 50) {
+            count = 50L;
+        }
+
+        return createJobPagination(jobList, page, count);
     }
 
     public JobPagination getLastJobs(Long cityId, Integer page) {
@@ -100,10 +122,7 @@ public class HomeService {
             page = 1;
         }
 
-        // Map para agilizar
-        Map<Long, String> portalNameMap = new HashMap<>();
-        List<Portal> portals = portalRepository.findAllByCityId(cityId);
-        portals.forEach(portal -> portalNameMap.put(portal.getId(), portal.getName()));
+        Map<Long, String> portalNameMap = getPortalNameMap(cityId);
 
         List<JobDetail> jobList = new ArrayList<>();
 
@@ -143,5 +162,12 @@ public class HomeService {
         pagination.setJobList(jobList);
 
         return pagination;
+    }
+
+    private Map<Long, String> getPortalNameMap(Long cityId) {
+        Map<Long, String> portalNameMap = new HashMap<>();
+        List<Portal> portals = portalRepository.findAllByCityId(cityId);
+        portals.forEach(portal -> portalNameMap.put(portal.getId(), portal.getName()));
+        return portalNameMap;
     }
 }

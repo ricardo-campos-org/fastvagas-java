@@ -39,6 +39,7 @@ public class BaseService {
         userAccountJson.setLastLogin(person.getLastLogin());
         userAccountJson.setCityName(city.getName());
         userAccountJson.setStateName(state.getName());
+        userAccountJson.setTerms(person.getTerms());
         return userAccountJson;
     }
 }
