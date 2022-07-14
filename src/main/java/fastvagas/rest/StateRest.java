@@ -1,7 +1,7 @@
 package fastvagas.rest;
 
-import fastvagas.data.entity.State;
-import fastvagas.data.repository.StateRepository;
+import fastvagas.entity.State;
+import fastvagas.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

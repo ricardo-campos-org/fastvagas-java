@@ -1,11 +1,11 @@
 package fastvagas.service;
 
-import fastvagas.data.entity.Person;
-import fastvagas.data.entity.PortalJob;
-import fastvagas.data.entity.PersonJob;
-import fastvagas.data.repository.PersonJobRepository;
-import fastvagas.data.repository.PersonRepository;
-import fastvagas.data.repository.PortalJobRepository;
+import fastvagas.entity.Person;
+import fastvagas.entity.PortalJob;
+import fastvagas.entity.PersonJob;
+import fastvagas.repository.PersonJobRepository;
+import fastvagas.repository.PersonRepository;
+import fastvagas.repository.PortalJobRepository;
 import fastvagas.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

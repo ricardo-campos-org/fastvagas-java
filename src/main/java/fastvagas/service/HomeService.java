@@ -1,10 +1,10 @@
 package fastvagas.service;
 
-import fastvagas.data.entity.*;
-import fastvagas.data.repository.PortalJobRepository;
-import fastvagas.data.repository.PortalRepository;
+import fastvagas.entity.*;
+import fastvagas.repository.PortalJobRepository;
+import fastvagas.repository.PortalRepository;
 import fastvagas.exception.EntityNotFoundException;
-import fastvagas.data.repository.CityRepository;
+import fastvagas.repository.CityRepository;
 import fastvagas.json.HomeJson;
 import fastvagas.json.JobDetail;
 import fastvagas.json.JobPagination;

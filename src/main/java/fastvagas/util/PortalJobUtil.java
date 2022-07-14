@@ -1,6 +1,6 @@
 package fastvagas.util;
 
-import fastvagas.data.entity.PortalJob;
+import fastvagas.entity.PortalJob;
 
 import java.util.HashMap;
 import java.util.List;

@@ -3,7 +3,8 @@ package fastvagas.data.repository;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import fastvagas.data.entity.Portal;
+import fastvagas.entity.Portal;
+import fastvagas.repository.PortalRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

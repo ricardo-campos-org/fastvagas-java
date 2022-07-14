@@ -1,6 +1,6 @@
 package fastvagas.json;
 
-import fastvagas.data.entity.PortalJob;
+import fastvagas.entity.PortalJob;
 
 import java.time.LocalDateTime;
 

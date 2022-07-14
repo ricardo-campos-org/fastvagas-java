@@ -1,20 +1,20 @@
 package fastvagas.controller;
 
-import fastvagas.data.entity.City;
-import fastvagas.data.entity.Contact;
-import fastvagas.data.entity.CrawlerLog;
-import fastvagas.data.entity.Person;
-import fastvagas.data.entity.PortalJob;
-import fastvagas.data.entity.State;
-import fastvagas.data.repository.ContactRepository;
-import fastvagas.data.repository.PersonRepository;
-import fastvagas.data.repository.PortalJobRepository;
-import fastvagas.data.repository.StateRepository;
+import fastvagas.entity.City;
+import fastvagas.entity.Contact;
+import fastvagas.entity.CrawlerLog;
+import fastvagas.entity.Person;
+import fastvagas.entity.PortalJob;
+import fastvagas.entity.State;
+import fastvagas.repository.ContactRepository;
+import fastvagas.repository.PersonRepository;
+import fastvagas.repository.PortalJobRepository;
+import fastvagas.repository.StateRepository;
 import fastvagas.exception.InvalidEmailException;
-import fastvagas.data.repository.CityRepository;
-import fastvagas.data.repository.CrowlerLogRepository;
+import fastvagas.repository.CityRepository;
+import fastvagas.repository.CrawlerLogRepository;
 import fastvagas.json.PortalJobResponse;
-import fastvagas.service.CrowlerService;
+import fastvagas.service.CrawlerService;
 import fastvagas.service.JobService;
 import fastvagas.service.MailService;
 import fastvagas.util.DateUtil;
@@ -40,22 +40,22 @@ public class GuestController {
     private final PersonRepository personRepository;
     private final ContactRepository contactRepository;
     private final MailService mailService;
-    private final CrowlerService crowlerService;
-    private final CrowlerLogRepository crowlerLogRepository;
+    private final CrawlerService crawlerService;
+    private final CrawlerLogRepository crawlerLogRepository;
     private final PortalJobRepository portalJobRepository;
     private final JobService jobService;
 
     @Autowired
     public GuestController(CityRepository cityRepository, PersonRepository personRepository,
-        ContactRepository contactRepository, MailService mailService, CrowlerService crowlerService,
-        CrowlerLogRepository crowlerLogRepository, PortalJobRepository portalJobRepository,
-        JobService jobService, StateRepository stateRepository) {
+                           ContactRepository contactRepository, MailService mailService, CrawlerService crawlerService,
+                           CrawlerLogRepository crawlerLogRepository, PortalJobRepository portalJobRepository,
+                           JobService jobService, StateRepository stateRepository) {
         this.cityRepository = cityRepository;
         this.personRepository = personRepository;
         this.contactRepository = contactRepository;
         this.mailService = mailService;
-        this.crowlerService = crowlerService;
-        this.crowlerLogRepository = crowlerLogRepository;
+        this.crawlerService = crawlerService;
+        this.crawlerLogRepository = crawlerLogRepository;
         this.portalJobRepository = portalJobRepository;
         this.jobService = jobService;
         this.stateRepository = stateRepository;
@@ -105,10 +105,10 @@ public class GuestController {
         return contact;
     }
 
-    // Crowler tests
-    @PostMapping(value = "/do-crowler", produces = "application/json")
-    public ResponseEntity<?> crowlerTests() {
-        crowlerService.start();
+    // Crawler tests API
+    @PostMapping(value = "/do-crawler", produces = "application/json")
+    public ResponseEntity<?> crawlerTests() {
+        crawlerService.start();
         LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
         jobService.processUserJobs(ultimoMes);
         return ResponseEntity.ok().body("Done");
@@ -118,7 +118,7 @@ public class GuestController {
     public List<CrawlerLog> getLogs() {
         LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
 
-        return crowlerLogRepository.findAllByGreaterDateTime(ontem);
+        return crawlerLogRepository.findAllByGreaterDateTime(ontem);
     }
 
     @GetMapping(value = "/get-jobs", produces = "application/json")

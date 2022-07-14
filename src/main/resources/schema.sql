@@ -93,7 +93,7 @@ CREATE TABLE person_job (
     seen           TIMESTAMP NULL
 );
 
-CREATE TABLE crowler_log (
+CREATE TABLE crawler_log (
     id         SERIAL PRIMARY KEY,
     portal_id  INTEGER NOT NULL REFERENCES portal (id),
     text       VARCHAR(2000) NOT NULL,

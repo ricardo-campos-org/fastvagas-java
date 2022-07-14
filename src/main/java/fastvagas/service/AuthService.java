@@ -1,7 +1,7 @@
 package fastvagas.service;
 
-import fastvagas.data.entity.Person;
-import fastvagas.data.repository.PersonRepository;
+import fastvagas.entity.Person;
+import fastvagas.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

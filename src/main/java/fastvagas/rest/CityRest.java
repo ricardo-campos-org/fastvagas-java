@@ -1,7 +1,7 @@
 package fastvagas.rest;
 
-import fastvagas.data.entity.City;
-import fastvagas.data.repository.CityRepository;
+import fastvagas.entity.City;
+import fastvagas.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package fastvagas.service;
 
-import fastvagas.data.entity.Person;
-import fastvagas.data.repository.PersonRepository;
+import fastvagas.entity.Person;
+import fastvagas.repository.PersonRepository;
 import fastvagas.json.UserAccountJson;
 import fastvagas.util.ObjectUtil;
 import java.util.Optional;
