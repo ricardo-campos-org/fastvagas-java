@@ -31,7 +31,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         final String usernameQuery = "select email, password, enabled "
-            + "from users where email = ?";
+            + "from person where email = ?";
 
         final String authorityQuery = "select email, authority "
             + "from authorities where email = ?";

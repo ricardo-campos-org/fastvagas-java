@@ -27,7 +27,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Optional<Person> personOpt = personRepository.findByEmail(authentication.getName());
         personOpt.ifPresent(person -> {
             person.setLastLogin(LocalDateTime.now());
-            person.setPassword("");
             personRepository.save(person);
         });
 

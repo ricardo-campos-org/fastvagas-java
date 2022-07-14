@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
-
 @SpringBootApplication(scanBasePackages = "fastvagas")
 @EnableScheduling
 public class PostgressApplication {
@@ -22,7 +21,6 @@ public class PostgressApplication {
     private String templatesRoot;
 
     public static void main(String[] args) {
-        // System.out.println("123456: " + new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode("123456"));
         SpringApplication.run(PostgressApplication.class, args);
     }
 

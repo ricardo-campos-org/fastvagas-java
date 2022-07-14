@@ -162,4 +162,9 @@ public class GuestController {
 
         return respList;
     }
+
+    @GetMapping(value = "/password-encoder", produces = MediaType.TEXT_PLAIN_VALUE)
+    public String passwordEncoder(@RequestParam("senha") String senha) {
+        return new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode(senha);
+    }
 }
