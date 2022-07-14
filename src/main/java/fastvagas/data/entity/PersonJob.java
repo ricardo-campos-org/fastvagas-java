@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "person_jobs")
+@Entity(name = "person_job")
 public class PersonJob {
 
     @Id

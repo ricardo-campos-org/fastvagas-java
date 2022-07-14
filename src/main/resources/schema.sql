@@ -42,7 +42,7 @@ CREATE TABLE portal_job (
     created_at      TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX idx_portal_jobs_url ON portal_jobs (job_url);
+CREATE INDEX idx_portal_jobs_url ON portal_job (job_url);
 
 CREATE TABLE person (
     id          SERIAL PRIMARY KEY,
@@ -67,24 +67,24 @@ CREATE TABLE authorities (
 );
 
 -- Don't needed for now
-CREATE TABLE payment (
-    id        SERIAL PRIMARY KEY,
-    person_id INTEGER NOT NULL REFERENCES person (id),
-    amount    DECIMAL(6, 2) NOT NULL,
-    due_date  DATE NOT NULL,
-    payday    TIMESTAMP NULL
-);
+--CREATE TABLE payment (
+--    id        SERIAL PRIMARY KEY,
+--    person_id INTEGER NOT NULL REFERENCES person (id),
+--    amount    DECIMAL(6, 2) NOT NULL,
+--    due_date  DATE NOT NULL,
+--    payday    TIMESTAMP NULL
+--);
 
 -- Don't needed for now
-CREATE TABLE plan (
-    id          SERIAL PRIMARY KEY,
-    name        VARCHAR(50) NOT NULL,
-    description VARCHAR(300) NOT NULL,
-    amount      DECIMAL(6, 2) NOT NULL,
-    plan_type   CHAR(1) NOT NULL, -- 1-semanal, 2-mensal, 3-anual
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    disabled_at TIMESTAMP NULL
-);
+--CREATE TABLE plan (
+--    id          SERIAL PRIMARY KEY,
+--    name        VARCHAR(50) NOT NULL,
+--    description VARCHAR(300) NOT NULL,
+--    amount      DECIMAL(6, 2) NOT NULL,
+--    plan_type   CHAR(1) NOT NULL, -- 1-semanal, 2-mensal, 3-anual
+--    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+--    disabled_at TIMESTAMP NULL
+--);
 
 CREATE TABLE person_job (
     id             SERIAL PRIMARY KEY,

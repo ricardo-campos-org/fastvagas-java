@@ -1,6 +1,6 @@
 package fastvagas.data.repository;
 
-import fastvagas.data.entity.CrowlerLog;
+import fastvagas.data.entity.CrawlerLog;
 import fastvagas.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,30 +18,30 @@ public class CrowlerLogCustomRepositoryImpl implements CrowlerLogCustomRepositor
     private EntityManager entityManager;
 
     @Override
-    public List<CrowlerLog> findAllByGreaterDateTime(LocalDateTime localDateTime) {
+    public List<CrawlerLog> findAllByGreaterDateTime(LocalDateTime localDateTime) {
         final String query = "SELECT * FROM crowler_log "
                 + "WHERE created_at >= ?1 "
                 + "ORDER BY created_at, id";
         log.info("SQL: {}", query);
-        Query q = entityManager.createNativeQuery(query, CrowlerLog.class);
+        Query q = entityManager.createNativeQuery(query, CrawlerLog.class);
         q.setParameter(1, localDateTime);
         List<?> list = q.getResultList();
         log.info("{} row(s)", list.size());
-        return (List<CrowlerLog>) list;
+        return (List<CrawlerLog>) list;
     }
 
     @Override
-    public List<CrowlerLog> fromStringArray(String[] logs, Long portal_id) {
-        List<CrowlerLog> crowlerLogs = new ArrayList<>(logs.length);
+    public List<CrawlerLog> fromStringArray(String[] logs, Long portal_id) {
+        List<CrawlerLog> crawlerLogs = new ArrayList<>(logs.length);
         for (String log : logs) {
-            CrowlerLog crowlerLog = CrowlerLog.builder()
+            CrawlerLog crawlerLog = CrawlerLog.builder()
                     .createdAt(DateUtil.getCurrentLocalDateTime())
                     .portalId(portal_id)
                     .text(log)
                     .build();
-            crowlerLogs.add(crowlerLog);
+            crawlerLogs.add(crawlerLog);
         }
 
-        return crowlerLogs;
+        return crawlerLogs;
     }
 }

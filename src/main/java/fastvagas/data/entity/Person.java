@@ -54,6 +54,9 @@ public class Person {
     @Column(name = "disabled_at")
     private LocalDateTime disabledAt;
 
+    @Column(name = "terms")
+    private String terms;
+
     @Override
     public String toString() {
         return "Person{" +
@@ -67,6 +70,7 @@ public class Person {
                 ", lastLogin=" + lastLogin +
                 ", createdAt=" + createdAt +
                 ", disabledAt=" + disabledAt +
+                ", terms='" + terms + '\'' +
                 '}';
     }
 }

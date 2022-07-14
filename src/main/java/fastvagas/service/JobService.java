@@ -3,10 +3,8 @@ package fastvagas.service;
 import fastvagas.data.entity.Person;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.data.entity.PersonJob;
-import fastvagas.data.entity.PersonTerm;
 import fastvagas.data.repository.PersonJobRepository;
 import fastvagas.data.repository.PersonRepository;
-import fastvagas.data.repository.PersonTermRepository;
 import fastvagas.data.repository.PortalJobRepository;
 import fastvagas.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -29,15 +27,13 @@ public class JobService {
 
     private final PortalJobRepository portalJobRepository;
     private final PersonJobRepository personJobRepository;
-    private final PersonTermRepository personTermRepository;
     private final PersonRepository personRepository;
 
     @Autowired
     public JobService(PortalJobRepository portalJobRepository, PersonJobRepository personJobRepository,
-                      PersonTermRepository personTermRepository, PersonRepository personRepository) {
+                      PersonRepository personRepository) {
         this.portalJobRepository = portalJobRepository;
         this.personJobRepository = personJobRepository;
-        this.personTermRepository = personTermRepository;
         this.personRepository = personRepository;
     }
 
@@ -73,22 +69,21 @@ public class JobService {
             return;
         }
 
-        Set<PersonTerm> personTerms = new HashSet<>();
+        Set<Person> personTerms = new HashSet<>();
 
         for (Person p : enabledUsers) {
-            List<PersonTerm> userTerms = personTermRepository.findAllByPersonId(p.getId());
-            if (!userTerms.isEmpty()) {
-                personTerms.addAll(userTerms);
+            if (!p.getTerms().isEmpty()) {
+                personTerms.add(p);
             }
         }
 
-        for (PersonTerm personTerm : personTerms) {
+        for (Person personTerm : personTerms) {
             processUserJobs(personTerm, startingAt);
         }
     }
 
-    public void processUserJobs(PersonTerm personTerm, LocalDateTime startingAt) {
-        final Long personId = personTerm.getPersonId();
+    public void processUserJobs(Person person, LocalDateTime startingAt) {
+        final Long personId = person.getId();
         log.info("ProcessUserJobs starting at {} for user {}", DateUtil.formatLocalDateTime(startingAt), personId);
 
         List<PortalJob> portalJobList = portalJobRepository.findAllByCreatedStartingAt(startingAt);
@@ -97,20 +92,20 @@ public class JobService {
 
         Set<PersonJob> userJobsToSave = new HashSet<>();
 
-        List<String> terms = Arrays.asList(personTerm.getTerms().split(";"));
+        List<String> terms = Arrays.asList(person.getTerms().split(";"));
 
         for (PortalJob portalJob : portalJobList) {
 
             Boolean match = check(portalJob.getJobTitle(), terms);
             if (match) {
                 long count = personJobRepository
-                    .findAllByPersonId(personTerm.getPersonId())
+                    .findAllByPersonId(person.getId())
                     .stream().filter(pj -> pj.getPortalJobId().equals(portalJob.getId()))
                     .count();
 
                 if (count == 0L) {
                     PersonJob userJob = PersonJob.builder()
-                            .personId(personTerm.getPersonId())
+                            .personId(person.getId())
                             .portalJobId(portalJob.getId())
                             .seen(null)
                             .build();

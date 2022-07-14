@@ -2,14 +2,12 @@ package fastvagas.controller;
 
 import fastvagas.data.entity.City;
 import fastvagas.data.entity.Contact;
-import fastvagas.data.entity.CrowlerLog;
+import fastvagas.data.entity.CrawlerLog;
 import fastvagas.data.entity.Person;
-import fastvagas.data.entity.PersonTerm;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.data.entity.State;
 import fastvagas.data.repository.ContactRepository;
 import fastvagas.data.repository.PersonRepository;
-import fastvagas.data.repository.PersonTermRepository;
 import fastvagas.data.repository.PortalJobRepository;
 import fastvagas.data.repository.StateRepository;
 import fastvagas.exception.InvalidEmailException;
@@ -46,14 +44,12 @@ public class GuestController {
     private final CrowlerLogRepository crowlerLogRepository;
     private final PortalJobRepository portalJobRepository;
     private final JobService jobService;
-    private final PersonTermRepository personTermRepository;
 
     @Autowired
     public GuestController(CityRepository cityRepository, PersonRepository personRepository,
         ContactRepository contactRepository, MailService mailService, CrowlerService crowlerService,
         CrowlerLogRepository crowlerLogRepository, PortalJobRepository portalJobRepository,
-        JobService jobService, StateRepository stateRepository, PersonTermRepository
-        personTermRepository) {
+        JobService jobService, StateRepository stateRepository) {
         this.cityRepository = cityRepository;
         this.personRepository = personRepository;
         this.contactRepository = contactRepository;
@@ -63,7 +59,6 @@ public class GuestController {
         this.portalJobRepository = portalJobRepository;
         this.jobService = jobService;
         this.stateRepository = stateRepository;
-        this.personTermRepository = personTermRepository;
     }
 
     // New account modal form URLs
@@ -120,7 +115,7 @@ public class GuestController {
     }
 
     @GetMapping(value = "/get-logs", produces = "application/json")
-    public List<CrowlerLog> getLogs() {
+    public List<CrawlerLog> getLogs() {
         LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
 
         return crowlerLogRepository.findAllByGreaterDateTime(ontem);
@@ -145,8 +140,11 @@ public class GuestController {
     public ResponseEntity<?> reprocessUser(@RequestBody Person person) {
         try {
             LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
-            List<PersonTerm> personTerms = personTermRepository.findAllByPersonId(person.getId());
-            jobService.processUserJobs(personTerms.get(0), ultimoMes);
+            Optional<Person> personDb = personRepository.findById(person.getId());
+            if (personDb.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            jobService.processUserJobs(personDb.get(), ultimoMes);
             return ResponseEntity.ok().body("Done");
         } catch (Exception e) {
             e.printStackTrace();

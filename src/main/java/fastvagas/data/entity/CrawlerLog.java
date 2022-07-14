@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(name = "crowler_log")
-public class CrowlerLog {
+@Entity(name = "crawler_log")
+public class CrawlerLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

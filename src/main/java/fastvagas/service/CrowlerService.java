@@ -3,7 +3,7 @@ package fastvagas.service;
 import fastvagas.crowler.Crowler;
 import fastvagas.crowler.CrowlerFactory;
 import fastvagas.data.entity.City;
-import fastvagas.data.entity.CrowlerLog;
+import fastvagas.data.entity.CrawlerLog;
 import fastvagas.data.entity.Portal;
 import fastvagas.data.entity.PortalJob;
 import fastvagas.data.repository.*;
@@ -118,8 +118,8 @@ public class CrowlerService {
             log.info(logsToSave[count]);
 
             // saving log
-            List<CrowlerLog> crowlerLogs = crowlerLogRepository.fromStringArray(logsToSave, portal.getId());
-            crowlerLogRepository.saveAll(crowlerLogs);
+            List<CrawlerLog> crawlerLogs = crowlerLogRepository.fromStringArray(logsToSave, portal.getId());
+            crowlerLogRepository.saveAll(crawlerLogs);
         }
     }
 
