@@ -60,4 +60,7 @@ else ifeq ($(env),prod)
     -jar target/prod-1.0.jar
 endif
 
+.PHONY: update-frontend
+update-frontend:
+	bash ./scripts/update-frontend.sh
 
