@@ -1,12 +1,17 @@
-# Fast Vagas
+# fastvagas-java
+[Side Project] Service to find jobs published openly on the web. This service do crawler to find jobs and parse HTML.
 
-This is a service that can help you find jobs, based on terms of search, it'll bring to you everything that matches.
-
-# Getting Started
-
-Unfortunately, this app is not hosted yet.
-
-# Developer corner
+# Tech stack
+- [x] Back-end
+- [x] Front-end
+- [x] Docker
+- [x] Database related
+- [x] Testing
+- [x] Maven
+- [x] NPM
+- [x] Java related
+- [ ] JavaScript/TypeScript/React related
+- [ ] Shell scripting
 
 ## Requirements
 
