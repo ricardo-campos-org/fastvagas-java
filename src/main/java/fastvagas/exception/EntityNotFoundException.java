@@ -6,8 +6,15 @@ import java.util.Map;
 import java.util.stream.IntStream;
 import org.springframework.http.HttpStatus;
 
+/** This class represents an error when a given database entity is not found. */
 public class EntityNotFoundException extends GeneralException {
 
+  /**
+   * Creates an instance of EntityNotFoundException.
+   *
+   * @param classe all classes that were trying to be found.
+   * @param searchParamsMap all parameters.
+   */
   public EntityNotFoundException(Class<?> classe, Object... searchParamsMap) {
     super(
         EntityNotFoundException.generateMessage(

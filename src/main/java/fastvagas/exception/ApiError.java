@@ -1,8 +1,13 @@
 package fastvagas.exception;
 
 import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+/** This class represents an error on the API. */
+@Getter
+@Setter
 public class ApiError {
 
   private HttpStatus status;
@@ -33,35 +38,4 @@ public class ApiError {
     this.debugMessage = ex.getLocalizedMessage();
   }
 
-  public HttpStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(HttpStatus status) {
-    this.status = status;
-  }
-
-  public Date getDate() {
-    return date;
-  }
-
-  public void setDate(Date date) {
-    this.date = date;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  public String getDebugMessage() {
-    return debugMessage;
-  }
-
-  public void setDebugMessage(String debugMessage) {
-    this.debugMessage = debugMessage;
-  }
 }
