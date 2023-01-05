@@ -16,7 +16,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Compilation
-        run: ./mvnw --no-transfer-progress clean compile
+        run: ./mvnw --no-transfer-progress clean compile -DskipTests
       - name: Google Checkstyle
         run: ./mvnw --no-transfer-progress checkstyle:checkstyle -Dskip.checkstyle=false
       - name: Unit tests

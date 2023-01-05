@@ -1,11 +1,10 @@
 package fastvagas.crawler;
 
 import fastvagas.entity.PortalJob;
-import org.jsoup.nodes.Document;
-
 import java.util.List;
+import org.jsoup.nodes.Document;
 
 public interface Crawler {
 
-    List<PortalJob> findJobs(Document document);
+  List<PortalJob> findJobs(Document document);
 }

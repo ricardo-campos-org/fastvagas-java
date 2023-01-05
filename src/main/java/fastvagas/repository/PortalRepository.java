@@ -1,17 +1,16 @@
 package fastvagas.repository;
 
 import fastvagas.entity.Portal;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface PortalRepository extends JpaRepository<Portal, Long> {
 
-    List<Portal> findAll();
+  List<Portal> findAll();
 
-    List<Portal> findAllByEnabled(Boolean enabled);
+  List<Portal> findAllByEnabled(Boolean enabled);
 
-    List<Portal> findAllByCityId(Long city_id);
+  List<Portal> findAllByCityId(Long city_id);
 }

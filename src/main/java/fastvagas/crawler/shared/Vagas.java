@@ -1,4 +1,3 @@
 package fastvagas.crawler.shared;
 
-public class Vagas {
-}
+public class Vagas {}
