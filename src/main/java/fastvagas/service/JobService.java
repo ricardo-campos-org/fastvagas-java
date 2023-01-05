@@ -17,18 +17,30 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** This class contains useful method to retrieve jobs information. */
 @Slf4j
+@Setter
 @Service
+@NoArgsConstructor
 public class JobService {
 
-  private final PortalJobRepository portalJobRepository;
-  private final PersonJobRepository personJobRepository;
-  private final PersonRepository personRepository;
+  private PortalJobRepository portalJobRepository;
+  private PersonJobRepository personJobRepository;
+  private PersonRepository personRepository;
 
+  /**
+   * Creates an instance of JobService.
+   *
+   * @param portalJobRepository portalJobRepository instance
+   * @param personJobRepository personJobRepository instance
+   * @param personRepository personRepository instance
+   */
   @Autowired
   public JobService(
       PortalJobRepository portalJobRepository,
@@ -39,6 +51,12 @@ public class JobService {
     this.personRepository = personRepository;
   }
 
+  /**
+   * Find all user jobs from a userId that match user's terms and had not been seen yet.
+   *
+   * @param personId Person id
+   * @return A list of jobs or an empty list.
+   */
   public List<PortalJob> findUserJobsByTermsNotSeen(Long personId) {
     if (Optional.ofNullable(personId).isEmpty()) {
       throw new RuntimeException("User id not provided!!");
@@ -63,6 +81,11 @@ public class JobService {
     return portalJobList;
   }
 
+  /**
+   * Process a list of jobs and a list of users' terms.
+   *
+   * @param startingAt Date and time to start from
+   */
   public void processUserJobs(LocalDateTime startingAt) {
     List<Person> enabledUsers = personRepository.findAllByEnabled(Boolean.TRUE);
     if (enabledUsers.isEmpty()) {
@@ -82,6 +105,12 @@ public class JobService {
     }
   }
 
+  /**
+   * Process a list of jobs and a list of users' terms.
+   *
+   * @param person Person to locate
+   * @param startingAt Date and time to start from
+   */
   public void processUserJobs(Person person, LocalDateTime startingAt) {
     final Long personId = person.getId();
     log.info(

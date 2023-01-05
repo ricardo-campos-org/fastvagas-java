@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,16 +31,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/** This class contains all routines related to a crawler job. */
+@Setter
 @Slf4j
 @Service
+@NoArgsConstructor
 public class CrawlerService {
 
-  private final PortalRepository portalRepository;
-  private final PortalJobRepository portalJobRepository;
-  private final CityRepository cityRepository;
-  private final CrawlerLogRepository crawlerLogRepository;
-  private final MailService mailService;
+  private PortalRepository portalRepository;
+  private PortalJobRepository portalJobRepository;
+  private CityRepository cityRepository;
+  private CrawlerLogRepository crawlerLogRepository;
+  private MailService mailService;
 
+  /**
+   * Creates an instance of CrawlerService.
+   *
+   * @param portalRepository portalRepository instance
+   * @param portalJobRepository portalJobRepository instance
+   * @param cityRepository cityRepository instance
+   * @param crawlerLogRepository crawlerLogRepository instance
+   * @param mailService mailService instance
+   */
   @Autowired
   public CrawlerService(
       PortalRepository portalRepository,
@@ -53,6 +67,9 @@ public class CrawlerService {
     this.mailService = mailService;
   }
 
+  /**
+   * Starts the process of seeking for jobs.
+   */
   @Transactional()
   public void start() {
     List<Portal> portals = portalRepository.findAll();
@@ -134,6 +151,13 @@ public class CrawlerService {
     }
   }
 
+  /**
+   * Finds a list of jobs based on a Portal and a City.
+   *
+   * @param portal Portal to be used as search parameter.
+   * @param city City to be used as search parameter.
+   * @return A list of PortalJob containing all PortalJob found or an empty list.
+   */
   public List<PortalJob> findJobs(Portal portal, City city) {
     try {
       Document doc = Jsoup.connect(portal.getJobsUrl()).ignoreHttpErrors(true).get();
@@ -167,13 +191,13 @@ public class CrawlerService {
     return Boolean.FALSE;
   }
 
-  private List<CrawlerLog> fromStringArray(String[] logs, Long portal_id) {
+  private List<CrawlerLog> fromStringArray(String[] logs, Long portalId) {
     List<CrawlerLog> crawlerLogs = new ArrayList<>(logs.length);
     for (String log : logs) {
       CrawlerLog crawlerLog =
           CrawlerLog.builder()
               .createdAt(DateUtil.getCurrentLocalDateTime())
-              .portalId(portal_id)
+              .portalId(portalId)
               .text(log)
               .build();
       crawlerLogs.add(crawlerLog);

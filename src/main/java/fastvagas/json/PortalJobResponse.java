@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** This class represents a response from a Portal Job query. */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,17 +25,13 @@ public class PortalJobResponse {
   private LocalDateTime createdAt;
   private String share;
 
+  /**
+   * Create a PortalJobResponse from a PortalJob.
+   *
+   * @param portalJob a PortalJob instance to be used
+   * @return a PortalJobResponse instance.
+   */
   public static PortalJobResponse fromPortalJob(PortalJob portalJob) {
-    PortalJobResponse pjr =
-        PortalJobResponse.builder()
-            .portalJobId(portalJob.getId())
-            .name(portalJob.getJobTitle())
-            .company(portalJob.getCompanyName())
-            .description(portalJob.getJobDescription())
-            .url(portalJob.getJobUrl())
-            .createdAt(portalJob.getCreatedAt())
-            .build();
-
     String share = portalJob.getJobTitle() + " - ";
     if (ObjectUtil.hasValue(portalJob.getCompanyName())) {
       share += portalJob.getCompanyName() + " - ";
@@ -46,6 +43,16 @@ public class PortalJobResponse {
     }
     share += description.substring(start) + " - ";
     share += portalJob.getJobUrl();
+
+    PortalJobResponse pjr =
+        PortalJobResponse.builder()
+            .portalJobId(portalJob.getId())
+            .name(portalJob.getJobTitle())
+            .company(portalJob.getCompanyName())
+            .description(portalJob.getJobDescription())
+            .url(portalJob.getJobUrl())
+            .createdAt(portalJob.getCreatedAt())
+            .build();
     pjr.setShare(share);
 
     return pjr;
