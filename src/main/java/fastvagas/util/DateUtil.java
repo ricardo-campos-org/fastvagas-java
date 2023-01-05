@@ -13,9 +13,10 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.TimeZone;
 
+/** This class contains useful Date and Time conversions and parsers. */
 public class DateUtil {
 
-  public static Integer getMonthFromDate(Date pDate) {
+  public static int getMonthFromDate(Date pDate) {
     Calendar c = Calendar.getInstance();
     c.setTime(pDate);
     return c.get(Calendar.MONTH) + 1;
