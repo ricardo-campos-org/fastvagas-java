@@ -21,16 +21,16 @@ jobs:
         run: ./mvnw --no-transfer-progress checkstyle:checkstyle -Dcheckstyle.skip=false
       - name: Tests and Coverage
         run: ./mvnw test
-      - name: Log Coverage
-        run: |
-          echo "Coverage = ${{ steps.jacoco.outputs.coverage }}"
-          echo "Branch Coverage = ${{ steps.jacoco.outputs.branches }}"
       - name: JaCoco
         uses: cicirello/jacoco-badge-generator@v2
         id: jacoco
         with:
           generate-branches-badge: true
-          jacoco-csv-file: target/coverage-reports/jacoco.csv
+          jacoco-csv-file: target/coverage-reports/merged-reports/jacoco.csv
+      - name: Log Coverage
+        run: |
+          echo "Coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "Branch Coverage = ${{ steps.jacoco.outputs.branches }}"
       - name: Commit badge
         uses: EndBug/add-and-commit@v9
         with:
