@@ -18,9 +18,11 @@ jobs:
       - name: Compilation
         run: ./mvnw --no-transfer-progress clean compile
       - name: Google Checkstyle
-        run: ./mvnw --no-transfer-progress checkstyle:checkstyle -Dcheckstyle.skip=false
-      - name: Tests and Coverage
-        run: ./mvnw test
+        run: ./mvnw --no-transfer-progress checkstyle:checkstyle -Dskip.checkstyle=false
+      - name: Unit tests
+        run: ./mvnw clean test
+      - name: Integration tests
+        run: ./mvnw verify
       - name: JaCoco
         uses: cicirello/jacoco-badge-generator@v2
         id: jacoco
@@ -34,8 +36,7 @@ jobs:
       - name: Commit badge
         uses: EndBug/add-and-commit@v9
         with:
-          author_name: Ci Bot
-          author_email: cibot
+          default_author: github_actions
           message: 'ci: update jacoco badges'
           add: '*.svg'
       - name: SonarCloud
