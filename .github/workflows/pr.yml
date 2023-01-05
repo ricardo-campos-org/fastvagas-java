@@ -1,0 +1,74 @@
+name: PR
+
+on:
+  pull_request:
+
+jobs:
+  compilation:
+    name: Code Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Compilation
+        run: ./mvnw --no-transfer-progress clean compile
+      - name: Google Checkstyle
+        run: ./mvnw --no-transfer-progress checkstyle:checkstyle -Dskip.checkstyle=false
+      - name: Unit tests
+        run: ./mvnw clean test
+      - name: Integration tests
+        run: ./mvnw verify
+      - name: JaCoco
+        uses: cicirello/jacoco-badge-generator@v2
+        id: jacoco
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: target/coverage-reports/merged-reports/jacoco.csv
+      - name: Log Coverage
+        run: |
+          echo "Coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "Branch Coverage = ${{ steps.jacoco.outputs.branches }}"
+      - name: Commit badge
+        uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions
+          message: 'ci: update jacoco badges'
+          add: '*.svg'
+      - name: SonarCloud
+        run: ./mvnw --no-transfer-progress clean verify package test sonar:sonar -Dsonar.projectKey=aaa -Dsonar.coverage.jacoco.xmlReportPaths=target/coverage-reports/jacoco.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    needs:
+      - compilation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Init CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          debug: true
+          language: java
+      - name: Configure JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Auto Build
+        uses: github/codeql-action/autobuild@v2
+      - name: CodeQL
+        uses: github/codeql-action/analyze@v2
+
