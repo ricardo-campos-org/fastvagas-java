@@ -15,7 +15,7 @@
 
 ## Requirements
 
-- Java OpenJDK 11 (I recommend [sdkman](https://sdkman.io/install))
+- Java OpenJDK 17 (I recommend [sdkman](https://sdkman.io/install))
 - Maven (You can use sdkman)
 - Docker
 
