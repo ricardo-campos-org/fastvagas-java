@@ -196,7 +196,7 @@ public class CrawlerService {
     for (String log : logs) {
       CrawlerLog crawlerLog =
           CrawlerLog.builder()
-              .createdAt(DateUtil.getCurrentLocalDateTime())
+              .createdAt(LocalDateTime.now())
               .portalId(portalId)
               .text(log)
               .build();

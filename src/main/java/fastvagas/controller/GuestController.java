@@ -132,7 +132,7 @@ public class GuestController {
   @PostMapping(value = "/do-crawler", produces = "application/json")
   public ResponseEntity<?> crawlerTests() {
     crawlerService.start();
-    LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
+    LocalDateTime ultimoMes = LocalDateTime.now().minusDays(31L);
     jobService.processUserJobs(ultimoMes);
     return ResponseEntity.ok().body("Done");
   }
@@ -144,7 +144,7 @@ public class GuestController {
    */
   @GetMapping(value = "/get-logs", produces = "application/json")
   public List<CrawlerLog> getLogs() {
-    LocalDateTime ontem = DateUtil.getCurrentLocalDateTime().minusDays(1L);
+    LocalDateTime ontem = LocalDateTime.now().minusDays(1L);
 
     return crawlerLogRepository.findAllByGreaterDateTime(ontem);
   }
@@ -156,7 +156,7 @@ public class GuestController {
    */
   @GetMapping(value = "/get-jobs", produces = "application/json")
   public List<PortalJobResponse> getJobs() {
-    LocalDateTime semanaAtual = DateUtil.getCurrentLocalDateTime().minusDays(7L);
+    LocalDateTime semanaAtual = LocalDateTime.now().minusDays(7L);
 
     List<PortalJob> portalJobList = portalJobRepository.findAllByCreatedAtStartingAt(semanaAtual);
     List<PortalJobResponse> respList = new ArrayList<>(portalJobList.size());
@@ -179,7 +179,7 @@ public class GuestController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> reprocessUser(@RequestBody Person person) {
     try {
-      LocalDateTime ultimoMes = DateUtil.getCurrentLocalDateTime().minusDays(31L);
+      LocalDateTime ultimoMes = LocalDateTime.now().minusDays(31L);
       Optional<Person> personDb = personRepository.findById(person.getId());
       if (personDb.isEmpty()) {
         return ResponseEntity.noContent().build();
