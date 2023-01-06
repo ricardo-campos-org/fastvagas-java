@@ -13,6 +13,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.PAT }}
+          ref: ${{ github.event.pull_request.head.ref }}
       - name: Configure JDK
         uses: actions/setup-java@v3
         with:
@@ -42,6 +43,7 @@ jobs:
           default_author: github_actions
           message: 'ci: update jacoco badges'
           add: '*.svg'
+          fetch: false
       - name: SonarCloud
         run: ./mvnw --no-transfer-progress clean verify package test sonar:sonar -Dsonar.projectKey=aaa -Dsonar.coverage.jacoco.xmlReportPaths=target/coverage-reports/jacoco.xml
         env:
