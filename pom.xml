@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.ondetemvagas</groupId>
-    <artifactId>webapp</artifactId>
+    <artifactId>fast-jobs</artifactId>
     <version>1.0</version>
     <name>Fast Jobs</name>
     <description>Demo project for Spring Boot</description>
@@ -23,6 +23,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <skip.checkstyle>true</skip.checkstyle>
+        <sonar.organization>ricardo-campos-org</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
