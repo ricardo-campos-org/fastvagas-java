@@ -1,4 +1,3 @@
 package fastvagas.crawler.shared;
 
-public class TrabalhaBrasil {
-}
+public class TrabalhaBrasil {}
