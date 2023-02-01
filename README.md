@@ -72,3 +72,16 @@ Cleaning up Docker Compose:
 ```bash
 docker-compose down --remove-orphans
 ```
+## Tests
+
+You can run all tests with:
+```bash
+./mvnw --no-transfer-progress clean verify package test
+```
+
+## Checkstyle
+
+And before making any changes, make sure the checkstyle is passing
+```bash
+./mvnw --no-transfer-progress checkstyle:checkstyle -Dskip.checkstyle=false
+```
