@@ -23,7 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestInstance(Lifecycle.PER_CLASS)
-class GuestControllerIt {
+class ApiControllerIt {
 
   private MockMvc mockMvc;
 

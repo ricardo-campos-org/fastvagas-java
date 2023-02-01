@@ -3,6 +3,7 @@ package fastvagas.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.springframework.lang.NonNull;
 
 public class StringUtil {
@@ -61,5 +62,17 @@ public class StringUtil {
     }
 
     return sb.toString();
+  }
+
+  public static String fixMaxLength(String text, Integer max) {
+    if (text.isEmpty() || text.isBlank()) {
+      return text;
+    }
+
+    if (text.length() > max) {
+      return text.substring(0, max);
+    }
+
+    return text;
   }
 }

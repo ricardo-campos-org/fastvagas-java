@@ -2,26 +2,20 @@ package fastvagas.service;
 
 import fastvagas.crawler.Crawler;
 import fastvagas.crawler.CrawlerFactory;
-import fastvagas.entity.City;
-import fastvagas.entity.CrawlerLog;
+import fastvagas.entity.Job;
 import fastvagas.entity.Portal;
-import fastvagas.entity.PortalJob;
-import fastvagas.repository.CityRepository;
-import fastvagas.repository.CrawlerLogRepository;
-import fastvagas.repository.PortalJobRepository;
+import fastvagas.repository.JobRepository;
 import fastvagas.repository.PortalRepository;
-import fastvagas.util.DateUtil;
 import fastvagas.util.PortalJobUtil;
 import fastvagas.util.StringUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Set;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,37 +33,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class CrawlerService {
 
   private PortalRepository portalRepository;
-  private PortalJobRepository portalJobRepository;
-  private CityRepository cityRepository;
-  private CrawlerLogRepository crawlerLogRepository;
+  private JobRepository jobRepository;
   private MailService mailService;
 
   /**
    * Creates an instance of CrawlerService.
    *
-   * @param portalRepository portalRepository instance
-   * @param portalJobRepository portalJobRepository instance
-   * @param cityRepository cityRepository instance
-   * @param crawlerLogRepository crawlerLogRepository instance
-   * @param mailService mailService instance
+   * @param portalRepository {@link PortalRepository} instance
+   * @param jobRepository {@link JobRepository} instance
+   * @param mailService {@link MailService} instance
    */
   @Autowired
   public CrawlerService(
-      PortalRepository portalRepository,
-      PortalJobRepository portalJobRepository,
-      CityRepository cityRepository,
-      CrawlerLogRepository crawlerLogRepository,
-      MailService mailService) {
+      PortalRepository portalRepository, JobRepository jobRepository, MailService mailService) {
     this.portalRepository = portalRepository;
-    this.portalJobRepository = portalJobRepository;
-    this.cityRepository = cityRepository;
-    this.crawlerLogRepository = crawlerLogRepository;
+    this.jobRepository = jobRepository;
     this.mailService = mailService;
   }
 
-  /**
-   * Starts the process of seeking for jobs.
-   */
+  /** Starts the process of seeking for jobs. */
   @Transactional()
   public void start() {
     List<Portal> portals = portalRepository.findAll();
@@ -78,91 +60,78 @@ public class CrawlerService {
       return;
     }
 
-    Map<Long, City> cityCache =
-        cityRepository.findAll().stream()
-            .collect(Collectors.toMap(City::getId, Function.identity()));
+    StringBuilder logsToWrite = new StringBuilder();
+    LocalDateTime oneMonthPast = LocalDateTime.now().minusMonths(1L);
+    char cr = '\n';
 
-    for (Portal portal : portals) {
-      int count = 0;
-      City city = cityCache.get(portal.getCityId());
-      if (city == null) {
-        log.warn("City id not mapped: {}", portal.getCityId());
-        continue;
-      }
+    Set<Portal> portalSet = new HashSet<>(portalRepository.findAllByEnabled(Boolean.TRUE));
+    portalSet.forEach(
+        portal -> {
+          String template = "Starting crawler on %s - %s/%s.";
+          String message =
+              String.format(template, portal.getName(), portal.getCity(), portal.getState());
 
-      String[] logsToSave = new String[7];
+          log.info(message);
+          logsToWrite.append(template).append(cr);
 
-      logsToSave[count] =
-          "Starting crawler for " + portal.getName() + " portal (city of " + city.getName() + ").";
-      log.info(logsToSave[count++]);
+          List<Job> jobList = findJobs(portal);
+          if (jobList.isEmpty()) {
+            message = "No new jobs found!";
+            log.info(message);
+            logsToWrite.append(message).append(cr);
+          } else {
+            message = jobList.size() + " new job(s) found on the portal.";
+            logsToWrite.append(message).append(cr);
 
-      List<PortalJob> portalJobList = findJobs(portal, city);
+            // Last 30 days jobs for this portal - to compare to see if it's new
+            List<Job> savedList =
+                jobRepository.findAllByPortalId(portal.getId()).stream()
+                    .filter(x -> x.getCreatedAt().isAfter(oneMonthPast))
+                    .toList();
 
-      if (portalJobList.isEmpty()) {
-        logsToSave[count] = "Zero jobs received from the portal. Going to next";
-        log.info(logsToSave[count]);
+            Map<String, Job> portalJobMap = PortalJobUtil.listToMapByUrl(savedList);
 
-        String[] smallCopy = new String[2];
-        Arrays.asList(logsToSave).subList(0, 2).toArray(smallCopy);
-        crawlerLogRepository.saveAll(fromStringArray(smallCopy, portal.getId()));
-        continue;
-      }
+            message = portalJobMap.size() + " job(s) already saved at this portal.";
+            logsToWrite.append(message).append(cr);
 
-      logsToSave[count] = portalJobList.size() + " job(s) received from the portal.";
-      log.info(logsToSave[count++]);
+            List<Job> jobToSave = new ArrayList<>();
+            message = "Iterating over job list received, looking for new jobs...";
+            log.info(message);
+            logsToWrite.append(message).append(cr);
 
-      // Last 30 days jobs for this portal
-      logsToSave[count] = "Finding last 30 days jobs from this portal...";
-      log.info(logsToSave[count++]);
-      LocalDateTime oneMonthPast = LocalDateTime.now().minusMonths(1L);
-      List<PortalJob> savedList =
-          portalJobRepository.findAllByPortalId(portal.getId()).stream()
-              .filter(x -> x.getCreatedAt().isAfter(oneMonthPast))
-              .collect(Collectors.toList());
+            for (Job job : jobList) {
+              // Save the job, if it's not already saved
+              if (!portalJobMap.containsKey(job.getJobUrl())) {
+                job.setPortalId(portal.getId());
+                jobToSave.add(job);
+              }
+            }
 
-      Map<String, PortalJob> portalJobMap = PortalJobUtil.listToMapByUrl(savedList);
+            message = jobToSave.size() + " new job(s) found. Registering...";
+            log.info(message);
+            logsToWrite.append(message).append(cr);
+            jobRepository.saveAll(jobToSave);
 
-      logsToSave[count] = portalJobMap.size() + " job(s) already saved at this portal.";
-      log.info(logsToSave[count++]);
+            message = "Done crowling for this portal!";
+            log.info(message);
+            logsToWrite.append(message).append(cr);
+          }
+        });
 
-      List<PortalJob> portalJobToSave = new ArrayList<>();
-
-      logsToSave[count] = "Iterating over job list received, looking for new jobs...";
-      log.info(logsToSave[count++]);
-      for (PortalJob portalJob : portalJobList) {
-        // Save the job, if it's not already saved
-        if (!portalJobMap.containsKey(portalJob.getJobUrl())) {
-          portalJob.setPortalId(portal.getId());
-          portalJobToSave.add(portalJob);
-        }
-      }
-
-      logsToSave[count] = portalJobToSave.size() + " new job(s) found. Registering...";
-      log.info(logsToSave[count++]);
-      portalJobRepository.saveAll(portalJobToSave);
-
-      logsToSave[count] =
-          "Done crowling for " + portal.getName() + " portal (city of " + city.getName() + ").";
-      log.info(logsToSave[count]);
-
-      // saving log
-      List<CrawlerLog> crawlerLogs = fromStringArray(logsToSave, portal.getId());
-      crawlerLogRepository.saveAll(crawlerLogs);
-    }
+    mailService.sendLogsToAdmin(logsToWrite.toString());
   }
 
   /**
    * Finds a list of jobs based on a Portal and a City.
    *
-   * @param portal Portal to be used as search parameter.
-   * @param city City to be used as search parameter.
-   * @return A list of PortalJob containing all PortalJob found or an empty list.
+   * @param portal {@link Portal} to be used as search parameter
+   * @return A list of {@link Job} containing all jobs found or an empty list
    */
-  public List<PortalJob> findJobs(Portal portal, City city) {
+  public List<Job> findJobs(Portal portal) {
     try {
-      Document doc = Jsoup.connect(portal.getJobsUrl()).ignoreHttpErrors(true).get();
+      Document doc = Jsoup.connect(portal.getSearchUrl()).ignoreHttpErrors(true).get();
 
-      String cityName = StringUtil.replaceToPlainText(city.getName().replace(" ", ""));
+      String cityName = StringUtil.replaceToPlainText(portal.getCity().replace(" ", ""));
       String portalName = StringUtil.replaceToPlainText(portal.getName().replace(" ", ""));
 
       Crawler crawler = CrawlerFactory.createInstance(cityName + portalName);
@@ -179,30 +148,5 @@ public class CrawlerService {
     }
 
     return new ArrayList<>();
-  }
-
-  private Boolean check(String jobName, List<String> terms) {
-    for (String term : terms) {
-      if (jobName.toLowerCase().contains(term.toLowerCase())) {
-        return Boolean.TRUE;
-      }
-    }
-
-    return Boolean.FALSE;
-  }
-
-  private List<CrawlerLog> fromStringArray(String[] logs, Long portalId) {
-    List<CrawlerLog> crawlerLogs = new ArrayList<>(logs.length);
-    for (String log : logs) {
-      CrawlerLog crawlerLog =
-          CrawlerLog.builder()
-              .createdAt(LocalDateTime.now())
-              .portalId(portalId)
-              .text(log)
-              .build();
-      crawlerLogs.add(crawlerLog);
-    }
-
-    return crawlerLogs;
   }
 }

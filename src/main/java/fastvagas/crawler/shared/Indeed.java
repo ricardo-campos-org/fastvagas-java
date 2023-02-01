@@ -1,7 +1,7 @@
 package fastvagas.crawler.shared;
 
 import fastvagas.crawler.Crawler;
-import fastvagas.entity.PortalJob;
+import fastvagas.entity.Job;
 import fastvagas.util.ObjectUtil;
 import fastvagas.util.StringUtil;
 import java.util.ArrayList;
@@ -13,17 +13,17 @@ import org.jsoup.select.Elements;
 public class Indeed implements Crawler {
 
   @Override
-  public List<PortalJob> findJobs(Document document) {
-    List<PortalJob> portalJobList = new ArrayList<>();
+  public List<Job> findJobs(Document document) {
+    List<Job> jobList = new ArrayList<>();
 
     Element divCard = document.getElementById("mosaic-zone-jobcards");
     if (divCard != null) {
       Elements aList = divCard.select("a.tapItem");
       for (Element a : aList) {
-        PortalJob portalJob = new PortalJob();
+        Job job = new Job();
 
         // URL
-        portalJob.setJobUrl(a.absUrl("href"));
+        job.setJobUrl(a.absUrl("href"));
 
         // Nome da vaga e URL
         Element h2JobTitle = a.selectFirst("h2.jobTitle");
@@ -31,7 +31,7 @@ public class Indeed implements Crawler {
           Elements spanList = h2JobTitle.select("span");
           for (Element span : spanList) {
             if (span.hasAttr("title")) {
-              portalJob.setJobTitle(StringUtil.parseJobName(span.text()));
+              job.setJobTitle(StringUtil.parseJobName(span.text()));
               break;
             }
           }
@@ -42,7 +42,7 @@ public class Indeed implements Crawler {
         if (divCompany != null) {
           Element span = divCompany.selectFirst("span.companyName");
           if (span != null) {
-            portalJob.setCompanyName(span.text().trim());
+            job.setCompanyName(span.text().trim());
           }
         }
 
@@ -53,40 +53,40 @@ public class Indeed implements Crawler {
           if (divAria != null) {
             String salario = divAria.attr("aria-label").trim();
             if (!salario.equals("null")) {
-              portalJob.setJobDescription(salario + ". ");
+              job.setJobDescription(salario + ". ");
             }
           }
         }
 
         // Tipo da vaga
-        portalJob.setJobType("");
+        job.setJobType("");
 
         // Descrição
         Element divJobSnippet = a.selectFirst("div.job-snippet");
         if (divJobSnippet != null) {
           Elements liList = divJobSnippet.select("li");
           for (Element li : liList) {
-            portalJob.setJobDescription(
-                portalJob.getJobDescription()
+            job.setJobDescription(
+                job.getJobDescription()
                     + StringUtil.capitalize(li.text().trim().toLowerCase()));
           }
 
           if (liList.isEmpty()) {
-            portalJob.setJobDescription(
-                portalJob.getJobDescription()
+            job.setJobDescription(
+                job.getJobDescription()
                     + StringUtil.capitalize(divJobSnippet.text().trim().toLowerCase()));
           }
         }
 
-        if (portalJob.isValid()) {
-          if (!ObjectUtil.hasValue(portalJob.getCompanyName())) {
-            portalJob.setCompanyName("");
+        if (job.isValid()) {
+          if (!ObjectUtil.hasValue(job.getCompanyName())) {
+            job.setCompanyName("");
           }
 
-          portalJobList.add(portalJob);
+          jobList.add(job);
         }
       }
     }
-    return portalJobList;
+    return jobList;
   }
 }

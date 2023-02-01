@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13.9-bullseye
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    hostname: postgres
+    restart: always
+    volumes:
+      - /pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "psql -q -U $POSTGRES_USER -d $POSTGRES_DATABASE -c 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  java:
+    container_name: java
+    image: ghcr.io/ricardo-campos-org/fast-jobs:latest
+    depends_on:
+      postgres:
+        contition: service_healthy
+    environment:
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_NAME: ${DATASOURCE_NAME}
+      DATASOURCE_USER: ${DATASOURCE_USER}
+      DATASOURCE_PASS: ${DATASOURCE_PASS}
+      MAIL_ENABLED: ${MAIL_ENABLED}
+      MAIL_FROM_ADDR: ${MAIL_FROM_ADDR}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+      MAIL_FROM_PASS: ${MAIL_FROM_PASS}
+      MAIL_DEBUG: ${MAIL_DEBUG}
+      MAIL_SMTP_HOST: ${MAIL_SMTP_HOST}
+      MAIL_SMTP_PORT: ${MAIL_SMTP_PORT}
+      MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH}
+      MAIL_SMTP_STARTTLS: ${MAIL_SMTP_STARTTLS}
+      MAIL_SMTP_CLASS: ${MAIL_SMTP_CLASS}
+      MAIL_ADMIN_TO_ADDR: ${MAIL_ADMIN_TO_ADDR}
+      MAIL_ADMIN_TO_NAME: ${MAIL_ADMIN_TO_NAME}
+      MAIL_ADMIN_CC_ADDR: ${MAIL_ADMIN_CC_ADDR}
+      MAIL_ADMIN_CC_NAME: ${MAIL_ADMIN_CC_NAME}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 1m30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    hostname: java
+    links:
+      - postgres
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile

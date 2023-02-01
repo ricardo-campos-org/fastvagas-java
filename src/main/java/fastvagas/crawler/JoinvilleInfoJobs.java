@@ -1,14 +1,14 @@
 package fastvagas.crawler;
 
 import fastvagas.crawler.shared.InfoJobs;
-import fastvagas.entity.PortalJob;
+import fastvagas.entity.Job;
 import java.util.List;
 import org.jsoup.nodes.Document;
 
 public class JoinvilleInfoJobs implements Crawler {
 
   @Override
-  public List<PortalJob> findJobs(Document document) {
+  public List<Job> findJobs(Document document) {
     InfoJobs infoJobs = new InfoJobs();
     return infoJobs.findJobs(document);
   }

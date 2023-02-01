@@ -1,7 +1,7 @@
 package fastvagas.crawler.shared;
 
 import fastvagas.crawler.Crawler;
-import fastvagas.entity.PortalJob;
+import fastvagas.entity.Job;
 import fastvagas.util.ObjectUtil;
 import fastvagas.util.StringUtil;
 import java.util.ArrayList;
@@ -15,27 +15,27 @@ import org.jsoup.select.Elements;
 public class InfoJobs implements Crawler {
 
   @Override
-  public List<PortalJob> findJobs(Document document) {
-    List<PortalJob> portalJobList = new ArrayList<>();
+  public List<Job> findJobs(Document document) {
+    List<Job> jobList = new ArrayList<>();
 
     Element divMultiple = document.selectFirst("div.multiple");
     if (divMultiple == null) {
       log.warn("div.multiple não localizado no documento!");
-      return portalJobList;
+      return jobList;
     }
 
     Elements divVagas = divMultiple.select("div.element-vaga");
     log.info("Divs encontradas: {}", divVagas.size());
     for (Element div : divVagas) {
-      PortalJob portalJob = new PortalJob();
+      Job job = new Job();
 
       // Nome da vaga e URL
       Element divVaga = div.selectFirst("div.vaga");
       if (divVaga != null) {
         Element a = divVaga.selectFirst("a");
         if (a != null) {
-          portalJob.setJobTitle(StringUtil.capitalize(a.attr("title").toLowerCase()));
-          portalJob.setJobUrl(a.absUrl("href"));
+          job.setJobTitle(StringUtil.capitalize(a.attr("title").toLowerCase()));
+          job.setJobUrl(a.absUrl("href"));
         }
       }
 
@@ -46,7 +46,7 @@ public class InfoJobs implements Crawler {
         if (divComp != null) {
           Element a = divComp.selectFirst("a");
           if (a != null) {
-            portalJob.setCompanyName(StringUtil.capitalize(a.text().trim().toLowerCase()));
+            job.setCompanyName(StringUtil.capitalize(a.text().trim().toLowerCase()));
           }
         }
       }
@@ -58,7 +58,7 @@ public class InfoJobs implements Crawler {
       if (divContainerVaga != null) {
         Element divVagaDesc = divContainerVaga.selectFirst("div.vagaDesc");
         if (divVagaDesc != null) {
-          portalJob.setJobDescription(
+          job.setJobDescription(
               StringUtil.capitalize(divVagaDesc.text().trim().toLowerCase()));
         }
       }
@@ -74,20 +74,20 @@ public class InfoJobs implements Crawler {
 
           Element spanData = p.selectFirst("span.data");
           if (spanData != null) {
-            portalJob.setPublishedAt(spanData.text().trim());
+            job.setPublishedAt(spanData.text().trim());
           }
         }
       }
 
-      if (portalJob.isValid()) {
-        if (!ObjectUtil.hasValue(portalJob.getCompanyName())) {
-          portalJob.setCompanyName("");
+      if (job.isValid()) {
+        if (!ObjectUtil.hasValue(job.getCompanyName())) {
+          job.setCompanyName("");
         }
 
-        portalJobList.add(portalJob);
+        jobList.add(job);
       }
     }
 
-    return portalJobList;
+    return jobList;
   }
 }

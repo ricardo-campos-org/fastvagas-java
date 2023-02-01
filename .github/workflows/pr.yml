@@ -37,9 +37,9 @@ jobs:
       - name: Google Checkstyle
         run: ./mvnw --no-transfer-progress checkstyle:checkstyle -Dskip.checkstyle=false
       - name: Unit tests
-        run: ./mvnw clean test
+        run: ./mvnw --no-transfer-progress clean test
       - name: Integration tests
-        run: ./mvnw verify
+        run: ./mvnw --no-transfer-progress verify
       - name: JaCoco
         uses: cicirello/jacoco-badge-generator@v2
         id: jacoco

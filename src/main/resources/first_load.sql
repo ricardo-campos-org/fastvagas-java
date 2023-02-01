@@ -1,79 +1,16 @@
-INSERT INTO state (name, acronym) VALUES ('Santa Catarina', 'SC');
---INSERT INTO state (name, acronym) VALUES ('São Paulo', 'SP');
---INSERT INTO state (name, acronym) VALUES ('Rio de Janeiro', 'RJ');
---INSERT INTO state (name, acronym) VALUES ('Distrito Federal', 'DF');
---INSERT INTO state (name, acronym) VALUES ('Bahia', 'BA');
---INSERT INTO state (name, acronym) VALUES ('Ceará', 'CE');
---INSERT INTO state (name, acronym) VALUES ('Minas Gerais', 'MG');
---INSERT INTO state (name, acronym) VALUES ('Amazonas', 'AM');
---INSERT INTO state (name, acronym) VALUES ('Paraná', 'PR');
---INSERT INTO state (name, acronym) VALUES ('Pernambuco', 'PE');
---INSERT INTO state (name, acronym) VALUES ('Goiás', 'GO');
---INSERT INTO state (name, acronym) VALUES ('Pará', 'PA');
---INSERT INTO state (name, acronym) VALUES ('Rio Grande do Sul', 'RS');
---INSERT INTO state (name, acronym) VALUES ('Maranhão', 'MA');
---INSERT INTO state (name, acronym) VALUES ('Alagoas', 'AL');
---INSERT INTO state (name, acronym) VALUES ('Mato Grosso do Sul', 'MS');
---INSERT INTO state (name, acronym) VALUES ('Rio Grande do Norte', 'RN');
---INSERT INTO state (name, acronym) VALUES ('Piauí', 'PI');
---INSERT INTO state (name, acronym) VALUES ('Paraiba', 'PB');
---INSERT INTO state (name, acronym) VALUES ('Sergipe', 'SE');
---INSERT INTO state (name, acronym) VALUES ('Mato Grosso', 'MT');
---INSERT INTO state (name, acronym) VALUES ('Rondonia', 'RO');
---INSERT INTO state (name, acronym) VALUES ('Espírito Santo', 'ES');
---INSERT INTO state (name, acronym) VALUES ('Amapá', 'AP');
-
-INSERT INTO city (name, state_id) VALUES ('Joinville', (SELECT id FROM state WHERE acronym = 'SC'));
---INSERT INTO city (name, state_id) VALUES ('São Paulo', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Rio de Janeiro', (SELECT id FROM state WHERE acronym = 'RJ'));
---INSERT INTO city (name, state_id) VALUES ('Brasília', (SELECT id FROM state WHERE acronym = 'DF'));
---INSERT INTO city (name, state_id) VALUES ('Salvador', (SELECT id FROM state WHERE acronym = 'BA'));
---INSERT INTO city (name, state_id) VALUES ('Fortaleza', (SELECT id FROM state WHERE acronym = 'CE'));
---INSERT INTO city (name, state_id) VALUES ('Belo Horizonte', (SELECT id FROM state WHERE acronym = 'MG'));
---INSERT INTO city (name, state_id) VALUES ('Manaus', (SELECT id FROM state WHERE acronym = 'AM'));
---INSERT INTO city (name, state_id) VALUES ('Curitiba', (SELECT id FROM state WHERE acronym = 'PR'));
---INSERT INTO city (name, state_id) VALUES ('Recife', (SELECT id FROM state WHERE acronym = 'PE'));
---INSERT INTO city (name, state_id) VALUES ('Goiânia', (SELECT id FROM state WHERE acronym = 'GO'));
---INSERT INTO city (name, state_id) VALUES ('Belém', (SELECT id FROM state WHERE acronym = 'PA'));
---INSERT INTO city (name, state_id) VALUES ('Porto Alegre', (SELECT id FROM state WHERE acronym = 'RS'));
---INSERT INTO city (name, state_id) VALUES ('Guarulhos', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Campinas', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('São Luis', (SELECT id FROM state WHERE acronym = 'MA'));
---INSERT INTO city (name, state_id) VALUES ('São Gonçalo', (SELECT id FROM state WHERE acronym = 'RJ'));
---INSERT INTO city (name, state_id) VALUES ('Maceió', (SELECT id FROM state WHERE acronym = 'AL'));
---INSERT INTO city (name, state_id) VALUES ('Duque de Caxias', (SELECT id FROM state WHERE acronym = 'RJ'));
---INSERT INTO city (name, state_id) VALUES ('Campo Grande', (SELECT id FROM state WHERE acronym = 'MS'));
---INSERT INTO city (name, state_id) VALUES ('Natal', (SELECT id FROM state WHERE acronym = 'RN'));
---INSERT INTO city (name, state_id) VALUES ('Teresina', (SELECT id FROM state WHERE acronym = 'PI'));
---INSERT INTO city (name, state_id) VALUES ('São Bernardo do Campo', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Nova Iguaçú', (SELECT id FROM state WHERE acronym = 'RJ'));
---INSERT INTO city (name, state_id) VALUES ('João Pessoa', (SELECT id FROM state WHERE acronym = 'PB'));
---INSERT INTO city (name, state_id) VALUES ('São José dos Campos', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Santo André', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Ribeirão Preto', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Jaboatão dos Guararapes', (SELECT id FROM state WHERE acronym = 'PE'));
---INSERT INTO city (name, state_id) VALUES ('Osasco', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Uberlândia', (SELECT id FROM state WHERE acronym = 'MG'));
---INSERT INTO city (name, state_id) VALUES ('Sorocaba', (SELECT id FROM state WHERE acronym = 'SP'));
---INSERT INTO city (name, state_id) VALUES ('Contagem', (SELECT id FROM state WHERE acronym = 'MG'));
---INSERT INTO city (name, state_id) VALUES ('Aracajú', (SELECT id FROM state WHERE acronym = 'SE'));
---INSERT INTO city (name, state_id) VALUES ('Feira de Santana', (SELECT id FROM state WHERE acronym = 'BA'));
---INSERT INTO city (name, state_id) VALUES ('Cuiabá', (SELECT id FROM state WHERE acronym = 'MT'));
---INSERT INTO city (name, state_id) VALUES ('Aparecida de Goiânia', (SELECT id FROM state WHERE acronym = 'GO'));
---INSERT INTO city (name, state_id) VALUES ('Londrina', (SELECT id FROM state WHERE acronym = 'PR'));
---INSERT INTO city (name, state_id) VALUES ('Juiz de Fora', (SELECT id FROM state WHERE acronym = 'MG'));
---INSERT INTO city (name, state_id) VALUES ('Ananindeua', (SELECT id FROM state WHERE acronym = 'PA'));
---INSERT INTO city (name, state_id) VALUES ('Porto Velho', (SELECT id FROM state WHERE acronym = 'RO'));
---INSERT INTO city (name, state_id) VALUES ('Serra', (SELECT id FROM state WHERE acronym = 'ES'));
---INSERT INTO city (name, state_id) VALUES ('Niterói', (SELECT id FROM state WHERE acronym = 'RJ'));
---INSERT INTO city (name, state_id) VALUES ('Belford Roxo', (SELECT id FROM state WHERE acronym = 'RJ'));
---INSERT INTO city (name, state_id) VALUES ('Caxias do Sul', (SELECT id FROM state WHERE acronym = 'RS'));
---INSERT INTO city (name, state_id) VALUES ('Campos dos Goytacazes', (SELECT id FROM state WHERE acronym = 'RJ'));
---INSERT INTO city (name, state_id) VALUES ('Macapá', (SELECT id FROM state WHERE acronym = 'AP'));
---INSERT INTO city (name, state_id) VALUES ('Florianópolis', (SELECT id FROM state WHERE acronym = 'SC'));
---INSERT INTO city (name, state_id) VALUES ('Vila Velha', (SELECT id FROM state WHERE acronym = 'ES'));
---INSERT INTO city (name, state_id) VALUES ('Mauá', (SELECT id FROM state WHERE acronym = 'SP'));
-
+-- Joinville - SC
+INSERT INTO fjobs.portal (name, search_url, city, state)
+  VALUES ('Joinville Vagas', 'https://www.joinvillevagas.com.br/', 'Joinville', 'SC');
+INSERT INTO fjobs.portal (name, search_url, city_id)
+  VALUES ('Indeed', 'https://br.indeed.com/jobs?q=&l=Joinville%2C+SC&sort=date', 'Joinville', 'SC');
+INSERT INTO fjobs.portal (name, jobs_url, city_id)
+  VALUES ('Info Jobs', 'https://www.infojobs.com.br/vagas-de-emprego-joinville.aspx', 'Joinville', 'SC');
+INSERT INTO fjobs.portal (name, jobs_url, city_id)
+  VALUES ('Trabalha Brasil', 'https://www.trabalhabrasil.com.br/vagas-empregos-em-joinville-sc', 'Joinville', 'SC');
+INSERT INTO fjobs.portal (name, jobs_url, city_id)
+  VALUES ('BNE', 'https://www.bne.com.br/vagas-de-emprego-em-joinville-sc', 'Joinville', 'SC');
+INSERT INTO fjobs.portal (name, jobs_url, city_id)
+  VALUES ('Vagas', 'https://www.vagas.com.br/vagas-de-joinville,-santa-catarina', 'Joinville', 'SC');
 
 -- São Paulo - SP
 --INSERT INTO portal (name, jobs_url, city_id)
@@ -236,21 +173,6 @@ INSERT INTO city (name, state_id) VALUES ('Joinville', (SELECT id FROM state WHE
 -- Aracajú - SE
 -- Feira de Santana - BA
 -- Cuiabá - MT
-
--- Joinville - SC
-INSERT INTO portal (name, jobs_url, city_id)
-VALUES ('Joinville Vagas', 'https://www.joinvillevagas.com.br/', (SELECT id FROM city WHERE name = 'Joinville'));
-INSERT INTO portal (name, jobs_url, city_id)
-VALUES ('Indeed', 'https://br.indeed.com/jobs?q=&l=Joinville%2C+SC&sort=date', (SELECT id FROM city WHERE name = 'Joinville'));
-INSERT INTO portal (name, jobs_url, city_id)
-VALUES ('Info Jobs', 'https://www.infojobs.com.br/vagas-de-emprego-joinville.aspx', (SELECT id FROM city WHERE name = 'Joinville'));
-INSERT INTO portal (name, jobs_url, city_id)
-VALUES ('Trabalha Brasil', 'https://www.trabalhabrasil.com.br/vagas-empregos-em-joinville-sc', (SELECT id FROM city WHERE name = 'Joinville'));
-INSERT INTO portal (name, jobs_url, city_id)
-VALUES ('BNE', 'https://www.bne.com.br/vagas-de-emprego-em-joinville-sc', (SELECT id FROM city WHERE name = 'Joinville'));
-INSERT INTO portal (name, jobs_url, city_id)
-VALUES ('Vagas', 'https://www.vagas.com.br/vagas-de-joinville,-santa-catarina', (SELECT id FROM city WHERE name = 'Joinville'));
-
 -- Aparecida de Goiânia - GO
 -- Londrina - PR
 -- Juiz de Fora - MG
@@ -265,27 +187,3 @@ VALUES ('Vagas', 'https://www.vagas.com.br/vagas-de-joinville,-santa-catarina', 
 -- Florianópolis - SC
 -- Vila Velha - ES
 -- Mauá - SP
-
-INSERT INTO person (first_name, last_name, email, password, city_id, enabled, created_at)
-  VALUES ('Ricardo', 'Campos', 'ricardompcampos@gmail.com', '', 1, TRUE, '2022-07-13 18:34:11');
---INSERT INTO person (first_name, last_name, email, password, city_id, enabled, created_at)
-      --VALUES ('Leandro', 'Alves', 'leandro@bussolainvestments.com.br', '', 8, TRUE, '2021-04-19 20:28:10');
---INSERT INTO person (first_name, last_name, email, password, city_id, enabled, created_at)
-      --VALUES ('Jaque', 'Schmoller', 'jaquessprung@gmail.com', '', 1, TRUE, '2022-03-31 20:45:10');
-INSERT INTO person (first_name, last_name, email, password, city_id, enabled, created_at)
-  VALUES ('Jéssica', 'Schmoller', 'jeschmoller@gmail.com', '', 1, TRUE, '2022-07-13 18:34:11');
-
---INSERT INTO authorities (email, authority) --VALUES ('ricardompcampos@gmail.com', 'ROLE_USER');
---INSERT INTO authorities (email, authority) --VALUES ('leandro@bussolainvestments.com.br', 'ROLE_USER');
---INSERT INTO authorities (email, authority) --VALUES ('jaquessprung@gmail.com', 'ROLE_USER');
-
---INSERT INTO user_terms --VALUES ((SELECT user_id FROM users WHERE email = 'jaquessprung@gmail.com'),'RH;Administrativo');
-
-SELECT * FROM portal_job WHERE seen IS NULL;
-UPDATE portal_job SET SEEN = NOW() WHERE seen IS NULL;
-
-select p.id, p.terms from Person p;
-update person set terms = 'Atendente,Recepcionista,Assistente' where email = 'jeschmoller@gmail.com';
-select * from person_job pj where pj.person_id = 2;
-select * from portal_job pj ;
-update person_job set seen = NOW() where person_id = 2;

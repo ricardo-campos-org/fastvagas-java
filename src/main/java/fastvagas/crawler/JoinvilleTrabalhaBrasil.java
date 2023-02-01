@@ -1,6 +1,6 @@
 package fastvagas.crawler;
 
-import fastvagas.entity.PortalJob;
+import fastvagas.entity.Job;
 import fastvagas.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,56 +13,56 @@ import org.jsoup.select.Elements;
 public class JoinvilleTrabalhaBrasil implements Crawler {
 
   @Override
-  public List<PortalJob> findJobs(Document document) {
-    List<PortalJob> portalJobList = new ArrayList<>();
+  public List<Job> findJobs(Document document) {
+    List<Job> jobList = new ArrayList<>();
 
     Element divJobsWrapper = document.selectFirst(".jg__container");
     if (divJobsWrapper == null) {
       log.warn("Elemento não encontrado para o seletor id #jobs-wrapper");
-      return portalJobList;
+      return jobList;
     }
 
     Elements divJobListing = divJobsWrapper.select(".jg__job");
 
     for (Element div : divJobListing) {
-      PortalJob portalJob = new PortalJob();
+      Job job = new Job();
 
       // URL
       Element aUrl = div.selectFirst("a");
       if (aUrl != null) {
-        portalJob.setJobUrl(aUrl.absUrl("href"));
+        job.setJobUrl(aUrl.absUrl("href"));
       }
 
       // Nome da Vaga
       Element h3JobName = div.selectFirst(".job__name");
       if (h3JobName != null) {
-        portalJob.setJobTitle(StringUtil.parseJobName(h3JobName.text()));
+        job.setJobTitle(StringUtil.parseJobName(h3JobName.text()));
       }
 
       // Nome da empresa
       Element h4JobCompany = div.selectFirst(".job__company");
       if (h4JobCompany != null) {
-        portalJob.setCompanyName(h4JobCompany.text().trim().toLowerCase());
+        job.setCompanyName(h4JobCompany.text().trim().toLowerCase());
       }
 
       // Tipo da vaga
-      portalJob.setJobType("");
+      job.setJobType("");
 
       // Descrição
       Element pJobDescription = div.selectFirst(".job__description");
       if (pJobDescription != null) {
-        portalJob.setJobDescription(
+        job.setJobDescription(
             StringUtil.capitalize(pJobDescription.text().trim().toLowerCase()));
       }
 
       // Data da publicação
-      portalJob.setPublishedAt("");
+      job.setPublishedAt("");
 
-      if (portalJob.isValid()) {
-        portalJobList.add(portalJob);
+      if (job.isValid()) {
+        jobList.add(job);
       }
     }
 
-    return portalJobList;
+    return jobList;
   }
 }

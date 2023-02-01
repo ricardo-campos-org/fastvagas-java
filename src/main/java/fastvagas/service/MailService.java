@@ -1,7 +1,7 @@
 package fastvagas.service;
 
-import fastvagas.entity.PortalJob;
-import fastvagas.exception.SendMailException;
+import fastvagas.entity.Job;
+import fastvagas.entity.User;
 import fastvagas.util.ObjectUtil;
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -79,11 +80,10 @@ public class MailService {
   /**
    * Send a notification to a user with his job list.
    *
-   * @param name name of the user
-   * @param email email of the user
-   * @param portalJobs list with all found jobs
+   * @param user the {@link User} destiny
+   * @param jobs list of {@link Job} with all found jobs
    */
-  public void jobNotification(String name, String email, List<PortalJob> portalJobs) {
+  public void jobNotification(User user, Set<Job> jobs) {
     if (!enabled.equals("true")) {
       log.info("Mail system not enabled for job notifications!! Leaving!");
       return;
@@ -117,14 +117,13 @@ public class MailService {
     try {
       URL url = getClass().getClassLoader().getResource("email_template.html");
       if (url == null) {
-        throw new SendMailException(
-            "Problema ao obter template para envio!", "Problema ao obter template para envio!");
+        throw new RuntimeException("Problema ao obter template para envio!");
       }
       File file = new File(url.getFile());
       String mailTemplate = new String(Files.readAllBytes(file.toPath()));
 
       // nome da pessoa
-      mailTemplate = mailTemplate.replace("__PRIMEIRO_NOME__", name);
+      mailTemplate = mailTemplate.replace("__PRIMEIRO_NOME__", user.getFirstName());
 
       final String jobTemplate =
           """
@@ -159,7 +158,7 @@ public class MailService {
           </div>
           """;
 
-      for (PortalJob portalJob : portalJobs) {
+      for (Job portalJob : jobs) {
         String jobDetails = portalJob.getJobDescription();
         if (portalJob.getCompanyName() != null && !portalJob.getCompanyName().isEmpty()) {
           boolean addDot =
@@ -198,18 +197,20 @@ public class MailService {
       Message message = new MimeMessage(session);
       message.setFrom(new InternetAddress(fromAdress, "Avisos de Vagas"));
       message.setReplyTo(new Address[] {new InternetAddress(fromAdress)});
-      message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-      message.setSubject(portalJobs.size() + " nova(s) vaga(s) encontrada(s)!");
+      message.setRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
+      message.setSubject(jobs.size() + " nova(s) vaga(s) encontrada(s)!");
       message.setContent(mailTemplate, "text/html; charset=UTF-8");
       message.setSentDate(new java.util.Date());
 
       Transport.send(message);
       log.info("E-mail para a pessoa enviado com sucesso!");
     } catch (MessagingException | IOException | NullPointerException me) {
-      throw new SendMailException(
-          "Problema no servidor ao registrar contato.",
-          me,
-          "Erro ao enviar e-mail para o usuário que solicitou: " + me.getLocalizedMessage());
+      me.printStackTrace();
+      throw new RuntimeException("Problema no servidor ao registrar contato.");
     }
+  }
+
+  public void sendLogsToAdmin(String content) {
+    log.info("Logs: {}", content);
   }
 }
