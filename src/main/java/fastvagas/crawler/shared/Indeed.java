@@ -2,10 +2,10 @@ package fastvagas.crawler.shared;
 
 import fastvagas.crawler.Crawler;
 import fastvagas.entity.Job;
-import fastvagas.util.ObjectUtil;
 import fastvagas.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -21,6 +21,7 @@ public class Indeed implements Crawler {
       Elements aList = divCard.select("a.tapItem");
       for (Element a : aList) {
         Job job = new Job();
+        job.setCompanyName("");
 
         // URL
         job.setJobUrl(a.absUrl("href"));
@@ -67,8 +68,7 @@ public class Indeed implements Crawler {
           Elements liList = divJobSnippet.select("li");
           for (Element li : liList) {
             job.setJobDescription(
-                job.getJobDescription()
-                    + StringUtil.capitalize(li.text().trim().toLowerCase()));
+                job.getJobDescription() + StringUtil.capitalize(li.text().trim().toLowerCase()));
           }
 
           if (liList.isEmpty()) {
@@ -79,10 +79,6 @@ public class Indeed implements Crawler {
         }
 
         if (job.isValid()) {
-          if (!ObjectUtil.hasValue(job.getCompanyName())) {
-            job.setCompanyName("");
-          }
-
           jobList.add(job);
         }
       }

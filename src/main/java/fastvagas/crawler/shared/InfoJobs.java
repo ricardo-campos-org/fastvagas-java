@@ -2,10 +2,10 @@ package fastvagas.crawler.shared;
 
 import fastvagas.crawler.Crawler;
 import fastvagas.entity.Job;
-import fastvagas.util.ObjectUtil;
 import fastvagas.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,6 +28,7 @@ public class InfoJobs implements Crawler {
     log.info("Divs encontradas: {}", divVagas.size());
     for (Element div : divVagas) {
       Job job = new Job();
+      job.setCompanyName("");
 
       // Nome da vaga e URL
       Element divVaga = div.selectFirst("div.vaga");
@@ -58,8 +59,7 @@ public class InfoJobs implements Crawler {
       if (divContainerVaga != null) {
         Element divVagaDesc = divContainerVaga.selectFirst("div.vagaDesc");
         if (divVagaDesc != null) {
-          job.setJobDescription(
-              StringUtil.capitalize(divVagaDesc.text().trim().toLowerCase()));
+          job.setJobDescription(StringUtil.capitalize(divVagaDesc.text().trim().toLowerCase()));
         }
       }
 
@@ -80,10 +80,6 @@ public class InfoJobs implements Crawler {
       }
 
       if (job.isValid()) {
-        if (!ObjectUtil.hasValue(job.getCompanyName())) {
-          job.setCompanyName("");
-        }
-
         jobList.add(job);
       }
     }
