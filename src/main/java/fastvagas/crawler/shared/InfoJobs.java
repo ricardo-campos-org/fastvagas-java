@@ -11,9 +11,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/** This class search jobs at InfoJobs. */
 @Slf4j
 public class InfoJobs implements Crawler {
 
+  /**
+   * Finds all job from the first page of the website.
+   *
+   * @param document The HTML DOM element to be searched
+   * @return A {@link List} of {@link Job} containing all found jobs
+   */
   @Override
   public List<Job> findJobs(Document document) {
     List<Job> jobList = new ArrayList<>();

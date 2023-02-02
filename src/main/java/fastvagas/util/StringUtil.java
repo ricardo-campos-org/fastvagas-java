@@ -6,8 +6,15 @@ import java.util.Map;
 import java.util.Objects;
 import org.springframework.lang.NonNull;
 
+/** This class contains useful methods to handle strings and texts. */
 public class StringUtil {
 
+  /**
+   * Normalize a given job title making it capitalized.
+   *
+   * @param text The text to be normalized
+   * @return A string with the new parsed text
+   */
   public static String parseJobName(@NonNull String text) {
     List<String> words = List.of(text.split(" "));
     StringBuilder sb = new StringBuilder();
@@ -22,6 +29,12 @@ public class StringUtil {
     return sb.toString();
   }
 
+  /**
+   * Capitalize a given text title making only the first letter uppercase.
+   *
+   * @param text The text to be capitalized
+   * @return A string with the new capitalized text
+   */
   public static String capitalize(String text) {
     if (TextUtil.isIgnore(text)) {
       return text;
@@ -30,6 +43,12 @@ public class StringUtil {
     return TextUtil.replace(text);
   }
 
+  /**
+   * Replaces special characters with plain characters.
+   *
+   * @param text The original text to be replaced
+   * @return The new text with only plain text
+   */
   public static String replaceToPlainText(String text) {
     Map<Character, Character> charMap = new HashMap<>();
     charMap.put('á', 'a');
@@ -64,6 +83,13 @@ public class StringUtil {
     return sb.toString();
   }
 
+  /**
+   * Cut a given text to a given maximum length.
+   *
+   * @param text The text to be cut
+   * @param max The maximum length
+   * @return the new text
+   */
   public static String fixMaxLength(String text, Integer max) {
     if (text.isEmpty() || text.isBlank()) {
       return text;

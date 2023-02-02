@@ -197,7 +197,8 @@ public class MailService {
       Message message = new MimeMessage(session);
       message.setFrom(new InternetAddress(fromAdress, "Avisos de Vagas"));
       message.setReplyTo(new Address[] {new InternetAddress(fromAdress)});
-      message.setRecipient(RecipientType.TO, new InternetAddress(user.getEmail(), user.getFirstName()));
+      message.setRecipient(
+          RecipientType.TO, new InternetAddress(user.getEmail(), user.getFirstName()));
       message.setRecipient(RecipientType.CC, new InternetAddress(adminToAddress, adminToName));
       message.setSubject(jobs.size() + " nova(s) vaga(s) encontrada(s)!");
       message.setContent(mailTemplate, "text/html; charset=UTF-8");

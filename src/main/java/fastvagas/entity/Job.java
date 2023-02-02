@@ -58,6 +58,11 @@ public class Job {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
+  /**
+   * Check if a job that was just read from the source is valid.
+   *
+   * @return true if is, false otherwise
+   */
   public boolean isValid() {
     boolean valid = !jobTitle.isBlank() && !jobUrl.isBlank();
 

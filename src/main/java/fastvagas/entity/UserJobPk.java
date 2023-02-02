@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** This class represents a primary key of {@link UserJob}. */
 @Getter
 @Setter
 @AllArgsConstructor
