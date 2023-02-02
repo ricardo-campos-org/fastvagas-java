@@ -73,8 +73,8 @@ public class InfoJobs implements Crawler {
       // Data da publicação
       if (divContainerVaga != null) {
         Elements divs = divContainerVaga.select("div");
-        for (Element divCVaga : divs) {
-          Element p = divCVaga.selectFirst("p.location2");
+        for (Element divVagaFor : divs) {
+          Element p = divVagaFor.selectFirst("p.location2");
           if (p == null) {
             continue;
           }

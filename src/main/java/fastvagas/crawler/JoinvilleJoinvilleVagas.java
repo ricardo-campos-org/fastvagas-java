@@ -9,9 +9,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/** This class contain the method to read jobs from Joinville Vagas in Joinville-SC City. */
 @Slf4j
 public class JoinvilleJoinvilleVagas implements Crawler {
 
+  /**
+   * Finds all job from the first page of the website.
+   *
+   * @param document The HTML DOM element to be searched
+   * @return A {@link List} of {@link Job} containing all found jobs
+   */
   @Override
   public List<Job> findJobs(Document document) {
     List<Job> jobList = new ArrayList<>();
@@ -44,9 +51,9 @@ public class JoinvilleJoinvilleVagas implements Crawler {
       }
 
       // Tipo da vaga
-      Element divJType = li.selectFirst(".jtype");
-      if (divJType != null) {
-        job.setJobType(StringUtil.capitalize(divJType.text().trim().toLowerCase()));
+      Element jobType = li.selectFirst(".jtype");
+      if (jobType != null) {
+        job.setJobType(StringUtil.capitalize(jobType.text().trim().toLowerCase()));
       }
 
       // Descrição
@@ -54,8 +61,7 @@ public class JoinvilleJoinvilleVagas implements Crawler {
       if (divDescriptions.size() >= 2) {
         Element divDescription = divDescriptions.get(1);
         if (divDescription != null) {
-          job.setJobDescription(
-              StringUtil.capitalize(divDescription.text().trim().toLowerCase()));
+          job.setJobDescription(StringUtil.capitalize(divDescription.text().trim().toLowerCase()));
         }
       }
 

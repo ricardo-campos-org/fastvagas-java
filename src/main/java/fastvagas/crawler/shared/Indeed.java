@@ -5,21 +5,27 @@ import fastvagas.entity.Job;
 import fastvagas.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/** This class contain the method to read jobs from Indeed in all cities. */
 public class Indeed implements Crawler {
 
+  /**
+   * Finds all job from the first page of the website.
+   *
+   * @param document The HTML DOM element to be searched
+   * @return A {@link List} of {@link Job} containing all found jobs
+   */
   @Override
   public List<Job> findJobs(Document document) {
     List<Job> jobList = new ArrayList<>();
 
     Element divCard = document.getElementById("mosaic-zone-jobcards");
     if (divCard != null) {
-      Elements aList = divCard.select("a.tapItem");
-      for (Element a : aList) {
+      Elements tapItemList = divCard.select("a.tapItem");
+      for (Element a : tapItemList) {
         Job job = new Job();
         job.setCompanyName("");
 

@@ -1,16 +1,18 @@
 package fastvagas.crawler;
 
+/** This class is a factory to create the class intances for each city portal. */
 public class CrawlerFactory {
 
+  /**
+   * Creates an instance of a given class name.
+   *
+   * @param className The class name to be created
+   * @return a {@link Crawler} instance or null if not found
+   */
   public static Crawler createInstance(String className) {
-    // Curitiba
-    if (className.equals("CuritibaIndeed")) {
-      return new CuritibaIndeed();
-    }
-
     // Joinville
     if (className.equals("JoinvilleBNE")) {
-      return new JoinvilleBNE();
+      return new JoinvilleBne();
     }
     if (className.equals("JoinvilleIndeed")) {
       return new JoinvilleIndeed();
@@ -23,11 +25,6 @@ public class CrawlerFactory {
     }
     if (className.equals("JoinvilleTrabalhaBrasil")) {
       return new JoinvilleTrabalhaBrasil();
-    }
-
-    // São Paulo
-    if (className.equals("SaoPauloIndeed")) {
-      return new SaoPauloIndeed();
     }
 
     return null;
