@@ -76,7 +76,7 @@ docker-compose down --remove-orphans
 
 You can run all tests with:
 ```bash
-./mvnw --no-transfer-progress clean verify package test
+./mvnw --no-transfer-progress clean verify test
 ```
 
 ## Checkstyle

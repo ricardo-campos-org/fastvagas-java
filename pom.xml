@@ -182,6 +182,7 @@
                         <exclude>**/config/**</exclude>
                         <exclude>**/entity/**</exclude>
                         <exclude>**/exception/**</exclude>
+                        <exclude>**/health/**</exclude>
                         <exclude>**/*$*Builder*</exclude>
                         <exclude>**/PostgressApplication.*</exclude>
                     </excludes>

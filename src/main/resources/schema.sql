@@ -1,6 +1,8 @@
 -- psql --host=localhost --username=postgres --dbname=fastservice --password
 -- password: pwd
 
+CREATE SCHEMA fjobs;
+
 CREATE TABLE fjobs.user (
     id          SERIAL,
     first_name  VARCHAR(20) NOT NULL,
@@ -23,7 +25,7 @@ CREATE TABLE fjobs.portal (
     city       VARCHAR(50) NOT NULL,
     state      CHAR(2) NOT NULL,
     enabled    BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT user_pk
+    CONSTRAINT portal_pk
       PRIMARY KEY(id)
 );
 
@@ -43,11 +45,11 @@ CREATE TABLE fjobs.job (
       FOREIGN KEY(portal_id) REFERENCES fjobs.portal (id)
 );
 
-CREATE INDEX fjobs.idx_job_job_url ON job (job_url);
+CREATE INDEX idx_job_job_url ON fjobs.job (job_url);
 
 CREATE TABLE fjobs.user_job (
     user_id    INTEGER NOT NULL,
-    job_id     INTEGER NOT NULL REFERENCES portal_job (id),
+    job_id     INTEGER NOT NULL,
     email_sent TIMESTAMP NULL,
     term       VARCHAR(30) NOT NULL,
     CONSTRAINT user_job_pk
