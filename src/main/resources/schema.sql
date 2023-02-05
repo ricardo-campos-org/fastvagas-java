@@ -31,12 +31,12 @@ CREATE TABLE fjobs.portal (
 
 CREATE TABLE fjobs.job (
     id              SERIAL,
-    job_title       VARCHAR(600) NOT NULL,
-    company_name    VARCHAR(600) NOT NULL,
-    job_type        VARCHAR(30) NULL DEFAULT NULL,
-    job_description VARCHAR(600) NOT NULL,
+    job_title       VARCHAR(50) NOT NULL,
+    company_name    VARCHAR(50) NOT NULL,
+    job_type        VARCHAR(20) NULL DEFAULT NULL,
+    job_description VARCHAR(300) NOT NULL,
     published_at    VARCHAR(30) NULL DEFAULT NULL,
-    job_url         VARCHAR(1000) NOT NULL,
+    job_url         VARCHAR(200) NOT NULL,
     portal_id       INTEGER NOT NULL,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     CONSTRAINT job_pk
