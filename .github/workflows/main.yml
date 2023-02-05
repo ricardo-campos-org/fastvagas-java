@@ -24,4 +24,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ricardo-campos-org/fast-jobs:latest
+          tags: rmcampos/fast-jobs:latest
