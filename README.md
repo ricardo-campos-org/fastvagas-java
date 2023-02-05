@@ -1,6 +1,6 @@
 ![Coverage](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ricardo-campos-org_onde-tem-vagas-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ricardo-campos-org_onde-tem-vagas-api)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ricardo-campos-org_fastvagas-java&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ricardo-campos-org_onde-tem-vagas-api)
 
 # fastvagas-java
 [Side Project] Service to find jobs published openly on the web. This service do crawler to find jobs and parse HTML.
