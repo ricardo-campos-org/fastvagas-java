@@ -1,11 +1,11 @@
 package fastvagas.crawler;
 
-import fastvagas.entity.PortalJob;
+import fastvagas.entity.Job;
+import java.util.List;
 import org.jsoup.nodes.Document;
 
-import java.util.List;
-
+/** This class represents an interface of all classes that search for jobs. */
 public interface Crawler {
 
-    List<PortalJob> findJobs(Document document);
+  List<Job> findJobs(Document document);
 }

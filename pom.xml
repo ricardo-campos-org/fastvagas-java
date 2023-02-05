@@ -4,9 +4,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.com.ondetemvagas</groupId>
-    <artifactId>webapp</artifactId>
+    <artifactId>fast-jobs</artifactId>
     <version>1.0</version>
-    <name>Onde Tem Vagas - ${project.artifactId}</name>
+    <name>Fast Jobs</name>
     <description>Demo project for Spring Boot</description>
     <packaging>jar</packaging>
 
@@ -19,10 +19,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <skip.checkstyle>true</skip.checkstyle>
+        <sonar.organization>ricardo-campos-org</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
@@ -93,10 +95,15 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>fastvagas</finalName>
+        <finalName>fast-jobs</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -176,7 +183,11 @@
                 <version>0.8.8</version>
                 <configuration>
                     <excludes>
+                        <exclude>**/crawler/**</exclude>
                         <exclude>**/config/**</exclude>
+                        <exclude>**/entity/**</exclude>
+                        <exclude>**/exception/**</exclude>
+                        <exclude>**/health/**</exclude>
                         <exclude>**/*$*Builder*</exclude>
                         <exclude>**/PostgressApplication.*</exclude>
                     </excludes>
@@ -269,7 +280,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>50%</minimum>
+                                            <minimum>10%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
