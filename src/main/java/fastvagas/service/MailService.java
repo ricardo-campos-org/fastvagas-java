@@ -1,56 +1,75 @@
 package fastvagas.service;
 
-import fastvagas.config.MailConfig;
-import fastvagas.entity.PortalJob;
-import fastvagas.exception.SendMailException;
-import fastvagas.util.ObjectUtil;
+import fastvagas.config.MailPropertiesConfig;
+import fastvagas.entity.Job;
+import fastvagas.entity.User;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** This class contains methods to send mail notifications. */
+@NoArgsConstructor
 @Slf4j
+@Setter
 @Service
 public class MailService {
 
-  @Autowired MailConfig mailConfig;
+  private MailPropertiesConfig mailPropertiesConfig;
 
-  public void jobNotification(String name, String email, List<PortalJob> portalJobs) {
-    if (!mailConfig.getEnabled()) {
+  /** Creates an instance of MailService. */
+  @Autowired
+  public MailService(MailPropertiesConfig mailPropertiesConfig) {
+    this.mailPropertiesConfig = mailPropertiesConfig;
+  }
+
+  /**
+   * Send a notification to a user with his job list.
+   *
+   * @param user the {@link User} destiny
+   * @param jobs list of {@link Job} with all found jobs
+   * @return True if the email was sent, false otherwise
+   */
+  public boolean jobNotification(User user, Set<Job> jobs) {
+    if (!mailPropertiesConfig.getEnabled().equals("true")) {
       log.info("Mail system not enabled for job notifications!! Leaving!");
-      return;
+      return false;
     }
-
-    String origemEmail = mailConfig.getFromAdress();
-    String origemEmailSenha = mailConfig.getFromPassword();
 
     Properties propvls = System.getProperties();
-    propvls.setProperty("mail.smtp.host", mailConfig.getSmtpHost());
-    if (ObjectUtil.hasValue(mailConfig.getDebug())) {
-      propvls.put("mail.debug", mailConfig.getDebug());
+    propvls.setProperty("mail.smtp.host", mailPropertiesConfig.getSmtpHost());
+    if (!Objects.isNull(mailPropertiesConfig.getDebug())
+        && mailPropertiesConfig.getDebug().isBlank()) {
+      propvls.put("mail.debug", mailPropertiesConfig.getDebug());
     }
-    propvls.put("mail.smtp.port", mailConfig.getSmtpPort());
-    if (ObjectUtil.hasValue(mailConfig.getSmtpAuth())) {
-      propvls.put("mail.smtp.auth", mailConfig.getSmtpAuth());
+    propvls.put("mail.smtp.port", mailPropertiesConfig.getSmtpPort());
+    if (!Objects.isNull(mailPropertiesConfig.getSmtpAuth())
+        && mailPropertiesConfig.getSmtpAuth().isBlank()) {
+      propvls.put("mail.smtp.auth", mailPropertiesConfig.getSmtpAuth());
     }
-    if (ObjectUtil.hasValue(mailConfig.getStartTlsEnable())) {
-      propvls.put("mail.smtp.starttls.enable", mailConfig.getStartTlsEnable());
+    if (!Objects.isNull(mailPropertiesConfig.getSmtpStarttlsEnabled())
+        && mailPropertiesConfig.getSmtpStarttlsEnabled().isBlank()) {
+      propvls.put("mail.smtp.starttls.enable", mailPropertiesConfig.getSmtpStarttlsEnabled());
     }
-    propvls.put("mail.smtp.socketFactory.class", mailConfig.getSocketFactoryClass());
+    propvls.put("mail.smtp.socketFactory.class", mailPropertiesConfig.getSmtpSocketFactoryClass());
 
     Session session =
         Session.getDefaultInstance(
@@ -58,40 +77,57 @@ public class MailService {
             new Authenticator() {
               @Override
               protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(origemEmail, origemEmailSenha);
+                return new PasswordAuthentication(
+                    mailPropertiesConfig.getFromAdress(), mailPropertiesConfig.getFromPassword());
               }
             });
 
-    // Envia um e-mail para a pessoa que fez o contato
+    // Send one email containing all found jobs.
     try {
       URL url = getClass().getClassLoader().getResource("email_template.html");
       if (url == null) {
-        throw new SendMailException(
-            "Problema ao obter template para envio!", "Problema ao obter template para envio!");
+        throw new RuntimeException("Unable to retrieve email_template.html file!");
       }
       File file = new File(url.getFile());
       String mailTemplate = new String(Files.readAllBytes(file.toPath()));
 
-      // nome da pessoa
-      mailTemplate = mailTemplate.replace("__PRIMEIRO_NOME__", name);
+      // user's name
+      mailTemplate = mailTemplate.replace("__PRIMEIRO_NOME__", user.getFirstName());
 
       final String jobTemplate =
-          "<div class=\"content\">\n"
-              + "   <table>\n"
-              + "       <tr>\n"
-              + "           <td class=\"small\" width=\"20%\" style=\"vertical-align: top; padding-right:10px;\">\n"
-              + "               <img width=\"32\" src=\"http://www.fastvagas.com.br/user/img/fast_logo2a.png\" alt=\"Nova vaga detectada\"/>\n"
-              + "           </td>\n"
-              + "           <td>\n"
-              + "               <h4>__JOB_NAME__</h4>\n"
-              + "               <p>__JOB_DETAILS__</p>\n"
-              + "               <a href=\"__JOB_URL__\" target=\"_blank\" title=\"Abrir link no navegador\" class=\"btn\">Acessar o site da vaga</a>\n"
-              + "           </td>\n"
-              + "       </tr>\n"
-              + "   </table>\n"
-              + "</div>";
+          """
+          <div class="content">
+            <table>
+              <tr>
+                <td
+                  class="small"
+                  width="20%"
+                  style="vertical-align: top; padding-right:10px;"
+                >
+                  <img
+                    width="32"
+                    src="http://www.fastvagas.com.br/user/img/fast_logo2a.png"
+                    alt="Nova vaga detectada"
+                  />
+                </td>
+                <td>
+                  <h4>__JOB_NAME__</h4>
+                  <p>__JOB_DETAILS__</p>
+                  <a
+                    href="__JOB_URL__"
+                    target="_blank"
+                    title="Abrir link"
+                    class="btn"
+                  >
+                    Acessar o site da vaga
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </div>
+          """;
 
-      for (PortalJob portalJob : portalJobs) {
+      for (Job portalJob : jobs) {
         String jobDetails = portalJob.getJobDescription();
         if (portalJob.getCompanyName() != null && !portalJob.getCompanyName().isEmpty()) {
           boolean addDot =
@@ -112,7 +148,7 @@ public class MailService {
             jobDetails += ".";
           }
 
-          if (ObjectUtil.hasValue(portalJob.getPublishedAt())) {
+          if (!portalJob.getPublishedAt().isBlank()) {
             jobDetails += " Publicado em: " + portalJob.getPublishedAt() + ".";
           }
         }
@@ -128,20 +164,28 @@ public class MailService {
       mailTemplate = mailTemplate.replace("__CONTEUDO_VAGA__", "");
 
       Message message = new MimeMessage(session);
-      message.setFrom(new InternetAddress(origemEmail, "Avisos de Vagas"));
-      message.setReplyTo(new Address[] {new InternetAddress(origemEmail)});
-      message.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
-      message.setSubject(portalJobs.size() + " nova(s) vaga(s) encontrada(s)!");
+      message.setFrom(new InternetAddress(mailPropertiesConfig.getFromAdress(), "Avisos de Vagas"));
+      message.setReplyTo(new Address[] {new InternetAddress(mailPropertiesConfig.getFromAdress())});
+      message.setRecipient(
+          RecipientType.TO, new InternetAddress(user.getEmail(), user.getFirstName()));
+      message.setRecipient(
+          RecipientType.CC,
+          new InternetAddress(
+              mailPropertiesConfig.getAdminToAddress(), mailPropertiesConfig.getAdminToName()));
+      message.setSubject(jobs.size() + " new jobs found!");
       message.setContent(mailTemplate, "text/html; charset=UTF-8");
       message.setSentDate(new java.util.Date());
 
       Transport.send(message);
-      log.info("E-mail para a pessoa enviado com sucesso!");
+      log.info("Notification email successfully sent to the user {}!", user.getEmail());
+      return true;
     } catch (MessagingException | IOException | NullPointerException me) {
-      throw new SendMailException(
-          "Problema no servidor ao registrar contato.",
-          me,
-          "Erro ao enviar e-mail para o usuário que solicitou: " + me.getLocalizedMessage());
+      me.printStackTrace();
+      throw new RuntimeException("Unable to notify user's new job for " + user.getEmail());
     }
+  }
+
+  public void sendLogsToAdmin(String content) {
+    log.info("Logs: {}", content);
   }
 }

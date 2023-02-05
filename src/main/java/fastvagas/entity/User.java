@@ -6,36 +6,49 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-/** This class represents a portal in the system. A portal holds the {@link Job} */
-@Builder
+/** This class represents a user in the system. */
 @Getter
 @Setter
-@Entity
-@Table(name = "portal")
-@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-public class Portal {
+@EqualsAndHashCode
+@ToString
+@Entity
+@Table(name = "user")
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column private String name;
+  @Column(name = "first_name")
+  private String firstName;
 
-  @Column(name = "search_url")
-  private String searchUrl;
+  @Column(name = "last_name")
+  private String lastName;
+
+  @Column private String email;
 
   @Column private String city;
 
   @Column private String state;
 
-  @Column private Boolean enabled;
+  @Column(name = "created_at")
+  private LocalDateTime createdAt;
+
+  @Column(name = "disabled_at")
+  private LocalDateTime disabledAt;
+
+  @Column private String terms;
+
+  @Column(name = "last_search")
+  private LocalDateTime lastSearch;
 }
