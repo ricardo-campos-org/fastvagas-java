@@ -29,18 +29,19 @@ public class Job {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Size(max = 50)
   @Column(name = "job_title")
   private String jobTitle;
 
-  @Size(max = 600)
+  @Size(max = 50)
   @Column(name = "company_name")
   private String companyName;
 
-  @Size(max = 30)
+  @Size(max = 20)
   @Column(name = "job_type")
   private String jobType;
 
-  @Size(max = 600)
+  @Size(max = 300)
   @Column(name = "job_description")
   private String jobDescription;
 
@@ -48,7 +49,7 @@ public class Job {
   @Column(name = "published_at")
   private String publishedAt;
 
-  @Size(max = 1000)
+  @Size(max = 200)
   @Column(name = "job_url")
   private String jobUrl;
 
@@ -58,6 +59,11 @@ public class Job {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
+  /**
+   * Check if a job that was just read from the source is valid.
+   *
+   * @return true if is, false otherwise
+   */
   public boolean isValid() {
     boolean valid = !jobTitle.isBlank() && !jobUrl.isBlank();
 

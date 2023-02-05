@@ -95,6 +95,11 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -182,6 +187,7 @@
                         <exclude>**/config/**</exclude>
                         <exclude>**/entity/**</exclude>
                         <exclude>**/exception/**</exclude>
+                        <exclude>**/health/**</exclude>
                         <exclude>**/*$*Builder*</exclude>
                         <exclude>**/PostgressApplication.*</exclude>
                     </excludes>

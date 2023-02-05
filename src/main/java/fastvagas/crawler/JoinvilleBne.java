@@ -1,12 +1,12 @@
 package fastvagas.crawler;
 
-import fastvagas.crawler.shared.InfoJobs;
 import fastvagas.entity.Job;
+import java.util.ArrayList;
 import java.util.List;
 import org.jsoup.nodes.Document;
 
-/** This class contain the method to read jobs from Info Jobs in Joinville-SC City. */
-public class JoinvilleInfoJobs implements Crawler {
+/** This class contain the method to read jobs from BNE in Joinville-SC City. */
+public class JoinvilleBne implements Crawler {
 
   /**
    * Finds all job from the first page of the website.
@@ -16,7 +16,6 @@ public class JoinvilleInfoJobs implements Crawler {
    */
   @Override
   public List<Job> findJobs(Document document) {
-    InfoJobs infoJobs = new InfoJobs();
-    return infoJobs.findJobs(document);
+    return new ArrayList<>();
   }
 }

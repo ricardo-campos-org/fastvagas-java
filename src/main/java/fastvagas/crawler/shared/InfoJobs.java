@@ -2,18 +2,25 @@ package fastvagas.crawler.shared;
 
 import fastvagas.crawler.Crawler;
 import fastvagas.entity.Job;
-import fastvagas.util.ObjectUtil;
 import fastvagas.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/** This class search jobs at InfoJobs. */
 @Slf4j
 public class InfoJobs implements Crawler {
 
+  /**
+   * Finds all job from the first page of the website.
+   *
+   * @param document The HTML DOM element to be searched
+   * @return A {@link List} of {@link Job} containing all found jobs
+   */
   @Override
   public List<Job> findJobs(Document document) {
     List<Job> jobList = new ArrayList<>();
@@ -28,6 +35,7 @@ public class InfoJobs implements Crawler {
     log.info("Divs encontradas: {}", divVagas.size());
     for (Element div : divVagas) {
       Job job = new Job();
+      job.setCompanyName("");
 
       // Nome da vaga e URL
       Element divVaga = div.selectFirst("div.vaga");
@@ -58,16 +66,15 @@ public class InfoJobs implements Crawler {
       if (divContainerVaga != null) {
         Element divVagaDesc = divContainerVaga.selectFirst("div.vagaDesc");
         if (divVagaDesc != null) {
-          job.setJobDescription(
-              StringUtil.capitalize(divVagaDesc.text().trim().toLowerCase()));
+          job.setJobDescription(StringUtil.capitalize(divVagaDesc.text().trim().toLowerCase()));
         }
       }
 
       // Data da publicação
       if (divContainerVaga != null) {
         Elements divs = divContainerVaga.select("div");
-        for (Element divCVaga : divs) {
-          Element p = divCVaga.selectFirst("p.location2");
+        for (Element divVagaFor : divs) {
+          Element p = divVagaFor.selectFirst("p.location2");
           if (p == null) {
             continue;
           }
@@ -80,10 +87,6 @@ public class InfoJobs implements Crawler {
       }
 
       if (job.isValid()) {
-        if (!ObjectUtil.hasValue(job.getCompanyName())) {
-          job.setCompanyName("");
-        }
-
         jobList.add(job);
       }
     }

@@ -1,107 +1,75 @@
 package fastvagas.service;
 
+import fastvagas.config.MailPropertiesConfig;
 import fastvagas.entity.Job;
 import fastvagas.entity.User;
-import fastvagas.util.ObjectUtil;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
 import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /** This class contains methods to send mail notifications. */
+@NoArgsConstructor
 @Slf4j
 @Setter
 @Service
 public class MailService {
 
-  @Value("${config.mail.enabled}")
-  private String enabled;
-
-  @Value("${config.mail.from.address}")
-  private String fromAdress;
-
-  @Value("${config.mail.from.name}")
-  private String fromName;
-
-  @Value("${config.mail.from.password}")
-  private String fromPassword;
-
-  @Value("${config.mail.debug}")
-  private String debug;
-
-  @Value("${config.mail.smtp.host}")
-  private String smtpHost;
-
-  @Value("${config.mail.smtp.port}")
-  private String smtpPort;
-
-  @Value("${config.mail.smtp.auth}")
-  private String smtpAuth;
-
-  @Value("${config.mail.smtp.starttls.enable}")
-  private String startTlsEnable;
-
-  @Value("${config.mail.smtp.socketFactory.class}")
-  private String socketFactoryClass;
-
-  @Value("${config.mail.admin.to.address}")
-  private String adminToAddress;
-
-  @Value("${config.mail.admin.to.name}")
-  private String adminToName;
-
-  @Value("${config.mail.admin.cc.address}")
-  private String adminCcAddress;
-
-  @Value("${config.mail.admin.cc.name}")
-  private String adminCcName;
+  private MailPropertiesConfig mailPropertiesConfig;
 
   /** Creates an instance of MailService. */
   @Autowired
-  public MailService() {}
+  public MailService(MailPropertiesConfig mailPropertiesConfig) {
+    this.mailPropertiesConfig = mailPropertiesConfig;
+  }
 
   /**
    * Send a notification to a user with his job list.
    *
    * @param user the {@link User} destiny
    * @param jobs list of {@link Job} with all found jobs
+   * @return True if the email was sent, false otherwise
    */
-  public void jobNotification(User user, Set<Job> jobs) {
-    if (!enabled.equals("true")) {
+  public boolean jobNotification(User user, Set<Job> jobs) {
+    if (!mailPropertiesConfig.getEnabled().equals("true")) {
       log.info("Mail system not enabled for job notifications!! Leaving!");
-      return;
+      return false;
     }
 
     Properties propvls = System.getProperties();
-    propvls.setProperty("mail.smtp.host", smtpHost);
-    if (ObjectUtil.hasValue(debug)) {
-      propvls.put("mail.debug", debug);
+    propvls.setProperty("mail.smtp.host", mailPropertiesConfig.getSmtpHost());
+    if (!Objects.isNull(mailPropertiesConfig.getDebug())
+        && mailPropertiesConfig.getDebug().isBlank()) {
+      propvls.put("mail.debug", mailPropertiesConfig.getDebug());
     }
-    propvls.put("mail.smtp.port", smtpPort);
-    if (ObjectUtil.hasValue(smtpAuth)) {
-      propvls.put("mail.smtp.auth", smtpAuth);
+    propvls.put("mail.smtp.port", mailPropertiesConfig.getSmtpPort());
+    if (!Objects.isNull(mailPropertiesConfig.getSmtpAuth())
+        && mailPropertiesConfig.getSmtpAuth().isBlank()) {
+      propvls.put("mail.smtp.auth", mailPropertiesConfig.getSmtpAuth());
     }
-    if (ObjectUtil.hasValue(startTlsEnable)) {
-      propvls.put("mail.smtp.starttls.enable", startTlsEnable);
+    if (!Objects.isNull(mailPropertiesConfig.getSmtpStarttlsEnabled())
+        && mailPropertiesConfig.getSmtpStarttlsEnabled().isBlank()) {
+      propvls.put("mail.smtp.starttls.enable", mailPropertiesConfig.getSmtpStarttlsEnabled());
     }
-    propvls.put("mail.smtp.socketFactory.class", socketFactoryClass);
+    propvls.put("mail.smtp.socketFactory.class", mailPropertiesConfig.getSmtpSocketFactoryClass());
 
     Session session =
         Session.getDefaultInstance(
@@ -109,20 +77,21 @@ public class MailService {
             new Authenticator() {
               @Override
               protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(fromAdress, fromPassword);
+                return new PasswordAuthentication(
+                    mailPropertiesConfig.getFromAdress(), mailPropertiesConfig.getFromPassword());
               }
             });
 
-    // Envia um e-mail para a pessoa que fez o contato
+    // Send one email containing all found jobs.
     try {
       URL url = getClass().getClassLoader().getResource("email_template.html");
       if (url == null) {
-        throw new RuntimeException("Problema ao obter template para envio!");
+        throw new RuntimeException("Unable to retrieve email_template.html file!");
       }
       File file = new File(url.getFile());
       String mailTemplate = new String(Files.readAllBytes(file.toPath()));
 
-      // nome da pessoa
+      // user's name
       mailTemplate = mailTemplate.replace("__PRIMEIRO_NOME__", user.getFirstName());
 
       final String jobTemplate =
@@ -179,7 +148,7 @@ public class MailService {
             jobDetails += ".";
           }
 
-          if (ObjectUtil.hasValue(portalJob.getPublishedAt())) {
+          if (!portalJob.getPublishedAt().isBlank()) {
             jobDetails += " Publicado em: " + portalJob.getPublishedAt() + ".";
           }
         }
@@ -195,18 +164,24 @@ public class MailService {
       mailTemplate = mailTemplate.replace("__CONTEUDO_VAGA__", "");
 
       Message message = new MimeMessage(session);
-      message.setFrom(new InternetAddress(fromAdress, "Avisos de Vagas"));
-      message.setReplyTo(new Address[] {new InternetAddress(fromAdress)});
-      message.setRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail()));
-      message.setSubject(jobs.size() + " nova(s) vaga(s) encontrada(s)!");
+      message.setFrom(new InternetAddress(mailPropertiesConfig.getFromAdress(), "Avisos de Vagas"));
+      message.setReplyTo(new Address[] {new InternetAddress(mailPropertiesConfig.getFromAdress())});
+      message.setRecipient(
+          RecipientType.TO, new InternetAddress(user.getEmail(), user.getFirstName()));
+      message.setRecipient(
+          RecipientType.CC,
+          new InternetAddress(
+              mailPropertiesConfig.getAdminToAddress(), mailPropertiesConfig.getAdminToName()));
+      message.setSubject(jobs.size() + " new jobs found!");
       message.setContent(mailTemplate, "text/html; charset=UTF-8");
       message.setSentDate(new java.util.Date());
 
       Transport.send(message);
-      log.info("E-mail para a pessoa enviado com sucesso!");
+      log.info("Notification email successfully sent to the user {}!", user.getEmail());
+      return true;
     } catch (MessagingException | IOException | NullPointerException me) {
       me.printStackTrace();
-      throw new RuntimeException("Problema no servidor ao registrar contato.");
+      throw new RuntimeException("Unable to notify user's new job for " + user.getEmail());
     }
   }
 

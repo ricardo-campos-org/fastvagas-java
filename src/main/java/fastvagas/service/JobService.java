@@ -8,7 +8,6 @@ import fastvagas.repository.JobRepository;
 import fastvagas.repository.UserJobRepository;
 import fastvagas.repository.UserRepository;
 import fastvagas.util.DateUtil;
-import fastvagas.util.ObjectUtil;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +63,7 @@ public class JobService {
 
     enabledUsers.forEach(
         user -> {
-          if (ObjectUtil.hasValue(user.getTerms())) {
+          if (!user.getTerms().isBlank()) {
             processUserJobs(user);
           } else {
             log.info("User {} doesn't have search terms!", user.getEmail());

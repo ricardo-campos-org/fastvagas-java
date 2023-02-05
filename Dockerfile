@@ -7,19 +7,18 @@ COPY src /home/spring/src
 COPY pom.xml /home/spring
 
 WORKDIR /home/spring
-RUN mvn --no-transfer-progress --update-snapshots -P prod clean package
+RUN mvn --no-transfer-progress --update-snapshots clean package
 
 FROM eclipse-temurin:17-jre-alpine
 LABEL maintainer="Ricardo Montania Prado de Campos <ricardompcampos@gmail.com>"
 
-ENV LANG en_CA.UTF-8
-ENV LANGUAGE en_CA.UTF-8
-ENV LC_ALL en_CA.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 
 WORKDIR /usr/share/service/
-COPY --from=build /home/spring/target/nr-spar-backend.jar /usr/share/service/service.jar
-COPY dockerfile-entrypoint.sh /usr/share/service/dockerfile-entrypoint.sh
+COPY --from=build /home/spring/target/fast-jobs.jar /usr/share/service/service.jar
 
-EXPOSE 8090
+EXPOSE 8080
 
-ENTRYPOINT ["/usr/share/service/dockerfile-entrypoint.sh"]
+ENTRYPOINT ["java", "-jar", "/usr/share/service/service.jar"]
