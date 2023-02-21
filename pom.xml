@@ -280,7 +280,7 @@
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>10%</minimum>
+                                            <minimum>70%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
