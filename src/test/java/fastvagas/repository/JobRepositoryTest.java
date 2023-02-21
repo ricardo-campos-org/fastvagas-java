@@ -2,6 +2,7 @@ package fastvagas.repository;
 
 import fastvagas.entity.Job;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -72,5 +73,26 @@ public class JobRepositoryTest {
     Assertions.assertNotNull(jobDbSaved);
     Assertions.assertEquals(2L, jobDbSaved.getId());
     Assertions.assertEquals("Part-time", jobDbSaved.getJobType());
+  }
+
+  @Test
+  @DisplayName("deleteTest")
+  @Order(3)
+  void deleteTest() {
+    Job job = createJob();
+    Job jobDb = jobRepository.save(job);
+
+    Assertions.assertNotNull(jobDb);
+    Assertions.assertEquals(3L, jobDb.getId());
+    Assertions.assertEquals("Software Developer", jobDb.getJobTitle());
+    Assertions.assertEquals("Encora", jobDb.getCompanyName());
+    Assertions.assertEquals("Full time", jobDb.getJobType());
+    Assertions.assertEquals("Able to write and test code", jobDb.getJobDescription());
+
+    jobRepository.deleteById(jobDb.getId());
+
+    Optional<Job> portalDeleted = jobRepository.findById(jobDb.getId());
+
+    Assertions.assertTrue(portalDeleted.isEmpty());
   }
 }

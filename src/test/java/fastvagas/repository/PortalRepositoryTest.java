@@ -1,6 +1,5 @@
 package fastvagas.repository;
 
-import fastvagas.entity.Job;
 import fastvagas.entity.Portal;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
