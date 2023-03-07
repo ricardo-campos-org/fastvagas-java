@@ -1,6 +1,7 @@
 package fastvagas.repository;
 
 import fastvagas.entity.Portal;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(OrderAnnotation.class)
-public class PortalRepositoryTest {
+class PortalRepositoryTestIT {
 
   @Autowired private PortalRepository portalRepository;
 
@@ -42,7 +44,6 @@ public class PortalRepositoryTest {
     Portal portalDb = portalRepository.save(portal);
 
     Assertions.assertNotNull(portalDb);
-    Assertions.assertEquals(1L, portalDb.getId());
     Assertions.assertEquals("Test", portalDb.getName());
     Assertions.assertEquals("https://jobs-search.com/jobs", portalDb.getSearchUrl());
     Assertions.assertEquals("Joinville", portalDb.getCity());
@@ -58,7 +59,6 @@ public class PortalRepositoryTest {
     Portal portalDb = portalRepository.save(portal);
 
     Assertions.assertNotNull(portalDb);
-    Assertions.assertEquals(2L, portalDb.getId());
     Assertions.assertEquals("Test", portalDb.getName());
     Assertions.assertEquals("https://jobs-search.com/jobs", portalDb.getSearchUrl());
     Assertions.assertEquals("Joinville", portalDb.getCity());
@@ -69,7 +69,7 @@ public class PortalRepositoryTest {
     Portal portalDbSaved = portalRepository.save(portalDb);
 
     Assertions.assertNotNull(portalDbSaved);
-    Assertions.assertEquals(2L, portalDb.getId());
+    Assertions.assertEquals(portalDb.getId(), portalDbSaved.getId());
     Assertions.assertFalse(portalDb.getEnabled());
   }
 
@@ -81,7 +81,6 @@ public class PortalRepositoryTest {
     Portal portalDb = portalRepository.save(portal);
 
     Assertions.assertNotNull(portalDb);
-    Assertions.assertEquals(3L, portalDb.getId());
     Assertions.assertEquals("Test", portalDb.getName());
     Assertions.assertEquals("https://jobs-search.com/jobs", portalDb.getSearchUrl());
     Assertions.assertEquals("Joinville", portalDb.getCity());
@@ -93,5 +92,21 @@ public class PortalRepositoryTest {
     Optional<Portal> portalDeleted = portalRepository.findById(portalDb.getId());
 
     Assertions.assertTrue(portalDeleted.isEmpty());
+  }
+
+  @Test
+  @DisplayName("findAllByEnabledTest")
+  @Order(4)
+  @Sql(scripts = {"classpath:sql/PortalRepositoryTest.sql"})
+  void findAllByEnabledTest() {
+    List<Portal> portalsDisabled = portalRepository.findAllByEnabled(Boolean.FALSE);
+
+    Assertions.assertFalse(portalsDisabled.isEmpty());
+    Assertions.assertEquals(1, portalsDisabled.size());
+
+    List<Portal> portalsEnabled = portalRepository.findAllByEnabled(Boolean.TRUE);
+
+    Assertions.assertFalse(portalsEnabled.isEmpty());
+    Assertions.assertEquals(3, portalsEnabled.size());
   }
 }

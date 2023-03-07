@@ -116,21 +116,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.0.0-M9</version>
+                <configuration>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <argLine>${failsafe.jacoco.args}</argLine>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>integration-tests</id>
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
                         </goals>
-                        <configuration>
-                            <argLine>@{argLine} -Xmx1024m</argLine>
-                            <useSystemClassLoader>false</useSystemClassLoader>
-                            <includes>
-                                <include>**/*It.java</include>
-                            </includes>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -140,9 +136,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
-                    <argLine>@{argLine} -Xmx1024m</argLine>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <argLine>${surefire.jacoco.args}</argLine>
                     <excludes>
-                        <exclude>**/*It.java</exclude>
+                        <exclude>**/*TestIT.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -189,56 +186,58 @@
                         <exclude>**/exception/**</exclude>
                         <exclude>**/health/**</exclude>
                         <exclude>**/*$*Builder*</exclude>
-                        <exclude>**/PostgressApplication.*</exclude>
+                        <exclude>**/FastJobsApplication.*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
                     <!-- Unit tests -->
                     <execution>
-                        <id>prepare-unit</id>
+                        <id>before-unit-test-execution</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+                            <destFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</destFile>
+                            <propertyName>surefire.jacoco.args</propertyName>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>reports-unit</id>
+                        <id>after-unit-test-execution</id>
                         <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-                            <outputDirectory>${project.build.directory}/coverage-reports/jacoco-ut</outputDirectory>
+                            <dataFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-unit-test-coverage-report</outputDirectory>
                         </configuration>
                     </execution>
                     <!-- Integration tests -->
                     <execution>
-                        <id>prepare-integration</id>
+                        <id>before-integration-test-execution</id>
                         <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>prepare-agent-integration</goal>
+                            <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+                            <destFile>${project.build.directory}/jacoco-output/jacoco-integration-tests.exec</destFile>
+                            <propertyName>failsafe.jacoco.args</propertyName>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>reports-integration</id>
+                        <id>after-integration-test-execution</id>
                         <phase>post-integration-test</phase>
                         <goals>
-                            <goal>report-integration</goal>
+                            <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
-                            <outputDirectory>${project.build.directory}/coverage-reports/jacoco-it</outputDirectory>
+                            <dataFile>${project.build.directory}/jacoco-output/jacoco-integration-tests.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-integration-test-coverage-report</outputDirectory>
                         </configuration>
                     </execution>
                     <!-- Merge reports -->
                     <execution>
-                        <id>merge-reports</id>
+                        <id>merge-unit-and-integration</id>
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>merge</goal>
@@ -246,45 +245,51 @@
                         <configuration>
                             <fileSets>
                                 <fileSet>
-                                    <directory>${project.build.directory}/coverage-reports</directory>
+                                    <directory>${project.build.directory}/jacoco-output/</directory>
                                     <includes>
                                         <include>*.exec</include>
                                     </includes>
                                 </fileSet>
                             </fileSets>
-                            <destFile>${project.build.directory}/jacoco.exec</destFile>
+                            <destFile>${project.build.directory}/jacoco-output/merged.exec</destFile>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>report-merge</id>
+                        <id>create-merged-report</id>
                         <phase>post-integration-test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>${project.build.directory}/jacoco.exec</dataFile>
-                            <outputDirectory>${project.build.directory}/coverage-reports/merged-reports</outputDirectory>
+                            <dataFile>${project.build.directory}/jacoco-output/merged.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-merged-test-coverage-report</outputDirectory>
                         </configuration>
                     </execution>
                     <!-- Checks -->
                     <execution>
-                        <id>jacoco-check</id>
+                        <id>check</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>BUNDLE</element>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <exclude>*Test</exclude>
+                                        <exclude>*It</exclude>
+                                    </excludes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>70%</minimum>
+                                            <minimum>100%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
                             </rules>
+                            <dataFile>${project.build.directory}/jacoco-output/merged.exec</dataFile>
                         </configuration>
                     </execution>
                 </executions>
