@@ -57,30 +57,29 @@ public class MailService {
     Properties propvls = System.getProperties();
     propvls.setProperty("mail.smtp.host", mailPropertiesConfig.getSmtpHost());
     if (!Objects.isNull(mailPropertiesConfig.getDebug())
-        && mailPropertiesConfig.getDebug().isBlank()) {
+        && !mailPropertiesConfig.getDebug().isBlank()) {
       propvls.put("mail.debug", mailPropertiesConfig.getDebug());
     }
     propvls.put("mail.smtp.port", mailPropertiesConfig.getSmtpPort());
     if (!Objects.isNull(mailPropertiesConfig.getSmtpAuth())
-        && mailPropertiesConfig.getSmtpAuth().isBlank()) {
+        && !mailPropertiesConfig.getSmtpAuth().isBlank()) {
       propvls.put("mail.smtp.auth", mailPropertiesConfig.getSmtpAuth());
     }
     if (!Objects.isNull(mailPropertiesConfig.getSmtpStarttlsEnabled())
-        && mailPropertiesConfig.getSmtpStarttlsEnabled().isBlank()) {
+        && !mailPropertiesConfig.getSmtpStarttlsEnabled().isBlank()) {
       propvls.put("mail.smtp.starttls.enable", mailPropertiesConfig.getSmtpStarttlsEnabled());
     }
     propvls.put("mail.smtp.socketFactory.class", mailPropertiesConfig.getSmtpSocketFactoryClass());
 
-    Session session =
-        Session.getDefaultInstance(
-            propvls,
-            new Authenticator() {
-              @Override
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(
-                    mailPropertiesConfig.getFromAdress(), mailPropertiesConfig.getFromPassword());
-              }
-            });
+    Authenticator authenticator = new Authenticator() {
+      @Override
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(
+            mailPropertiesConfig.getFromAdress(), mailPropertiesConfig.getFromPassword());
+      }
+    };
+
+    Session session = Session.getDefaultInstance(propvls, authenticator);
 
     // Send one email containing all found jobs.
     try {
