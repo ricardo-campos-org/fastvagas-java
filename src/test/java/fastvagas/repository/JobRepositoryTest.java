@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(OrderAnnotation.class)
-public class JobRepositoryTest {
+class JobRepositoryTest {
 
   @Autowired private JobRepository jobRepository;
 
