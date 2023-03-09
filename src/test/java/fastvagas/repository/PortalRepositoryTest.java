@@ -1,5 +1,5 @@
 package fastvagas.repository;
 
-public class PortalRepositoryTest {
+class PortalRepositoryTest {
 
 }
