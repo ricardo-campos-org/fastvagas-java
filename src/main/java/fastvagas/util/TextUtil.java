@@ -1,6 +1,6 @@
 package fastvagas.util;
 
-import java.util.Map;
+import jakarta.validation.constraints.NotNull;import java.util.Map;
 import org.springframework.util.StringUtils;
 
 /** This class contains useful method to adjust text from the jobs. */
@@ -33,7 +33,7 @@ public final class TextUtil {
    * @param word The word to be replaced
    * @return The new word
    */
-  public static String replace(String word) {
-    return replacer.getOrDefault(word, StringUtils.capitalize(word));
+  public static String replace(@NotNull String word) {
+    return replacer.getOrDefault(word.toLowerCase(), StringUtils.capitalize(word));
   }
 }
