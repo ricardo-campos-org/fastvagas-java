@@ -112,7 +112,7 @@ public class CrawlerService {
             logsToWrite.append(message).append(cr);
             jobRepository.saveAll(jobToSave);
 
-            message = "Done crowling for this portal!";
+            message = "Done crawling for this portal!";
             log.info(message);
             logsToWrite.append(message).append(cr);
           }
