@@ -89,7 +89,7 @@ public class StringUtil {
    * @param max The maximum length
    * @return the new text
    */
-  public static String fixMaxLength(String text, Integer max) {
+  public static String fixMaxLength(String text, int max) {
     if (text.isEmpty() || text.isBlank()) {
       return text;
     }

@@ -37,5 +37,5 @@ public class Portal {
 
   @Column private String state;
 
-  @Column private Boolean enabled;
+  @Column private boolean enabled;
 }

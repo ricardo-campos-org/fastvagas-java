@@ -48,7 +48,7 @@ class PortalRepositoryTestIT {
     Assertions.assertEquals("https://jobs-search.com/jobs", portalDb.getSearchUrl());
     Assertions.assertEquals("Joinville", portalDb.getCity());
     Assertions.assertEquals("SC", portalDb.getState());
-    Assertions.assertTrue(portalDb.getEnabled());
+    Assertions.assertTrue(portalDb.isEnabled());
   }
 
   @Test
@@ -63,14 +63,14 @@ class PortalRepositoryTestIT {
     Assertions.assertEquals("https://jobs-search.com/jobs", portalDb.getSearchUrl());
     Assertions.assertEquals("Joinville", portalDb.getCity());
     Assertions.assertEquals("SC", portalDb.getState());
-    Assertions.assertTrue(portalDb.getEnabled());
+    Assertions.assertTrue(portalDb.isEnabled());
 
     portalDb.setEnabled(Boolean.FALSE);
     Portal portalDbSaved = portalRepository.save(portalDb);
 
     Assertions.assertNotNull(portalDbSaved);
     Assertions.assertEquals(portalDb.getId(), portalDbSaved.getId());
-    Assertions.assertFalse(portalDb.getEnabled());
+    Assertions.assertFalse(portalDb.isEnabled());
   }
 
   @Test
@@ -85,7 +85,7 @@ class PortalRepositoryTestIT {
     Assertions.assertEquals("https://jobs-search.com/jobs", portalDb.getSearchUrl());
     Assertions.assertEquals("Joinville", portalDb.getCity());
     Assertions.assertEquals("SC", portalDb.getState());
-    Assertions.assertTrue(portalDb.getEnabled());
+    Assertions.assertTrue(portalDb.isEnabled());
 
     portalRepository.deleteById(portalDb.getId());
 

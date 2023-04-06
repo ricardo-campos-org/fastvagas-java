@@ -54,7 +54,7 @@ public class CrawlerService {
   /** Starts the process of seeking for jobs. */
   @Transactional()
   public void start() {
-    List<Portal> portals = portalRepository.findAll();
+    List<Portal> portals = portalRepository.findAllByEnabled(Boolean.TRUE);
     if (portals.isEmpty()) {
       log.info("Zero portals with active users. Leaving..");
       return;
@@ -64,7 +64,7 @@ public class CrawlerService {
     LocalDateTime oneMonthPast = LocalDateTime.now().minusMonths(1L);
     char cr = '\n';
 
-    Set<Portal> portalSet = new HashSet<>(portalRepository.findAllByEnabled(Boolean.TRUE));
+    Set<Portal> portalSet = new HashSet<>(portals);
     portalSet.forEach(
         portal -> {
           String template = "Starting crawler on %s - %s/%s.";
@@ -121,13 +121,7 @@ public class CrawlerService {
     mailService.sendLogsToAdmin(logsToWrite.toString());
   }
 
-  /**
-   * Finds a list of jobs based on a Portal and a City.
-   *
-   * @param portal {@link Portal} to be used as search parameter
-   * @return A list of {@link Job} containing all jobs found or an empty list
-   */
-  public List<Job> findJobs(Portal portal) {
+  private List<Job> findJobs(Portal portal) {
     try {
       Document doc = Jsoup.connect(portal.getSearchUrl()).ignoreHttpErrors(true).get();
 
