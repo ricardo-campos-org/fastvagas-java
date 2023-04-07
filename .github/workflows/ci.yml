@@ -47,7 +47,7 @@ jobs:
         id: jacoco
         with:
           generate-branches-badge: true
-          jacoco-csv-file: target/coverage-reports/merged-reports/jacoco.csv
+          jacoco-csv-file: target/site/jacoco-merged-test-coverage-report/jacoco.csv
       - name: Log Coverage
         run: |
           echo "Coverage = ${{ steps.jacoco.outputs.coverage }}"
@@ -60,7 +60,7 @@ jobs:
           add: '*.svg'
           fetch: false
       - name: SonarCloud
-        run: ./mvnw --no-transfer-progress clean verify package test sonar:sonar -Dsonar.projectKey=ricardo-campos-org_fastvagas-java -Dsonar.coverage.jacoco.xmlReportPaths=target/coverage-reports/merged-reports/jacoco.xml
+        run: ./mvnw --no-transfer-progress clean verify package test sonar:sonar -Dsonar.projectKey=ricardo-campos-org_fastvagas-java -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco-merged-test-coverage-report/jacoco.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
