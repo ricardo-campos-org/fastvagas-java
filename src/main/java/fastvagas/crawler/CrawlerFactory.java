@@ -27,6 +27,11 @@ public class CrawlerFactory {
       return new JoinvilleTrabalhaBrasil();
     }
 
+    // Testing
+    if (className.equals("JoinvilleTesting")) {
+      return new JoinvilleTesting();
+    }
+
     return null;
   }
 }

@@ -11,11 +11,9 @@ import fastvagas.util.StringUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -64,83 +62,77 @@ public class CrawlerService {
     LocalDateTime oneMonthPast = LocalDateTime.now().minusMonths(1L);
     char cr = '\n';
 
-    Set<Portal> portalSet = new HashSet<>(portals);
-    portalSet.forEach(
-        portal -> {
-          String template = "Starting crawler on %s - %s/%s.";
-          String message =
-              String.format(template, portal.getName(), portal.getCity(), portal.getState());
+    for (Portal portal : portals) {
+      String template = "Starting crawler on %s - %s/%s.";
+      String message =
+          String.format(template, portal.getName(), portal.getCity(), portal.getState());
 
-          log.info(message);
-          logsToWrite.append(template).append(cr);
+      log.info(message);
+      logsToWrite.append(template).append(cr);
 
-          List<Job> jobList = findJobs(portal);
-          if (jobList.isEmpty()) {
-            message = "No new jobs found!";
-            log.info(message);
-            logsToWrite.append(message).append(cr);
-          } else {
-            message = jobList.size() + " new job(s) found on the portal.";
-            logsToWrite.append(message).append(cr);
+      List<Job> jobList = findJobs(portal);
+      if (jobList.isEmpty()) {
+        message = "No new jobs found!";
+        log.info(message);
+        logsToWrite.append(message).append(cr);
+      } else {
+        message = jobList.size() + " new job(s) found on the portal.";
+        logsToWrite.append(message).append(cr);
 
-            // Last 30 days jobs for this portal - to compare to see if it's new
-            List<Job> savedList =
-                jobRepository.findAllByPortalId(portal.getId()).stream()
-                    .filter(x -> x.getCreatedAt().isAfter(oneMonthPast))
-                    .toList();
+        // Last 30 days jobs for this portal - to compare to see if it's new
+        List<Job> savedList =
+            jobRepository.findAllByPortalId(portal.getId()).stream()
+                .filter(x -> x.getCreatedAt().isAfter(oneMonthPast))
+                .toList();
 
-            Map<String, Job> portalJobMap = PortalJobUtil.listToMapByUrl(savedList);
+        Map<String, Job> portalJobMap = PortalJobUtil.listToMapByUrl(savedList);
 
-            message = portalJobMap.size() + " job(s) already saved at this portal.";
-            logsToWrite.append(message).append(cr);
+        message = portalJobMap.size() + " job(s) already saved at this portal.";
+        logsToWrite.append(message).append(cr);
 
-            List<Job> jobToSave = new ArrayList<>();
-            message = "Iterating over job list received, looking for new jobs...";
-            log.info(message);
-            logsToWrite.append(message).append(cr);
+        List<Job> jobToSave = new ArrayList<>();
+        message = "Iterating over job list received, looking for new jobs...";
+        log.info(message);
+        logsToWrite.append(message).append(cr);
 
-            for (Job job : jobList) {
-              // Save the job, if it's not already saved
-              if (!portalJobMap.containsKey(job.getJobUrl())) {
-                job.setPortalId(portal.getId());
-                jobToSave.add(job);
-              }
-            }
-
-            message = jobToSave.size() + " new job(s) found. Registering...";
-            log.info(message);
-            logsToWrite.append(message).append(cr);
-            jobRepository.saveAll(jobToSave);
-
-            message = "Done crawling for this portal!";
-            log.info(message);
-            logsToWrite.append(message).append(cr);
+        for (Job job : jobList) {
+          // Save the job, if it's not already saved
+          if (!portalJobMap.containsKey(job.getJobUrl())) {
+            job.setPortalId(portal.getId());
+            jobToSave.add(job);
           }
-        });
+        }
+
+        message = jobToSave.size() + " new job(s) found. Registering...";
+        log.info(message);
+        logsToWrite.append(message).append(cr);
+        jobRepository.saveAll(jobToSave);
+
+        message = "Done crawling for this portal!";
+        log.info(message);
+        logsToWrite.append(message).append(cr);
+      }
+    }
 
     mailService.sendLogsToAdmin(logsToWrite.toString());
   }
 
   private List<Job> findJobs(Portal portal) {
+    Document doc = null;
     try {
-      Document doc = Jsoup.connect(portal.getSearchUrl()).ignoreHttpErrors(true).get();
-
-      String cityName = StringUtil.replaceToPlainText(portal.getCity().replace(" ", ""));
-      String portalName = StringUtil.replaceToPlainText(portal.getName().replace(" ", ""));
-
-      Crawler crawler = CrawlerFactory.createInstance(cityName + portalName);
-      if (Objects.isNull(crawler)) {
-        return new ArrayList<>();
-      }
-
-      return crawler.findJobs(doc);
-
-    } catch (IOException ioe) {
-      log.error("IOException: {}", ioe.getLocalizedMessage());
-    } catch (ClassCastException cce) {
-      log.error("ClassCastException: {}", cce.getLocalizedMessage());
+      doc = Jsoup.connect(portal.getSearchUrl()).ignoreHttpErrors(true).get();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
-    return new ArrayList<>();
+    String cityName = StringUtil.replaceToPlainText(portal.getCity().replace(" ", ""));
+    String portalName = StringUtil.replaceToPlainText(portal.getName().replace(" ", ""));
+
+    Crawler crawler = CrawlerFactory.createInstance(cityName + portalName);
+    if (Objects.isNull(crawler)) {
+      return List.of();
+    }
+
+    return crawler.findJobs(doc);
   }
 }
