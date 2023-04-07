@@ -126,4 +126,10 @@ class MailServiceTest {
                       })));
     }
   }
+
+  @Test
+  @DisplayName("sendLogsToAdminTest")
+  void sendLogsToAdminTest() {
+    mailService.sendLogsToAdmin("Test content");
+  }
 }

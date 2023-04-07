@@ -24,11 +24,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /** This class contains all routines related to a crawler job. */
-@Setter
 @Slf4j
 @Service
-@NoArgsConstructor
 public class CrawlerService {
+
+  private CrawlerService() {}
 
   private PortalRepository portalRepository;
   private JobRepository jobRepository;

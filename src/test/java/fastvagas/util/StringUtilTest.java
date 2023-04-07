@@ -19,6 +19,7 @@ class StringUtilTest {
   void capitalizeTest() {
     Assertions.assertEquals("TI", StringUtil.parseJobName("ti"));
     Assertions.assertEquals("Gerente", StringUtil.parseJobName("GERENTE"));
+    Assertions.assertEquals("de", StringUtil.parseJobName("de"));
   }
 
   @Test
@@ -41,5 +42,6 @@ class StringUtilTest {
   void fixMaxLengthTest() {
     Assertions.assertEquals("Company", StringUtil.fixMaxLength("Company LLC", 7));
     Assertions.assertEquals("Ricardo Campos", StringUtil.fixMaxLength("Ricardo Campos", 30));
+    Assertions.assertEquals("", StringUtil.fixMaxLength("", 7));
   }
 }
