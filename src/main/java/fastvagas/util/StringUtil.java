@@ -39,6 +39,8 @@ public class StringUtil {
       return text;
     }
 
+    text = text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+
     return TextUtil.replace(text);
   }
 
@@ -58,6 +60,7 @@ public class StringUtil {
     charMap.put('ç', 'c');
     charMap.put('ã', 'a');
     charMap.put('â', 'a');
+    charMap.put('ê', 'e');
     charMap.put('ô', 'o');
     charMap.put('Á', 'A');
     charMap.put('É', 'E');
