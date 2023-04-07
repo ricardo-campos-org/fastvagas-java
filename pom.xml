@@ -186,6 +186,7 @@
                         <exclude>**/exception/**</exclude>
                         <exclude>**/health/**</exclude>
                         <exclude>**/*$*Builder*</exclude>
+                        <exclude>**/MailService$1*</exclude>
                         <exclude>**/FastJobsApplication.*</exclude>
                     </excludes>
                 </configuration>

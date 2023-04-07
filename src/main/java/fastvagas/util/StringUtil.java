@@ -8,6 +8,8 @@ import org.springframework.lang.NonNull;
 /** This class contains useful methods to handle strings and texts. */
 public class StringUtil {
 
+  private StringUtil() {}
+
   /**
    * Normalize a given job title making it capitalized.
    *

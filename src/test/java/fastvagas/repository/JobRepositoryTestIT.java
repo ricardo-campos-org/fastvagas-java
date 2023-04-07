@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(OrderAnnotation.class)
@@ -122,7 +122,8 @@ class JobRepositoryTestIT {
   @Order(5)
   @Sql(scripts = {"classpath:sql/JobRepositoryTest.sql"})
   void findAllByCreatedStartingAt() {
-    List<Job> jobs = jobRepository.findAllByCreatedStartingAt(LocalDateTime.parse("2023-02-01T10:05:02"));
+    List<Job> jobs =
+        jobRepository.findAllByCreatedStartingAt(LocalDateTime.parse("2023-02-01T10:05:02"));
     Assertions.assertFalse(jobs.isEmpty());
     Assertions.assertEquals(1, jobs.size());
 
@@ -132,7 +133,8 @@ class JobRepositoryTestIT {
     Assertions.assertEquals("Full-time", job.getJobType());
     Assertions.assertEquals("Write code", job.getJobDescription());
 
-    List<Job> jobsMore = jobRepository.findAllByCreatedStartingAt(LocalDateTime.parse("2023-01-01T10:05:02"));
+    List<Job> jobsMore =
+        jobRepository.findAllByCreatedStartingAt(LocalDateTime.parse("2023-01-01T10:05:02"));
     Assertions.assertFalse(jobsMore.isEmpty());
     Assertions.assertEquals(2, jobsMore.size());
   }

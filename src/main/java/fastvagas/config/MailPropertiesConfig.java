@@ -14,7 +14,7 @@ public class MailPropertiesConfig {
 
   private String enabled;
 
-  private String fromAdress;
+  private String fromAddress;
 
   private String fromName;
 
