@@ -23,10 +23,10 @@ import org.springframework.stereotype.Service;
 
 /** This class contains useful method to retrieve jobs information. */
 @Slf4j
-@Setter
 @Service
-@NoArgsConstructor
 public class JobService {
+
+  private JobService() {}
 
   private JobRepository jobRepository;
   private UserJobRepository userJobRepository;
@@ -42,7 +42,7 @@ public class JobService {
    * @param mailService {@link MailService} instance
    */
   @Autowired
-  JobService(
+  public JobService(
       JobRepository jobRepository,
       UserJobRepository userJobRepository,
       UserRepository userRepository,
@@ -61,14 +61,13 @@ public class JobService {
       return;
     }
 
-    enabledUsers.forEach(
-        user -> {
-          if (!user.getTerms().isBlank()) {
-            processUserJobs(user);
-          } else {
-            log.info("User {} doesn't have search terms!", user.getEmail());
-          }
-        });
+    for (User user : enabledUsers) {
+      if (!user.getTerms().isBlank()) {
+        processUserJobs(user);
+      } else {
+        log.info("User {} doesn't have search terms!", user.getEmail());
+      }
+    }
   }
 
   private void processUserJobs(User user) {
