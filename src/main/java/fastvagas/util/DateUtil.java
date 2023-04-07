@@ -7,6 +7,8 @@ import java.util.Optional;
 /** This class contains useful Date and Time conversions and parsers. */
 public class DateUtil {
 
+  private DateUtil() {}
+
   /**
    * Format a {@link LocalDateTime} to 'dd/MM/yyyy hh:mm:ss' format.
    *

@@ -11,6 +11,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
   List<Job> findAllByPortalId(Long portalId);
 
-  @Query(value = "select * from job where created_at >= ?1", nativeQuery = true)
+  @Query(value = "select j.* from fjobs.job j where j.created_at >= ?1", nativeQuery = true)
   List<Job> findAllByCreatedStartingAt(LocalDateTime startingAt);
 }

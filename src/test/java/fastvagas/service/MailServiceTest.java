@@ -77,7 +77,7 @@ class MailServiceTest {
     when(mailPropertiesConfig.getSmtpHost()).thenReturn("mail.com");
     when(mailPropertiesConfig.getSmtpPort()).thenReturn("123");
     when(mailPropertiesConfig.getSmtpSocketFactoryClass()).thenReturn("java.class");
-    when(mailPropertiesConfig.getFromAdress()).thenReturn("mail@test.com");
+    when(mailPropertiesConfig.getFromAddress()).thenReturn("mail@test.com");
 
     try (MockedStatic<Transport> mockedTransport = mockStatic(Transport.class)) {
       boolean emailSent = mailService.jobNotification(createUser(), Set.of(createJob()));
@@ -95,5 +95,41 @@ class MailServiceTest {
                         }
                       })));
     }
+  }
+
+  @Test
+  @DisplayName("jobNotificationTestNullCases")
+  void jobNotificationTestNullCases() throws Exception {
+    when(mailPropertiesConfig.getEnabled()).thenReturn("true");
+    when(mailPropertiesConfig.getSmtpHost()).thenReturn("mail.com");
+    when(mailPropertiesConfig.getSmtpPort()).thenReturn("123");
+    when(mailPropertiesConfig.getSmtpSocketFactoryClass()).thenReturn("java.class");
+    when(mailPropertiesConfig.getFromAddress()).thenReturn("mail@test.com");
+    when(mailPropertiesConfig.getDebug()).thenReturn("true");
+    when(mailPropertiesConfig.getSmtpAuth()).thenReturn("true");
+    when(mailPropertiesConfig.getSmtpStarttlsEnabled()).thenReturn("true");
+
+    try (MockedStatic<Transport> mockedTransport = mockStatic(Transport.class)) {
+      boolean emailSent = mailService.jobNotification(createUser(), Set.of(createJob()));
+      Assertions.assertTrue(emailSent);
+
+      mockedTransport.verify(
+          () ->
+              Transport.send(
+                  argThat(
+                      message -> {
+                        try {
+                          return message.getSubject().equals("1 new jobs found!");
+                        } catch (MessagingException e) {
+                          throw new RuntimeException(e);
+                        }
+                      })));
+    }
+  }
+
+  @Test
+  @DisplayName("sendLogsToAdminTest")
+  void sendLogsToAdminTest() {
+    mailService.sendLogsToAdmin("Test content");
   }
 }

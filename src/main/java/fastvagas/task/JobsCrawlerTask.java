@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 
 /** This class contains the scheduled method that is triggered to find jobs. */
 @Slf4j
-@Setter
 @Component
-@NoArgsConstructor
 public class JobsCrawlerTask {
+
+  private JobsCrawlerTask() {}
 
   private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -29,14 +29,14 @@ public class JobsCrawlerTask {
    * @param jobService {@link JobService} instance
    */
   @Autowired
-  JobsCrawlerTask(CrawlerService crawlerService, JobService jobService) {
+  public JobsCrawlerTask(CrawlerService crawlerService, JobService jobService) {
     this.crawlerService = crawlerService;
     this.jobService = jobService;
   }
 
   /** This method starts the crawling task. Every two hours. */
   // @Scheduled(cron = "0 0 */2 * * *")
-  public void reportCurrentTime() {
+  public void startScheduledTask() {
     log.info("Starting jobs crawler at {}", dateFormat.format(new Date()));
     crawlerService.start();
     log.info("Finished jobs crawler at {}", dateFormat.format(new Date()));

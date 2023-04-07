@@ -74,6 +74,12 @@ docker-compose down --remove-orphans
 ```
 ## Tests
 
+Unit tests run with **surefire** maven plugin.
+You can run all unit tests running with `./mvnw clean test`
+
+Integration tests run with **failsafe** maven plugin.
+You can run all integration tests running with `./mvnw clean verify`
+
 You can run all tests with:
 ```bash
 ./mvnw --no-transfer-progress clean verify test

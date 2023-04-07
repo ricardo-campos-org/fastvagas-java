@@ -8,6 +8,8 @@ import org.springframework.lang.NonNull;
 /** This class contains useful methods to handle strings and texts. */
 public class StringUtil {
 
+  private StringUtil() {}
+
   /**
    * Normalize a given job title making it capitalized.
    *
@@ -39,6 +41,8 @@ public class StringUtil {
       return text;
     }
 
+    text = text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+
     return TextUtil.replace(text);
   }
 
@@ -58,6 +62,7 @@ public class StringUtil {
     charMap.put('ç', 'c');
     charMap.put('ã', 'a');
     charMap.put('â', 'a');
+    charMap.put('ê', 'e');
     charMap.put('ô', 'o');
     charMap.put('Á', 'A');
     charMap.put('É', 'E');
@@ -89,7 +94,7 @@ public class StringUtil {
    * @param max The maximum length
    * @return the new text
    */
-  public static String fixMaxLength(String text, Integer max) {
+  public static String fixMaxLength(String text, int max) {
     if (text.isEmpty() || text.isBlank()) {
       return text;
     }

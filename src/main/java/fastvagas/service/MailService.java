@@ -20,16 +20,12 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /** This class contains methods to send mail notifications. */
-@NoArgsConstructor
 @Slf4j
-@Setter
 @Service
 public class MailService {
 
@@ -40,6 +36,8 @@ public class MailService {
   public MailService(MailPropertiesConfig mailPropertiesConfig) {
     this.mailPropertiesConfig = mailPropertiesConfig;
   }
+
+  private MailService() {}
 
   /**
    * Send a notification to a user with his job list.
@@ -57,30 +55,30 @@ public class MailService {
     Properties propvls = System.getProperties();
     propvls.setProperty("mail.smtp.host", mailPropertiesConfig.getSmtpHost());
     if (!Objects.isNull(mailPropertiesConfig.getDebug())
-        && mailPropertiesConfig.getDebug().isBlank()) {
+        && !mailPropertiesConfig.getDebug().isBlank()) {
       propvls.put("mail.debug", mailPropertiesConfig.getDebug());
     }
     propvls.put("mail.smtp.port", mailPropertiesConfig.getSmtpPort());
     if (!Objects.isNull(mailPropertiesConfig.getSmtpAuth())
-        && mailPropertiesConfig.getSmtpAuth().isBlank()) {
+        && !mailPropertiesConfig.getSmtpAuth().isBlank()) {
       propvls.put("mail.smtp.auth", mailPropertiesConfig.getSmtpAuth());
     }
     if (!Objects.isNull(mailPropertiesConfig.getSmtpStarttlsEnabled())
-        && mailPropertiesConfig.getSmtpStarttlsEnabled().isBlank()) {
+        && !mailPropertiesConfig.getSmtpStarttlsEnabled().isBlank()) {
       propvls.put("mail.smtp.starttls.enable", mailPropertiesConfig.getSmtpStarttlsEnabled());
     }
     propvls.put("mail.smtp.socketFactory.class", mailPropertiesConfig.getSmtpSocketFactoryClass());
 
-    Session session =
-        Session.getDefaultInstance(
-            propvls,
-            new Authenticator() {
-              @Override
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(
-                    mailPropertiesConfig.getFromAdress(), mailPropertiesConfig.getFromPassword());
-              }
-            });
+    Authenticator authenticator =
+        new Authenticator() {
+          @Override
+          protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(
+                mailPropertiesConfig.getFromAddress(), mailPropertiesConfig.getFromPassword());
+          }
+        };
+
+    Session session = Session.getDefaultInstance(propvls);
 
     // Send one email containing all found jobs.
     try {
@@ -164,8 +162,10 @@ public class MailService {
       mailTemplate = mailTemplate.replace("__CONTEUDO_VAGA__", "");
 
       Message message = new MimeMessage(session);
-      message.setFrom(new InternetAddress(mailPropertiesConfig.getFromAdress(), "Avisos de Vagas"));
-      message.setReplyTo(new Address[] {new InternetAddress(mailPropertiesConfig.getFromAdress())});
+      message.setFrom(
+          new InternetAddress(mailPropertiesConfig.getFromAddress(), "Avisos de Vagas"));
+      message.setReplyTo(
+          new Address[] {new InternetAddress(mailPropertiesConfig.getFromAddress())});
       message.setRecipient(
           RecipientType.TO, new InternetAddress(user.getEmail(), user.getFirstName()));
       message.setRecipient(

@@ -15,4 +15,10 @@ class DateUtilTest {
 
     Assertions.assertEquals("06/01/2023 08:08:00", formatted);
   }
+
+  @Test
+  @DisplayName("formatEmptyDateTimeTest")
+  void formatEmptyDateTimeTest() {
+    Assertions.assertEquals("", DateUtil.formatLocalDateTime(null));
+  }
 }
