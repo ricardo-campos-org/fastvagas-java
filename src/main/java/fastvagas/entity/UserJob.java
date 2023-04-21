@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** This class represents a {@link Job} found to a {@link User}. */
+/** This class represents a {@link Job} found to a {@link UserEntity}. */
 @Getter
 @Setter
 @Entity

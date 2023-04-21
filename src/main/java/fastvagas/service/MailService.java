@@ -2,7 +2,7 @@ package fastvagas.service;
 
 import fastvagas.config.MailPropertiesConfig;
 import fastvagas.entity.Job;
-import fastvagas.entity.User;
+import fastvagas.entity.UserEntity;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -42,11 +42,11 @@ public class MailService {
   /**
    * Send a notification to a user with his job list.
    *
-   * @param user the {@link User} destiny
+   * @param user the {@link UserEntity} destiny
    * @param jobs list of {@link Job} with all found jobs
    * @return True if the email was sent, false otherwise
    */
-  public boolean jobNotification(User user, Set<Job> jobs) {
+  public boolean jobNotification(UserEntity user, Set<Job> jobs) {
     if (!mailPropertiesConfig.getEnabled().equals("true")) {
       log.info("Mail system not enabled for job notifications!! Leaving!");
       return false;

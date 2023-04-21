@@ -6,7 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import fastvagas.entity.Job;
-import fastvagas.entity.User;
+import fastvagas.entity.UserEntity;
 import fastvagas.repository.JobRepository;
 import fastvagas.repository.UserJobRepository;
 import fastvagas.repository.UserRepository;
@@ -37,8 +37,8 @@ class JobServiceTest {
     jobService = new JobService(jobRepository, userJobRepository, userRepository, mailService);
   }
 
-  private User createUser() {
-    User user = new User();
+  private UserEntity createUser() {
+    UserEntity user = new UserEntity();
     user.setEmail("test@user.com");
     user.setId(1L);
     user.setTerms("");
@@ -58,7 +58,7 @@ class JobServiceTest {
   @Test
   @DisplayName("processAllUsersTest_emptyTerm")
   void processAllUsersTest_emptyTerm() {
-    User user = createUser();
+    UserEntity user = createUser();
 
     when(userRepository.findAllByDisabledAt(any())).thenReturn(List.of(user));
 
@@ -70,7 +70,7 @@ class JobServiceTest {
   @Test
   @DisplayName("processAllUsersTest_noUserJobs")
   void processAllUsersTest_noUserJobs() {
-    User user = createUser();
+    UserEntity user = createUser();
     user.setTerms("lala");
 
     when(userRepository.findAllByDisabledAt(any())).thenReturn(List.of(user));
@@ -98,7 +98,7 @@ class JobServiceTest {
   @Test
   @DisplayName("processAllUsersTest_success")
   void processAllUsersTest_success() {
-    User user = createUser();
+    UserEntity user = createUser();
     user.setTerms("java");
 
     when(userRepository.findAllByDisabledAt(any())).thenReturn(List.of(user));

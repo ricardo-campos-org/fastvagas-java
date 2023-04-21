@@ -7,10 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -20,7 +17,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "user")
-public class User {
+public class UserEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +32,10 @@ public class User {
   @Column(length = 100, nullable = false)
   private String email;
 
-  @Column(length = 30)
+  @Column(length = 30, nullable = false)
   private String city;
 
-  @Column(length = 30)
+  @Column(length = 30, nullable = false)
   private String state;
 
   @Column(name = "created_at", nullable = false)
