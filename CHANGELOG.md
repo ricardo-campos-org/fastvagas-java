@@ -1,4 +1,13 @@
-# 0.1.0 (2023-04-25)
+# [0.2.0](https://github.com/ricardo-campos-org/fastvagas-java/compare/v0.1.0...v0.2.0) (2023-04-25)
+
+
+### Features
+
+* bumping maven-checkstyle-plugin and spring-boot-starter-parent ([#44](https://github.com/ricardo-campos-org/fastvagas-java/issues/44)) ([44a08c2](https://github.com/ricardo-campos-org/fastvagas-java/commit/44a08c22c9dba12bb545baf0050af0f29332bcbf))
+
+
+
+# [0.1.0](https://github.com/ricardo-campos-org/fastvagas-java/compare/afcda3e843a8de09764d951e984fb499d87205b7...v0.1.0) (2023-04-25)
 
 
 ### Features
