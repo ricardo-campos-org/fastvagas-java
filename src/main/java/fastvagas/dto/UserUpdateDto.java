@@ -7,11 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/** This class represents a user object when creating. */
+/** This class represents a user object when updating. */
 @Getter
 @Setter
 @ToString
-public class UserCreateDto {
+public class UserUpdateDto {
 
   @NotNull
   @Size(max = 15)
@@ -27,15 +27,6 @@ public class UserCreateDto {
   private String email;
 
   @NotNull
-  @Size(max = 30)
-  private String city;
-
-  @NotNull
-  @Size(max = 30)
-  private String state;
-
-  @NotNull
   @Size(max = 200)
   private String terms;
-
 }

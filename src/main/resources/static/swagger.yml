@@ -1,0 +1,215 @@
+openapi: 3.0.0
+
+info:
+  title: Fast Vagas REST API
+  description: Where you can find jobs
+  version: 0.0.1
+  contact:
+    name: Ricardo Campos
+    email: ricardompcampos@gmail.com
+    url: https://linktr.ee/ricardompcampos
+  license:
+    name: GPL v3.0
+    url: https://choosealicense.com/licenses/gpl-3.0/
+
+paths:
+  /users:
+    post:
+      tags:
+        - UserResource
+      summary: Creates a user
+      description: Creates a user in the database
+      requestBody:
+        description: Body containing first and last name, email, city, state, and search terms in
+          in a list, separated by comma.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateDto'
+      responses:
+        '201':
+          description: User created with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEntity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - UserResource
+      summary: Retrieve users
+      description: Retrieve all registered users
+      responses:
+        '200':
+          description: List with all registered users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserEntity'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /users/{id}:
+    put:
+      tags:
+        - UserResource
+      summary: Update users
+      description: Updates a user in the database based on the user's identification number
+      parameters:
+        - name: id
+          in: path
+          description: User's identification, from UserEntity table.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Body containing first and last name, email and terms, separated by comma.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateDto'
+      responses:
+        '200':
+          description: User updated with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEntity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: User not found
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - UserResource
+      summary: Delete users
+      description: Delete a user in the database, actually, disable, based on the user's
+        identification number
+      parameters:
+        - name: id
+          in: path
+          description: User's identification, from UserEntity table.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User (soft) deleted with success
+        '404':
+          description: User not found
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+
+components:
+  responses:
+    BadRequest:
+      description: Required fields missing or validation errors
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          example: '500'
+        error:
+          type: string
+          example: Internal Server Error
+        message:
+          type: string
+          example: JDBC exception executing SQL error
+        path:
+          type: string
+          example: "/users"
+    UserCreateDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Ricardo
+        lastName:
+          type: string
+          example: Campos
+        email:
+          type: string
+          example: email@domain.com
+        city:
+          type: string
+          example: Joinville
+        state:
+          type: string
+          example: SC
+        terms:
+          type: string
+          example: Java,Backend
+    UserUpdateDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Ricardo
+        lastName:
+          type: string
+          example: Campos
+        email:
+          type: string
+          example: email@domain.com
+        terms:
+          type: string
+          example: Java,Backend
+    UserEntity:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: Ricardo
+        lastName:
+          type: string
+          example: Campos
+        email:
+          type: string
+          example: email@domain.com
+        city:
+          type: string
+          example: Joinville
+        state:
+          type: string
+          example: SC
+        createdAt:
+          type: string
+          format: date-time
+        disabledAt:
+          type: string
+          format: date-time
+        terms:
+          type: string
+          example: Java,Backend
+        lastSearch:
+          type: string
+          format: date-time
