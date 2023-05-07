@@ -4,8 +4,6 @@ import fastvagas.service.CrawlerService;
 import fastvagas.service.JobService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

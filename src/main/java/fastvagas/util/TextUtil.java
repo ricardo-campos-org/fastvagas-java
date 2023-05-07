@@ -1,6 +1,7 @@
 package fastvagas.util;
 
-import jakarta.validation.constraints.NotNull;import java.util.Map;
+import jakarta.validation.constraints.NotNull;
+import java.util.Map;
 import org.springframework.util.StringUtils;
 
 /** This class contains useful method to adjust text from the jobs. */

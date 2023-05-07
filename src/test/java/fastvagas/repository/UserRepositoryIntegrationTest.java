@@ -19,7 +19,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(OrderAnnotation.class)
-class UserRepositoryTestIT {
+class UserRepositoryIntegrationTest {
 
   @Autowired private UserRepository userRepository;
 

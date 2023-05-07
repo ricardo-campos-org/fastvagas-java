@@ -1,12 +1,12 @@
 package fastvagas.service;
-import fastvagas.dto.UserUpdateDto;
-import fastvagas.exception.UserExistsException;
-import fastvagas.exception.UserNotFoundException;
-import java.time.LocalDateTime;
 
 import fastvagas.dto.UserCreateDto;
+import fastvagas.dto.UserUpdateDto;
 import fastvagas.entity.UserEntity;
+import fastvagas.exception.UserExistsException;
+import fastvagas.exception.UserNotFoundException;
 import fastvagas.repository.UserRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/** This class container methods to handle user related routines and processes. */
 @Slf4j
 @Service
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

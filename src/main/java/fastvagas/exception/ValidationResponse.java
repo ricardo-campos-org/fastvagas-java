@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.Getter;
 import org.springframework.validation.FieldError;
 
+/** This class contains error message and invalid fields description, in case of errors. */
 @Getter
 public class ValidationResponse {
 
@@ -13,10 +14,16 @@ public class ValidationResponse {
 
   private final List<ValidationFieldResponse> fields;
 
+  /**
+   * Create a new ValidationResponse instance.
+   *
+   * @param errors A {@link List} of {@link FieldError}
+   */
   public ValidationResponse(List<FieldError> errors) {
-    this.fields = errors.stream()
-        .map(e -> new ValidationFieldResponse(e.getField(), e.getDefaultMessage()))
-        .toList();
+    this.fields =
+        errors.stream()
+            .map(e -> new ValidationFieldResponse(e.getField(), e.getDefaultMessage()))
+            .toList();
     this.errorMessage = String.format(TEMPLATE, this.fields.size());
   }
 }
