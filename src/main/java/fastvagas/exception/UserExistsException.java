@@ -8,7 +8,15 @@ import org.springframework.web.server.ResponseStatusException;
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class UserExistsException extends ResponseStatusException {
 
+  private final String message;
+
   public UserExistsException(String email) {
     super(HttpStatus.BAD_REQUEST, String.format("User already exists for this email: %s", email));
+    this.message = String.format("User already exists for this email: %s", email);
+  }
+
+  @Override
+  public String getMessage() {
+    return message;
   }
 }

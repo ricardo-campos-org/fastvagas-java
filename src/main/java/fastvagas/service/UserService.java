@@ -40,7 +40,7 @@ public class UserService {
     // Validations
     List<UserEntity> usersEmailList = userRepository.findAllByEmail(userCreateDto.getEmail());
     if (!usersEmailList.isEmpty()) {
-      log.info("User already exists! {}", userCreateDto);
+      log.info("User (email) already exists! {}", userCreateDto);
       throw new UserExistsException(userCreateDto.getEmail());
     }
 
@@ -72,6 +72,7 @@ public class UserService {
 
     Optional<UserEntity> userEntityOp = userRepository.findById(userId);
     if (userEntityOp.isEmpty()) {
+      log.info("User not found for id {}", userId);
       throw new UserNotFoundException(userId);
     }
 

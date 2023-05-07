@@ -8,7 +8,15 @@ import org.springframework.web.server.ResponseStatusException;
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class UserNotFoundException extends ResponseStatusException {
 
+  private final String message;
+
   public UserNotFoundException(Long id) {
     super(HttpStatus.NOT_FOUND, String.format("User not found for id: %d", id));
+    this.message = String.format("User not found for id: %d", id);
+  }
+
+  @Override
+  public String getMessage() {
+    return message;
   }
 }
