@@ -58,16 +58,32 @@ public class UserResource {
     return userService.updateUser(id, userUpdateDto);
   }
 
+  /**
+   * Deletes a {@link UserEntity} in the database. PS: The record will not be deleted,
+   * but will be updated with the field 'disabledAt' with current date and time.
+   *
+   * @param id User's identification number
+   */
   @DeleteMapping(path = "/{id}")
   public void disableUser(@PathVariable long id) {
     userService.disableUser(id);
   }
 
+  /**
+   * Retrieves all database users.
+   *
+   * @return A {@link List} of {@link UserEntity}
+   */
   @GetMapping()
   public List<UserEntity> getAll() {
     return userService.getAllUsers();
   }
 
+  /**
+   * Retrieve all jobs to a specific user.
+   *
+   * @returnA {@link List} of {@link Job}
+   */
   @GetMapping("/{id}/jobs")
   public List<Job> getAllUserJobs() {
     return List.of();
