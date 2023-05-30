@@ -36,7 +36,7 @@ class CrawlerServiceTest {
     return Portal.builder()
         .id(1L)
         .name("Testing")
-        .searchUrl("http://joinville.com")
+        .searchUrl("https://www.joinville.sc.gov.br/")
         .city("Joinville")
         .state("SC")
         .enabled(enabled)
