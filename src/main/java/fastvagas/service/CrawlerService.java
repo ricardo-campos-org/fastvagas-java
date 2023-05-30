@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -120,6 +118,7 @@ public class CrawlerService {
   private List<Job> findJobs(Portal portal) {
     Document doc = null;
     try {
+      log.info("Finding jobs for Portal URL {}", portal.getSearchUrl());
       doc = Jsoup.connect(portal.getSearchUrl()).ignoreHttpErrors(true).get();
     } catch (IOException e) {
       throw new RuntimeException(e);
