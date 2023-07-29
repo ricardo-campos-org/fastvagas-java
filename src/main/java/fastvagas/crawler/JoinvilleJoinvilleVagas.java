@@ -2,8 +2,11 @@ package fastvagas.crawler;
 
 import fastvagas.entity.Job;
 import fastvagas.util.StringUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,7 +41,7 @@ public class JoinvilleJoinvilleVagas implements Crawler {
       Element h3JobListingTitle = li.selectFirst(".job_listing-title");
       if (h3JobListingTitle != null) {
         Element a = h3JobListingTitle.selectFirst("a");
-        if (a != null) {
+        if (!Objects.isNull(a) && !Objects.isNull(a.text())) {
           job.setJobTitle(StringUtil.parseJobName(a.text()));
           job.setJobUrl(a.absUrl("href"));
         }

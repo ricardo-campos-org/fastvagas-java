@@ -12,6 +12,8 @@ services:
     restart: always
     volumes:
       - /pgdata
+    ports:
+      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "psql -q -U $DATASOURCE_USER -d $DATASOURCE_NAME -c 'SELECT 1'"]
       interval: 10s
