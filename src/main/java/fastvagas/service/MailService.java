@@ -21,7 +21,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /** This class contains methods to send mail notifications. */
@@ -32,12 +31,9 @@ public class MailService {
   private MailPropertiesConfig mailPropertiesConfig;
 
   /** Creates an instance of MailService. */
-  @Autowired
   public MailService(MailPropertiesConfig mailPropertiesConfig) {
     this.mailPropertiesConfig = mailPropertiesConfig;
   }
-
-  private MailService() {}
 
   /**
    * Send a notification to a user with his job list.

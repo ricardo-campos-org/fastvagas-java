@@ -3,7 +3,7 @@ package fastvagas.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.lang.NonNull;
+import java.util.Objects;
 
 /** This class contains useful methods to handle strings and texts. */
 public class StringUtil {
@@ -16,7 +16,10 @@ public class StringUtil {
    * @param text The text to be normalized
    * @return A string with the new parsed text
    */
-  public static String parseJobName(@NonNull String text) {
+  public static String parseJobName(String text) {
+    if (Objects.isNull(text)) {
+      return text;
+    }
     List<String> words = List.of(text.split(" "));
     StringBuilder sb = new StringBuilder();
     for (String word : words) {
