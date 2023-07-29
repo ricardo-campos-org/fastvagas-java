@@ -15,18 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /** This class contains useful method to retrieve jobs information. */
 @Slf4j
 @Service
 public class JobService {
-
-  private JobService() {}
 
   private JobRepository jobRepository;
   private UserJobRepository userJobRepository;
@@ -41,7 +36,6 @@ public class JobService {
    * @param userRepository {@link UserRepository} instance
    * @param mailService {@link MailService} instance
    */
-  @Autowired
   public JobService(
       JobRepository jobRepository,
       UserJobRepository userJobRepository,

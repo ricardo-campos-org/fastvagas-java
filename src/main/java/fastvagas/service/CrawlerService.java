@@ -17,7 +17,6 @@ import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 public class CrawlerService {
-
-  private CrawlerService() {}
 
   private PortalRepository portalRepository;
   private JobRepository jobRepository;
@@ -39,7 +36,6 @@ public class CrawlerService {
    * @param jobRepository {@link JobRepository} instance
    * @param mailService {@link MailService} instance
    */
-  @Autowired
   public CrawlerService(
       PortalRepository portalRepository, JobRepository jobRepository, MailService mailService) {
     this.portalRepository = portalRepository;

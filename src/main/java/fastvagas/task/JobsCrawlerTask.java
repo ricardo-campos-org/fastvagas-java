@@ -4,18 +4,13 @@ import fastvagas.service.CrawlerService;
 import fastvagas.service.JobService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /** This class contains the scheduled method that is triggered to find jobs. */
 @Slf4j
 @Component
 public class JobsCrawlerTask {
-
-  private JobsCrawlerTask() {}
 
   private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
@@ -28,7 +23,6 @@ public class JobsCrawlerTask {
    * @param crawlerService {@link CrawlerService} instance
    * @param jobService {@link JobService} instance
    */
-  @Autowired
   public JobsCrawlerTask(CrawlerService crawlerService, JobService jobService) {
     this.crawlerService = crawlerService;
     this.jobService = jobService;
