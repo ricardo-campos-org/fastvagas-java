@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MailService {
 
-  private MailPropertiesConfig mailPropertiesConfig;
+  private final MailPropertiesConfig mailPropertiesConfig;
 
   /** Creates an instance of MailService. */
   public MailService(MailPropertiesConfig mailPropertiesConfig) {
@@ -74,7 +74,7 @@ public class MailService {
           }
         };
 
-    Session session = Session.getDefaultInstance(propvls);
+    Session session = Session.getDefaultInstance(propvls, authenticator);
 
     // Send one email containing all found jobs.
     try {
