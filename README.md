@@ -2,14 +2,17 @@
 ![Branches](.github/badges/branches.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ricardo-campos-org_fastvagas-java&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ricardo-campos-org_onde-tem-vagas-api)
 
-# fastvagas-java
-[Side Project] Service to find jobs published openly on the web. This service do crawler to find jobs and parse HTML.
+# Fast Vagas
+[Side Project] Service to find jobs published openly on the web. This service do crawler to find
+jobs and parse HTML.
 
 # Tech stack
 - [x] Back-end
-- [x] Front-end
+- [x] REST API
+- [ ] Front-end
 - [x] Docker
-- [x] Database related
+- [x] Docker compose
+- [x] Postgres Database
 - [x] Testing
 - [x] Maven
 - [x] NPM

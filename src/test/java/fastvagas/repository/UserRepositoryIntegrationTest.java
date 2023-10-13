@@ -1,6 +1,6 @@
 package fastvagas.repository;
 
-import fastvagas.entity.User;
+import fastvagas.entity.UserEntity;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -19,12 +19,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(OrderAnnotation.class)
-class UserRepositoryTestIT {
+class UserRepositoryIntegrationTest {
 
   @Autowired private UserRepository userRepository;
 
-  private User createUser() {
-    User user = new User();
+  private UserEntity createUser() {
+    UserEntity user = new UserEntity();
     user.setId(1L);
     user.setFirstName("First");
     user.setLastName("Last");
@@ -42,7 +42,7 @@ class UserRepositoryTestIT {
   @DisplayName("createTest")
   @Order(1)
   void createTest() {
-    User userDb = userRepository.save(createUser());
+    UserEntity userDb = userRepository.save(createUser());
 
     Assertions.assertNotNull(userDb);
     Assertions.assertEquals("First", userDb.getFirstName());
@@ -59,11 +59,11 @@ class UserRepositoryTestIT {
   @DisplayName("updateTest")
   @Order(2)
   void updateTest() {
-    User userDb = userRepository.save(createUser());
+    UserEntity userDb = userRepository.save(createUser());
 
     userDb.setEmail("new.address@email.com");
 
-    User userDbSaved = userRepository.save(userDb);
+    UserEntity userDbSaved = userRepository.save(userDb);
 
     Assertions.assertNotNull(userDbSaved);
     Assertions.assertEquals(userDb.getId(), userDbSaved.getId());

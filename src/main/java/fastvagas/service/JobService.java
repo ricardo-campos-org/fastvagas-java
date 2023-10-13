@@ -1,7 +1,7 @@
 package fastvagas.service;
 
 import fastvagas.entity.Job;
-import fastvagas.entity.User;
+import fastvagas.entity.UserEntity;
 import fastvagas.entity.UserJob;
 import fastvagas.entity.UserJobPk;
 import fastvagas.repository.JobRepository;
@@ -49,13 +49,13 @@ public class JobService {
 
   /** Process a list of jobs and a list of users' terms. */
   public void processAllUsers() {
-    List<User> enabledUsers = userRepository.findAllByDisabledAt(null);
+    List<UserEntity> enabledUsers = userRepository.findAllByDisabledAt(null);
     if (enabledUsers.isEmpty()) {
       log.info("No active users!");
       return;
     }
 
-    for (User user : enabledUsers) {
+    for (UserEntity user : enabledUsers) {
       if (!user.getTerms().isBlank()) {
         processUserJobs(user);
       } else {
@@ -64,7 +64,7 @@ public class JobService {
     }
   }
 
-  private void processUserJobs(User user) {
+  private void processUserJobs(UserEntity user) {
     LocalDateTime startingAt = user.getLastSearch();
     log.info("Processing new jobs to user {}", user.getEmail());
     log.info("Processing new jobs starting at {}", DateUtil.formatLocalDateTime(startingAt));

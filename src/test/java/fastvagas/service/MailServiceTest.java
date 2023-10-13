@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import fastvagas.config.MailPropertiesConfig;
 import fastvagas.entity.Job;
-import fastvagas.entity.User;
+import fastvagas.entity.UserEntity;
 import java.time.LocalDateTime;
 import java.util.Set;
 import javax.mail.MessagingException;
@@ -34,8 +34,8 @@ class MailServiceTest {
     mailService = new MailService(mailPropertiesConfig);
   }
 
-  private User createUser() {
-    User user = new User();
+  private UserEntity createUser() {
+    UserEntity user = new UserEntity();
     user.setId(1L);
     user.setFirstName("Test");
     user.setLastName("User");

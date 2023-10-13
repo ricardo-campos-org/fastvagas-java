@@ -22,7 +22,7 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(OrderAnnotation.class)
-class UserJobRepositoryTestIT {
+class UserJobRepositoryIntegrationTest {
 
   @Autowired private UserJobRepository userJobRepository;
 
