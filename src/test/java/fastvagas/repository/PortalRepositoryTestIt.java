@@ -21,7 +21,7 @@ import org.springframework.test.context.jdbc.Sql;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestMethodOrder(OrderAnnotation.class)
-class PortalRepositoryTestIT {
+class PortalRepositoryTestIt {
 
   @Autowired private PortalRepository portalRepository;
 

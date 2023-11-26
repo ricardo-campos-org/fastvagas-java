@@ -13,8 +13,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>3.1.5</version>
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
@@ -117,7 +117,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.2</version>
                 <configuration>
                     <!--suppress UnresolvedMavenProperty -->
                     <argLine>${failsafe.jacoco.args}</argLine>
@@ -135,12 +135,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.2</version>
                 <configuration>
                     <!--suppress UnresolvedMavenProperty -->
                     <argLine>${surefire.jacoco.args}</argLine>
                     <excludes>
-                        <exclude>**/*TestIT.java</exclude>
+                        <exclude>**/*TestIt.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -158,7 +158,7 @@
                 </dependencies>
                 <configuration>
                     <skip>${skip.checkstyle}</skip>
-                    <failsOnError>false</failsOnError>
+                    <failsOnError>true</failsOnError>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <configLocation>.mvn/google_checks.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
@@ -178,7 +178,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.10</version>
+                <version>0.8.11</version>
                 <configuration>
                     <excludes>
                         <exclude>**/crawler/**</exclude>
