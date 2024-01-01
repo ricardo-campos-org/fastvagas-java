@@ -28,7 +28,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Conventional Changelog Update
-        uses: TriPSs/conventional-changelog-action@v4
+        uses: TriPSs/conventional-changelog-action@v5
         id: changelog
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
