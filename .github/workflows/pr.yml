@@ -76,7 +76,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Init CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           debug: true
           languages: java
@@ -86,6 +86,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Auto Build
-        uses: github/codeql-action/autobuild@v2
+        uses: github/codeql-action/autobuild@v3
       - name: CodeQL
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
