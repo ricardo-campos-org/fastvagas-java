@@ -84,11 +84,11 @@ public class CrawlerService {
         message = portalJobMap.size() + " job(s) already saved at this portal.";
         logsToWrite.append(message).append(cr);
 
-        List<Job> jobToSave = new ArrayList<>();
         message = "Iterating over job list received, looking for new jobs...";
         log.info(message);
         logsToWrite.append(message).append(cr);
 
+        List<Job> jobToSave = new ArrayList<>();
         for (Job job : jobList) {
           // Save the job, if it's not already saved
           if (!portalJobMap.containsKey(job.getJobUrl())) {
