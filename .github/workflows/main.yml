@@ -17,18 +17,18 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           fetch-depth: 0
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven-test-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-test-
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Conventional Changelog Update
-        uses: TriPSs/conventional-changelog-action@v4
+        uses: TriPSs/conventional-changelog-action@v5
         id: changelog
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
